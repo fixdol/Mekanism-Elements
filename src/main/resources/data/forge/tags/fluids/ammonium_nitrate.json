@@ -1,7 +1,7 @@
 {
   "values":
   [
-    "mekanismscience:ammonium_nitrate",
-    "mekanismscience:flowing_ammonium_nitrate"
+    "mekanismelements:ammonium_nitrate",
+    "mekanismelements:flowing_ammonium_nitrate"
   ]
 }

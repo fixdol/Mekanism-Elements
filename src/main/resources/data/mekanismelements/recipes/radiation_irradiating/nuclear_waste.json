@@ -1,0 +1,22 @@
+{
+  "type":"mekanismelements:radiation_irradiating",
+  "gasInput":
+  {
+    "amount":4,
+    "gas":"mekanism:fissile_fuel"
+  },
+  "itemInput":
+  {
+    "amount": 3,
+    "ingredient":
+    {
+      "item":"mekanismelements:pellet_neutron_source"
+    }
+  },
+  "output":
+  {
+    "amount":10,
+    "chemicalType":"gas",
+    "gas":"mekanism:nuclear_waste"
+  }
+}

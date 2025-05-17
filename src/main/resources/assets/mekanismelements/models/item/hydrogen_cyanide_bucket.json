@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "mekanismelements:item/hydrogen_cyanide_bucket"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type":"mekanismelements:adsorption",
+  "fluidInput":
+  {
+    "amount":50,
+    "fluid":"mekanismelements:seawater"
+  },
+  "itemInput":
+  {
+    "ingredient":
+    {
+      "item":"mekanismelements:high_performance_adsorbent_lead"
+    }
+  },
+  "output":
+  {
+    "amount":400,
+    "chemicalType":"slurry",
+    "slurry":"mekanism:dirty_lead"
+  }
+}

@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "mekanismscience:item/syringe_flame_retardant_2"
-  }
-}

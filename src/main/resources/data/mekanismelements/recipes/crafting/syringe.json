@@ -1,0 +1,23 @@
+{
+  "type":"minecraft:crafting_shaped",
+  "key":
+  {
+    "S":
+    {
+      "item":"mekanism:hdpe_sheet"
+    },
+    "A":
+    {
+      "tag":"forge:glass"
+    }
+  },"pattern":
+[
+  "ASA",
+  "A A",
+  " A "
+],
+  "result":
+  {
+    "item":"mekanismelements:syringe"
+  }
+}

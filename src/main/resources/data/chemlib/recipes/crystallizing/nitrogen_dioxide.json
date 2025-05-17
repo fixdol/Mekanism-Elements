@@ -4,7 +4,7 @@
   "input":
   {
     "amount":1000,
-    "gas":"mekanismscience:nitrogen_dioxide"
+    "gas":"mekanismelements:nitrogen_dioxide"
   },
   "output":
   {

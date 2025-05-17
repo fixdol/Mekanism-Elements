@@ -1,0 +1,27 @@
+{
+  "type":"minecraft:crafting_shaped",
+  "key":
+  {
+    "A":
+    {
+      "tag":"forge:ingots/osmium"
+    },
+    "_":
+    {
+      "tag":"forge:circuits/elite"
+    },
+    "E":
+    {
+      "item":"mekanism:electric_pump"
+    }
+  },"pattern":
+[
+  "AAA",
+  "_E_",
+  "AAA"
+],
+  "result":
+  {
+    "item":"mekanismelements:seawater_pump"
+  }
+}

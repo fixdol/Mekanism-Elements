@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "mekanismelements:item/syringe_flame_retardant_0"
+  },
+  "overrides": [
+    { "predicate": { "use_count": 1 }, "model": "mekanismelements:item/syringe_flame_retardant_1" },
+    { "predicate": { "use_count": 2 }, "model": "mekanismelements:item/syringe_flame_retardant_2" },
+    { "predicate": { "use_count": 3 }, "model": "mekanismelements:item/syringe_flame_retardant_3" },
+    { "predicate": { "use_count": 4 }, "model": "mekanismelements:item/syringe_flame_retardant_4" }
+  ]
+}

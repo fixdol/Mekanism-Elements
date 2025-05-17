@@ -4,7 +4,7 @@
   "input":
   {
     "amount":1000,
-    "gas":"mekanismscience:xenon"
+    "gas":"mekanismelements:xenon"
   },
   "output":
   {

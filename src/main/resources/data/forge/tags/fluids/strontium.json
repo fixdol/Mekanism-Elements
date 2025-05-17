@@ -1,7 +1,7 @@
 {
   "values":
   [
-    "mekanismscience:strontium",
-    "mekanismscience:flowing_strontium"
+    "mekanismelements:strontium",
+    "mekanismelements:flowing_strontium"
   ]
 }

@@ -1,0 +1,27 @@
+{
+  "type":"minecraft:crafting_shaped",
+  "key":
+  {
+    "A":
+    {
+      "item":"mekanism:pellet_antimatter"
+    },
+    "X":
+    {
+      "item":"mekanismelements:high_performance_adsorbent"
+    },
+    "C":
+    {
+      "tag":"forge:ingots/copper"
+    }
+  },"pattern":
+[
+  "ACA",
+  "CXC",
+  "ACA"
+],
+  "result":
+  {
+    "item":"mekanismelements:high_performance_adsorbent_copper"
+  }
+}

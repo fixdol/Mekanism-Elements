@@ -1,7 +1,7 @@
 {
   "values":
   [
-    "mekanismscience:potassium_chloride",
-    "mekanismscience:flowing_potassium_chloride"
+    "mekanismelements:potassium_chloride",
+    "mekanismelements:flowing_potassium_chloride"
   ]
 }

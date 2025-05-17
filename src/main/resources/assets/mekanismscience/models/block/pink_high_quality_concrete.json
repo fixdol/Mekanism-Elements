@@ -1,7 +1,0 @@
-{
-  "parent":"minecraft:block/cube_all",
-  "textures":
-  {
-    "all":"mekanismscience:block/pink_high_quality_concrete"
-  }
-}

@@ -1,7 +1,7 @@
 {
   "values":
   [
-    "mekanismscience:iodine",
-    "mekanismscience:flowing_iodine"
+    "mekanismelements:iodine",
+    "mekanismelements:flowing_iodine"
   ]
 }

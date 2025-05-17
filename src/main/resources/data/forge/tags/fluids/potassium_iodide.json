@@ -1,7 +1,7 @@
 {
   "values":
   [
-    "mekanismscience:potassium_iodide",
-    "mekanismscience:flowing_potassium_iodide"
+    "mekanismelements:potassium_iodide",
+    "mekanismelements:flowing_potassium_iodide"
   ]
 }

@@ -1,7 +1,7 @@
 {
   "values":
   [
-    "mekanismscience:nitric_oxide",
-    "mekanismscience:flowing_nitric_oxide"
+    "mekanismelements:nitric_oxide",
+    "mekanismelements:flowing_nitric_oxide"
   ]
 }

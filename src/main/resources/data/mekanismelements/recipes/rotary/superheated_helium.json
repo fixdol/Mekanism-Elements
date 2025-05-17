@@ -1,0 +1,19 @@
+{
+  "type": "mekanism:rotary",
+  "fluidInput": {
+    "fluid": "mekanismelements:superheated_helium",
+    "amount": 1
+  },
+  "gasOutput": {
+    "gas": "mekanismelements:superheated_helium",
+    "amount": 1
+  },
+  "gasInput": {
+    "gas": "mekanismelements:superheated_helium",
+    "amount": 1
+  },
+  "fluidOutput": {
+    "fluid": "mekanismelements:superheated_helium",
+    "amount": 1
+  }
+}

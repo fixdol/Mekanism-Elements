@@ -1,7 +1,7 @@
 {
   "values":
   [
-    "mekanismscience:ammonia",
-    "mekanismscience:flowing_ammonia"
+    "mekanismelements:ammonia",
+    "mekanismelements:flowing_ammonia"
   ]
 }

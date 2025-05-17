@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 1,
-  "ingredient": {
-    "item": "mekanismscience:aqua_high_quality_concrete"
-  },
-  "result": "mekanismscience:aqua_high_quality_concrete_stairs"
-}

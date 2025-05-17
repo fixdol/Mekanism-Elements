@@ -1,0 +1,20 @@
+{
+  "type":"mekanism:injecting",
+  "chemicalInput":
+  {
+    "amount":5,
+    "gas":"mekanismelements:ammonium_nitrate"
+  },
+  "itemInput":
+  {
+    "ingredient":
+    {
+      "item":"minecraft:tnt"
+    }
+  },
+  "output":
+  {
+    "count": 8,
+    "item":"minecraft:tnt"
+  }
+}

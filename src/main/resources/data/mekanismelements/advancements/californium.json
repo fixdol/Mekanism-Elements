@@ -1,0 +1,37 @@
+{
+  "parent":"mekanism:plutonium",
+  "criteria":{
+    "pellet_neutron_source":
+    {
+      "conditions":
+      {
+        "items":
+        [
+          {
+            "items":
+            [
+              "mekanismelements:ingot_refined_californium"
+            ]
+          }
+        ]
+      },
+      "trigger":"minecraft:inventory_changed"
+    }
+  },
+  "display":
+  {
+    "description":
+    {
+      "translate":"advancements.mekanismelements.californium.description"
+    },
+    "icon":
+    {
+      "item":"mekanismelements:ingot_refined_californium"
+    },
+    "title":
+    {
+      "translate":"advancements.mekanismelements.californium.title"
+    }
+  },
+  "sends_telemetry_event":true
+}

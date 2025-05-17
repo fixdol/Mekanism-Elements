@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "mekanismelements:adsorption_separator"
+  },
+  "pattern": [
+    "ACA",
+    "SXS",
+    "ACA"
+  ],
+  "key": {
+    "C": {
+      "tag": "forge:circuits/elite"
+    },
+    "S": {
+      "item": "minecraft:iron_bars"
+    },
+    "A": {
+      "tag": "mekanism:alloys/reinforced"
+    },
+    "X": {
+      "item": "mekanism:steel_casing"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type":"minecraft:crafting_shaped",
+  "key":
+  {
+    "#":
+    {
+      "item":"mekanismelements:clump_high_quality_concrete_dark_red"
+    }
+  },
+  "pattern":
+  [
+    "##",
+    "##"
+  ],
+  "result":
+  {
+    "count": 4,
+    "item":"mekanismelements:dark_red_high_quality_concrete"
+  }
+}

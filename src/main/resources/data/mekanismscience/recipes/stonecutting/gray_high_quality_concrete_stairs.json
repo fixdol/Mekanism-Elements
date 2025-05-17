@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 1,
-  "ingredient": {
-    "item": "mekanismscience:gray_high_quality_concrete"
-  },
-  "result": "mekanismscience:gray_high_quality_concrete_stairs"
-}

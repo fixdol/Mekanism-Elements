@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "mekanismelements:item/high_performance_adsorbent_uranium"
+  }
+}

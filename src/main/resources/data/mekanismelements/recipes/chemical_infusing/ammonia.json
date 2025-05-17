@@ -1,0 +1,18 @@
+{
+  "type":"mekanism:chemical_infusing",
+  "leftInput":
+  {
+    "amount":1,
+    "gas":"mekanismelements:nitrogen"
+  },
+  "output":
+  {
+    "amount":2,
+    "gas":"mekanismelements:ammonia"
+  },
+  "rightInput":
+  {
+    "amount":3,
+    "gas":"mekanism:hydrogen"
+  }
+}

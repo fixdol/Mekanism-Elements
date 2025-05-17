@@ -1,7 +1,7 @@
 {
   "values":
   [
-    "mekanismscience:bromine",
-    "mekanismscience:flowing_bromine"
+    "mekanismelements:bromine",
+    "mekanismelements:flowing_bromine"
   ]
 }

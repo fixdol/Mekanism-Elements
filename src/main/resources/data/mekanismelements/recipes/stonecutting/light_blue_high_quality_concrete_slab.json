@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "mekanismelements:light_blue_high_quality_concrete"
+  },
+  "result": "mekanismelements:light_blue_high_quality_concrete_slab"
+}

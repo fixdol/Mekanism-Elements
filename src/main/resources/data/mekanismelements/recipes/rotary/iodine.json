@@ -1,0 +1,19 @@
+{
+  "type": "mekanism:rotary",
+  "fluidInput": {
+    "fluid": "mekanismelements:iodine",
+    "amount": 1
+  },
+  "gasOutput": {
+    "gas": "mekanismelements:iodine",
+    "amount": 1
+  },
+  "gasInput": {
+    "gas": "mekanismelements:iodine",
+    "amount": 1
+  },
+  "fluidOutput": {
+    "fluid": "mekanismelements:iodine",
+    "amount": 1
+  }
+}

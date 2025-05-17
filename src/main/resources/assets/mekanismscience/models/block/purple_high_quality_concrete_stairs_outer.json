@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "bottom": "mekanismscience:block/purple_high_quality_concrete",
-    "side": "mekanismscience:block/purple_high_quality_concrete",
-    "top": "mekanismscience:block/purple_high_quality_concrete"
-  }
-}

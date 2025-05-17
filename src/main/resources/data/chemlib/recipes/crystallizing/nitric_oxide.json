@@ -4,7 +4,7 @@
   "input":
   {
     "amount":1000,
-    "gas":"mekanismscience:nitric_oxide"
+    "gas":"mekanismelements:nitric_oxide"
   },
   "output":
   {

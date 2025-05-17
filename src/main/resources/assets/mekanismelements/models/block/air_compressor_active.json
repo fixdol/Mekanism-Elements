@@ -1,0 +1,13 @@
+{
+  "parent":"mekanism:block/machine",
+  "textures":
+  {
+    "sides":"mekanismelements:block/air_compressor/side",
+    "front":"mekanismelements:block/air_compressor/front_active",
+    "west":"mekanismelements:block/air_compressor/side",
+    "east":"mekanismelements:block/air_compressor/side",
+    "south":"mekanismelements:block/air_compressor/back",
+    "up":"mekanismelements:block/air_compressor/top",
+    "down":"mekanismelements:block/air_compressor/bottom"
+  }
+}

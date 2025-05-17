@@ -1,8 +1,8 @@
 {
   "values":
   [
-    "mekanismscience:americium",
-    "mekanismscience:curium",
-    "mekanismscience:californium"
+    "mekanismelements:americium",
+    "mekanismelements:curium",
+    "mekanismelements:californium"
   ]
 }

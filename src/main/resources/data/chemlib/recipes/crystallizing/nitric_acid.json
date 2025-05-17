@@ -4,7 +4,7 @@
   "input":
   {
     "amount":1000,
-    "gas":"mekanismscience:nitric_acid"
+    "gas":"mekanismelements:nitric_acid"
   },
   "output":
   {

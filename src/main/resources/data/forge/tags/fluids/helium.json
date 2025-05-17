@@ -1,7 +1,7 @@
 {
   "values":
   [
-    "mekanismscience:helium",
-    "mekanismscience:flowing_helium"
+    "mekanismelements:helium",
+    "mekanismelements:flowing_helium"
   ]
 }

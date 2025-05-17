@@ -1,0 +1,19 @@
+{
+  "type": "mekanism:rotary",
+  "fluidInput": {
+    "fluid": "mekanismelements:netherite_acid",
+    "amount": 1
+  },
+  "gasOutput": {
+    "gas": "mekanismelements:netherite_acid",
+    "amount": 1
+  },
+  "gasInput": {
+    "gas": "mekanismelements:netherite_acid",
+    "amount": 1
+  },
+  "fluidOutput": {
+    "fluid": "mekanismelements:netherite_acid",
+    "amount": 1
+  }
+}

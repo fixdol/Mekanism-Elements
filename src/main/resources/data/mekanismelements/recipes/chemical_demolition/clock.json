@@ -1,0 +1,24 @@
+{
+  "type":"mekanismscience:chemical_demolition",
+  "gasInput":
+  {
+    "amount":1,
+    "gas":"mekanismelements:aqua_regia"
+  },
+  "itemInput":
+  {
+    "ingredient":
+    {
+      "item":"minecraft:clock"
+    }
+  },
+  "mainOutput":
+  {
+    "count": 4,
+    "item":"minecraft:gold_ingot"
+  },
+  "secondaryOutput":
+  {
+    "item":"minecraft:redstone"
+  }
+}

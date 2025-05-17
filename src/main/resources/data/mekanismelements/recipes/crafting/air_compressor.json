@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "mekanismelements:air_compressor"
+  },
+  "pattern": [
+    "ACA",
+    "SXS",
+    "ATA"
+  ],
+  "key": {
+    "T": {
+      "item": "mekanism:basic_chemical_tank"
+    },
+    "C": {
+      "tag": "forge:circuits/advanced"
+    },
+    "S": {
+      "item": "mekanism:hdpe_sheet"
+    },
+    "A": {
+      "tag": "mekanism:alloys/infused"
+    },
+    "X": {
+      "item": "mekanism:steel_casing"
+    }
+  }
+}

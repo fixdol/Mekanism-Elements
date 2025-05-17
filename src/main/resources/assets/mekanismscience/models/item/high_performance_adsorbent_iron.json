@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "mekanismscience:item/high_performance_adsorbent_iron"
-  }
-}

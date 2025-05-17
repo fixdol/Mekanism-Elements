@@ -1,7 +1,7 @@
 {
   "values":
   [
-    "mekanismscience:nitrogen",
-    "mekanismscience:flowing_nitrogen"
+    "mekanismelements:nitrogen",
+    "mekanismelements:flowing_nitrogen"
   ]
 }

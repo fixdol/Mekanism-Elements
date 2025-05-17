@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "mekanismelements:block/pink_high_quality_concrete",
+    "side": "mekanismelements:block/pink_high_quality_concrete",
+    "top": "mekanismelements:block/pink_high_quality_concrete"
+  }
+}

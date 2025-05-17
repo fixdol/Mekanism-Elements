@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "mekanismelements:block/white_high_quality_concrete_slab"
+    },
+    "type=double": {
+      "model": "mekanismelements:block/white_high_quality_concrete"
+    },
+    "type=top": {
+      "model": "mekanismelements:block/white_high_quality_concrete_slab_top"
+    }
+  }
+}

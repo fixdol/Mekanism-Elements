@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "concrete_powder",
+  "ingredients": [
+    {
+      "item": "mekanismelements:powder_high_quality_concrete"
+    },
+    {
+      "item": "minecraft:green_dye"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "mekanismelements:powder_high_quality_concrete_green"
+  }
+}

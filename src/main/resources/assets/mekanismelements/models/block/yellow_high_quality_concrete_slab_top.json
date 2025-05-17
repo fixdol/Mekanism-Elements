@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "mekanismelements:block/yellow_high_quality_concrete",
+    "side": "mekanismelements:block/yellow_high_quality_concrete",
+    "top": "mekanismelements:block/yellow_high_quality_concrete"
+  }
+}

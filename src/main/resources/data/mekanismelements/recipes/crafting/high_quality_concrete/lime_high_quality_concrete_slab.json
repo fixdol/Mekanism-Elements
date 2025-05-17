@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "mekanismelements:lime_high_quality_concrete"
+    }
+  },
+  "pattern": [
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "item": "mekanismelements:lime_high_quality_concrete_slab"
+  },
+  "show_notification": true
+}

@@ -3,20 +3,20 @@ loaderVersion="${loader_version_range}"
 license="${mod_license}"
 
 [[mods]]
-modId="mekanismscience"
-version="2.2"
-displayName="Mekanism: Science"
+modId="mekanismelements"
+version="2.3"
+displayName="Mekanism: Elements"
 authors="FixedDolphin927"
 
 description='''${mod_description}'''
-[[dependencies.mekanismscience]]
+[[dependencies.mekanismelements]]
     modId="forge"
     mandatory=true
     versionRange="${forge_version_range}"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.mekanismscience]]
+[[dependencies.mekanismelements]]
     modId="minecraft"
     mandatory=true
     versionRange="${minecraft_version_range}"

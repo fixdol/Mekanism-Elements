@@ -1,0 +1,13 @@
+{
+  "type":"mekanism:crystallizing",
+  "chemicalType":"gas",
+  "input":
+  {
+    "amount":1000,
+    "gas":"mekanismelements:beryllium"
+  },
+  "output":
+  {
+    "item":"mekanismelements:dust_beryllium"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent":"minecraft:block/cube_all",
+  "textures":
+  {
+    "all":"mekanismelements:block/yellow_high_quality_concrete"
+  }
+}

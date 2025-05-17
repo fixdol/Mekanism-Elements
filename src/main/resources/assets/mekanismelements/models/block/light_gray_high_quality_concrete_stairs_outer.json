@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "mekanismelements:block/light_gray_high_quality_concrete",
+    "side": "mekanismelements:block/light_gray_high_quality_concrete",
+    "top": "mekanismelements:block/light_gray_high_quality_concrete"
+  }
+}

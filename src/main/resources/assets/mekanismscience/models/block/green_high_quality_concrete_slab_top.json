@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab_top",
-  "textures": {
-    "bottom": "mekanismscience:block/green_high_quality_concrete",
-    "side": "mekanismscience:block/green_high_quality_concrete",
-    "top": "mekanismscience:block/green_high_quality_concrete"
-  }
-}

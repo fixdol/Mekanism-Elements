@@ -1,0 +1,27 @@
+{
+  "type":"mekanism:reaction",
+  "duration":50,
+  "fluidInput":
+  {
+    "amount":3000,
+    "fluid":"mekanismelements:netherite_acid"
+  },
+  "gasInput":
+  {
+    "amount":3000,
+    "gas":"mekanismelements:californium"
+  },
+  "itemInput":
+  {
+    "amount":1,
+    "ingredient":
+    {
+      "tag":"forge:dusts/lead"
+    }
+  },
+  "itemOutput":
+  {
+    "amount":1,
+    "item":"mekanismelements:unstable_californium_mixture"
+  }
+}
