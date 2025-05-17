@@ -11,7 +11,7 @@ public class MSCreativeTab {
 
     public static final CreativeTabRegistryObject MEKANISM_SCIENCE = CREATIVE_TABS.registerMain(MSLang.MEKANISM_SCIENCE, MSItems.NEUTRON_SOURCE_PELLET, builder ->
               builder.withBackgroundLocation(MekanismElements.rl("textures/gui/creative_tab.png"))
-                      .withSearchBar(70)
+                      .withSearchBar(65)
                       .withTabsBefore(MekanismCreativeTabs.MEKANISM.key())
                       .displayItems((displayParameters, output) -> {
                           CreativeTabDeferredRegister.addToDisplay(MSItems.ITEMS, output);
