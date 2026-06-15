@@ -5,8 +5,8 @@ import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.client.gui.GuiConfigurableTile;
 import mekanism.client.gui.element.bar.GuiHorizontalPowerBar;
 import mekanism.client.gui.element.gauge.GaugeType;
-import mekanism.client.gui.element.gauge.GuiGasGauge;
-import mekanism.client.gui.element.gauge.GuiMergedChemicalTankGauge;
+import mekanism.client.gui.element.gauge.GuiChemicalGauge;
+import mekanism.client.gui.element.gauge.GuiMergedTankGauge;
 import mekanism.client.gui.element.progress.GuiProgress;
 import mekanism.client.gui.element.progress.ProgressType;
 import mekanism.client.gui.element.tab.GuiEnergyTab;
@@ -31,11 +31,11 @@ public class GuiRadiationIrradiator extends GuiConfigurableTile<TileEntityRadiat
                 .warning(WarningTracker.WarningType.NOT_ENOUGH_ENERGY, tile.getWarningCheck(CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_ENERGY))
                 .warning(WarningTracker.WarningType.NOT_ENOUGH_ENERGY_REDUCED_RATE, tile.getWarningCheck(CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_ENERGY_REDUCED_RATE));
         addRenderableWidget(new GuiEnergyTab(this, tile.getEnergyContainer(), tile::getActive));
-        addRenderableWidget(new GuiGasGauge(() -> tile.injectTank, () -> tile.getGasTanks(null), GaugeType.STANDARD, this, 28, 13))
+        addRenderableWidget(new GuiChemicalGauge(() -> tile.injectTank, () -> tile.getChemicalTanks(null), GaugeType.STANDARD, this, 28, 13))
                 .warning(WarningTracker.WarningType.NO_MATCHING_RECIPE, tile.getWarningCheck(CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_SECONDARY_INPUT));
-        addRenderableWidget(new GuiMergedChemicalTankGauge<>(() -> tile.outputTank, () -> tile, GaugeType.STANDARD, this, 131, 13))
+        addRenderableWidget(new GuiChemicalGauge(() -> tile.chemicalOutputTank, () -> tile.getChemicalTanks(null), GaugeType.STANDARD, this, 131, 13))
                 .warning(WarningTracker.WarningType.NO_SPACE_IN_OUTPUT, tile.getWarningCheck(CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_OUTPUT_SPACE));
-        addRenderableWidget(new GuiProgress(tile::getScaledProgress, ProgressType.LARGE_RIGHT, this, 64, 40).jeiCategory(tile))
+        addRenderableWidget(new GuiProgress(tile::getScaledProgress, ProgressType.LARGE_RIGHT, this, 64, 40))
                 .warning(WarningTracker.WarningType.INPUT_DOESNT_PRODUCE_OUTPUT, tile.getWarningCheck(CachedRecipe.OperationTracker.RecipeError.INPUT_DOESNT_PRODUCE_OUTPUT));
     }
 
@@ -45,3 +45,4 @@ public class GuiRadiationIrradiator extends GuiConfigurableTile<TileEntityRadiat
         super.drawForegroundText(guiGraphics, mouseX, mouseY);
     }
 }
+

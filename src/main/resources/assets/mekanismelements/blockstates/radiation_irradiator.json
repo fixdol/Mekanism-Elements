@@ -22,7 +22,7 @@
     },
     "facing=north,active=true":
     {
-      "model":"mekanismscience:block/radiation_irradiator_active"
+      "model":"mekanismelements:block/radiation_irradiator_active"
     },
     "facing=south,active=true":
     {

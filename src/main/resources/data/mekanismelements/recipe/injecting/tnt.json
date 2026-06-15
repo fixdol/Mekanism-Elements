@@ -1,0 +1,15 @@
+{
+  "type": "mekanism:injecting",
+  "chemical_input": {
+    "amount": 5,
+    "chemical": "mekanismelements:ammonium_nitrate"
+  },
+  "item_input": {
+    "item": "minecraft:tnt"
+  },
+  "output": {
+    "count": 8,
+    "id": "minecraft:tnt"
+  },
+  "per_tick_usage": false
+}

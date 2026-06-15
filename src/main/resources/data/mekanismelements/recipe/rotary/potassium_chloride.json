@@ -1,0 +1,19 @@
+{
+  "type": "mekanism:rotary",
+  "fluid_input": {
+    "amount": 1,
+    "fluid": "mekanismelements:potassium_chloride"
+  },
+  "chemical_output": {
+    "id": "mekanismelements:potassium_chloride",
+    "amount": 1
+  },
+  "chemical_input": {
+    "amount": 1,
+    "chemical": "mekanismelements:potassium_chloride"
+  },
+  "fluid_output": {
+    "id": "mekanismelements:potassium_chloride",
+    "amount": 1
+  }
+}

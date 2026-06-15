@@ -1,5 +1,6 @@
 package com.fxd927.mekanismelements.common.item.syringe;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 
@@ -9,7 +10,7 @@ public class FlameRetardantSyringe extends DrugSyringe{
     }
 
     @Override
-    protected MobEffect getEffectType() {
+    protected Holder<MobEffect> getEffectType() {
         return MobEffects.FIRE_RESISTANCE;
     }
 
@@ -23,3 +24,4 @@ public class FlameRetardantSyringe extends DrugSyringe{
         return 0;
     }
 }
+

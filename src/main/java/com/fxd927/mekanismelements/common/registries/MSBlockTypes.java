@@ -7,9 +7,8 @@ import com.fxd927.mekanismelements.common.content.blocktype.MSMachine;
 import com.fxd927.mekanismelements.common.tile.machine.*;
 import mekanism.api.Upgrade;
 import mekanism.common.block.attribute.Attributes;
-import mekanism.generators.common.registries.GeneratorsSounds;
+// GeneratorsSounds not available - using MSSounds instead
 
-import java.util.EnumSet;
 
 public class MSBlockTypes {
     public static final MSMachine<TileEntityAdsorptionSeparator> ADSORPTION_SEPARATOR = MSMachine.MSMachineBuilder
@@ -18,8 +17,9 @@ public class MSBlockTypes {
             .withSound(MSSounds.AIR_COMPRESSOR)
             .withEnergyConfig(MSConfig.usageConfig.adsorptionSeparator, MSConfig.storageConfig.adsorptionSeparator)
             .withCustomShape(MSBlockShapes.ADSORPTION_SEPARATOR)
-            .withSupportedUpgrades(EnumSet.of(Upgrade.SPEED, Upgrade.ENERGY, Upgrade.MUFFLING))
+            .withSupportedUpgrades(Upgrade.SPEED, Upgrade.ENERGY, Upgrade.MUFFLING)
             .withComputerSupport("adsorptionSeparator")
+            .withSideConfig(mekanism.common.lib.transmitter.TransmissionType.ITEM, mekanism.common.lib.transmitter.TransmissionType.FLUID, mekanism.common.lib.transmitter.TransmissionType.CHEMICAL, mekanism.common.lib.transmitter.TransmissionType.ENERGY)
             .replace(Attributes.ACTIVE_LIGHT)
             .build();
     public static final MSMachine<TileEntityAirCompressor> AIR_COMPRESSOR = MSMachine.MSMachineBuilder
@@ -27,8 +27,9 @@ public class MSBlockTypes {
             .withGui(() -> MSContainerTypes.AIR_COMPRESSOR)
             .withSound(MSSounds.AIR_COMPRESSOR)
             .withEnergyConfig(MSConfig.usageConfig.airCompressor, MSConfig.storageConfig.airCompressor)
-            .withSupportedUpgrades(EnumSet.of(Upgrade.SPEED, Upgrade.ENERGY, Upgrade.MUFFLING))
+            .withSupportedUpgrades(Upgrade.SPEED, Upgrade.ENERGY, Upgrade.MUFFLING)
             .withComputerSupport("airCompressor")
+            .withSideConfig(mekanism.common.lib.transmitter.TransmissionType.ITEM, mekanism.common.lib.transmitter.TransmissionType.CHEMICAL, mekanism.common.lib.transmitter.TransmissionType.ENERGY)
             .replace(Attributes.ACTIVE_LIGHT)
             .build();
     //public static final MSMachine<TileEntityChemicalDemolitionMachine> CHEMICAL_DEMOLITION_MACHINE = MSMachine.MSMachineBuilder
@@ -42,10 +43,11 @@ public class MSBlockTypes {
     public static final MSMachine<TileEntityRadiationIrradiator> RADIATION_IRRADIATOR = MSMachine.MSMachineBuilder
             .createMSMachine(() -> MSTileEntityTypes.RADIATION_IRRADIATOR, MSLang.DESCRIPTION_RADIATION_IRRADIATOR)
             .withGui(() -> MSContainerTypes.RADIATION_IRRADIATOR)
-            .withSound(GeneratorsSounds.FISSION_REACTOR)
+            .withSound(MSSounds.AIR_COMPRESSOR) // Using available sound instead of GeneratorsSounds
             .withEnergyConfig(MSConfig.usageConfig.radiationIrradiator, MSConfig.storageConfig.radiationIrradiator)
-            .withSupportedUpgrades(EnumSet.of(Upgrade.SPEED, Upgrade.ENERGY, Upgrade.MUFFLING))
+            .withSupportedUpgrades(Upgrade.SPEED, Upgrade.ENERGY, Upgrade.MUFFLING)
             .withComputerSupport("radiationIrradiator")
+            .withSideConfig(mekanism.common.lib.transmitter.TransmissionType.ITEM, mekanism.common.lib.transmitter.TransmissionType.CHEMICAL, mekanism.common.lib.transmitter.TransmissionType.ENERGY)
             .replace(Attributes.ACTIVE_FULL_LIGHT)
             .build();
     // public static final MSMachine<TileEntityOrganicLiquidExtractor> ORGANIC_LIQUID_EXTRACTOR = MSMachine.MSMachineBuilder
@@ -59,12 +61,15 @@ public class MSBlockTypes {
     public static final MSMachine<TileEntitySeawaterPump> SEAWATER_PUMP = MSMachine.MSMachineBuilder
             .createMSMachine(() -> MSTileEntityTypes.SEAWATER_PUMP, MSLang.DESCRIPTION_SEAWATER_PUMP)
             .withGui(() -> MSContainerTypes.SEAWATER_PUMP)
+            .withSound(MSSounds.AIR_COMPRESSOR)
             .withEnergyConfig(MSConfig.usageConfig.seawaterPump, MSConfig.storageConfig.seawaterPump)
-            .withSupportedUpgrades(EnumSet.of(Upgrade.SPEED, Upgrade.ENERGY))
+            .withSupportedUpgrades(Upgrade.SPEED, Upgrade.ENERGY)
             .withComputerSupport("seawaterPump")
+            .withSideConfig(mekanism.common.lib.transmitter.TransmissionType.ITEM, mekanism.common.lib.transmitter.TransmissionType.FLUID, mekanism.common.lib.transmitter.TransmissionType.ENERGY)
             .replace(Attributes.ACTIVE)
-    .build();
+            .build();
 
     private MSBlockTypes(){
     }
 }
+

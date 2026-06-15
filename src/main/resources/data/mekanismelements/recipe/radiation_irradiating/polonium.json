@@ -1,0 +1,14 @@
+{
+  "type": "mekanismelements:radiation_irradiating",
+  "chemical_input": {
+    "amount": 4,
+    "chemical": "mekanism:nuclear_waste"
+  },
+  "item_input": {
+    "item": "mekanismelements:pellet_neutron_source"
+  },
+  "output": {
+    "amount": 500,
+    "id": "mekanism:polonium"
+  }
+}

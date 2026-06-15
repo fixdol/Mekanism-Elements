@@ -1,13 +1,12 @@
 {
   "type":"mekanism:crystallizing",
-  "chemicalType":"gas",
   "input":
   {
     "amount":1000,
-    "gas":"mekanismelements:nitric_acid"
+    "chemical":"mekanismelements:nitric_acid"
   },
   "output":
   {
-    "item":"chemlib:nitric_acid"
+    "id":"chemlib:nitric_acid"
   }
 }

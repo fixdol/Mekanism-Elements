@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "mekanism:pellet_antimatter"
+    },
+    "C": {
+      "tag": "c:ingots/uranium"
+    },
+    "X": {
+      "item": "mekanismelements:high_performance_adsorbent"
+    }
+  },
+  "pattern": [
+    "ACA",
+    "CXC",
+    "ACA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mekanismelements:high_performance_adsorbent_uranium"
+  }
+}

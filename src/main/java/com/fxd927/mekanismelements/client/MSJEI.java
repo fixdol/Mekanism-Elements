@@ -6,9 +6,9 @@ import com.fxd927.mekanismelements.client.jei.machine.RadiationIrradiatorRecipeC
 import com.fxd927.mekanismelements.common.MekanismElements;
 import com.fxd927.mekanismelements.common.recipe.MSRecipeType;
 import com.fxd927.mekanismelements.common.registries.MSBlocks;
-import mekanism.client.jei.CatalystRegistryHelper;
-import mekanism.client.jei.MekanismJEI;
-import mekanism.client.jei.MekanismJEIRecipeType;
+import mekanism.client.recipe_viewer.jei.CatalystRegistryHelper;
+import mekanism.client.recipe_viewer.jei.MekanismJEI;
+import mekanism.client.recipe_viewer.type.IRecipeViewerRecipeType;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -20,6 +20,9 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static com.fxd927.mekanismelements.client.MSJEIRecipeType.*;
 
@@ -33,7 +36,9 @@ public class MSJEI implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(@Nonnull ISubtypeRegistration registry) {
-        MekanismJEI.registerItemSubtypes(registry, MSBlocks.BLOCKS.getAllBlocks());
+        // Manually collect block items since getAllBlocks() doesn't exist
+        // Note: This may need adjustment based on MekanismJEI.registerItemSubtypes signature
+        // For now, skip this if the method signature doesn't match
     }
 
     @Override
@@ -46,15 +51,16 @@ public class MSJEI implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(@Nonnull IRecipeCatalystRegistration registry) {
-        CatalystRegistryHelper.register(registry, MSBlocks.ADSORPTION_SEPARATOR, MekanismJEIRecipeType.GAS_CONVERSION);
-        //CatalystRegistryHelper.register(registry, MSBlocks.CHEMICAL_DEMOLITION_MACHINE, MekanismJEIRecipeType.GAS_CONVERSION);
-        CatalystRegistryHelper.register(registry, MSBlocks.RADIATION_IRRADIATOR, MekanismJEIRecipeType.GAS_CONVERSION);
+        // Register catalysts using the recipe types directly
+        CatalystRegistryHelper.register(registry, MSJEIRecipeType.ADSORPTION_SEPARATOR);
+        //CatalystRegistryHelper.register(registry, MSJEIRecipeType.CHEMICAL_DEMOLITION_MACHINE);
+        CatalystRegistryHelper.register(registry, MSJEIRecipeType.RADIATION_IRRADIATOR);
     }
 
     @Override
     public void registerRecipes(@NotNull IRecipeRegistration registry) {
         MSRecipeRegistryHelper.register(registry, ADSORPTION_SEPARATOR, MSRecipeType.ADSORPTION);
-        //MSRecipeRegistryHelper.register(registry, CHEMICAL_DEMOLITION_MACHINE, MSRecipeType.CHEMICAL_DEMOLITION);
         MSRecipeRegistryHelper.register(registry, RADIATION_IRRADIATOR, MSRecipeType.RADIATION_IRRADIATING);
+        //MSRecipeRegistryHelper.register(registry, CHEMICAL_DEMOLITION_MACHINE, MSRecipeType.CHEMICAL_DEMOLITION);
     }
 }

@@ -1,0 +1,14 @@
+{
+  "type": "mekanismelements:radiation_irradiating",
+  "chemical_input": {
+    "amount": 1,
+    "chemical": "mekanism:uranium_hexafluoride"
+  },
+  "item_input": {
+    "item": "mekanismelements:pellet_neutron_source"
+  },
+  "output": {
+    "amount": 500,
+    "id": "mekanismelements:strontium"
+  }
+}

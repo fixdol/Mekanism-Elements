@@ -1,0 +1,19 @@
+{
+  "type":"mekanism:injecting",
+  "chemical_input":
+  {
+    "amount":1,
+    "tag":"mekanism:water_vapor"
+  },
+  "item_input":
+  {
+    "count":1,
+    "item":"mekanismscience:powder_high_quality_concrete_magenta"
+  },
+  "output":
+  {
+    "count":1,
+    "id":"mekanismelements:clump_high_quality_concrete_magenta"
+  },
+  "per_tick_usage":true
+}

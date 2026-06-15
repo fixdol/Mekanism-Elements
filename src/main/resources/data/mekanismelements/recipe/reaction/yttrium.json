@@ -1,0 +1,24 @@
+{
+  "type": "mekanism:reaction",
+  "item_input": {
+    "amount": 1,
+    "tag": "c:dusts/fluorite"
+  },
+  "fluid_input": {
+    "amount": 10,
+    "tag": "c:heavy_water"
+  },
+  "chemical_input": {
+    "amount": 100,
+    "chemical": "mekanismelements:strontium"
+  },
+  "duration": 100,
+  "item_output": {
+    "id": "mekanismelements:dust_calcium_oxide",
+    "count": 1
+  },
+  "chemical_output": {
+    "id": "mekanismelements:yttrium",
+    "amount": 100
+  }
+}

@@ -3,9 +3,8 @@
   "minVersion": "0.8",
   "package": "com.fxd927.mekanismelements.mixin",
   "refmap": "mekanismelements.refmap.json",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "CoolantAccessor",
     "MixinTileEntityChemicalInfuser"
   ],
   "client": [

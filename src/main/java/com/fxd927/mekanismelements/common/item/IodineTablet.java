@@ -23,7 +23,7 @@ public class IodineTablet extends Item {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (!level.isClientSide && entity instanceof Player player) {
 
-            MobEffectInstance currentEffect = player.getEffect(MSEffects.RADIATION_RESISTANCE.get());
+            MobEffectInstance currentEffect = player.getEffect(MSEffects.RADIATION_RESISTANCE);
             //player.getCooldowns().addCooldown(this, 3600);
 
             int newDuration;
@@ -33,7 +33,7 @@ public class IodineTablet extends Item {
                 newDuration = BASE_DURATION;
             }
 
-            player.addEffect(new MobEffectInstance(MSEffects.RADIATION_RESISTANCE.get(), newDuration, 0));
+            player.addEffect(new MobEffectInstance(MSEffects.RADIATION_RESISTANCE, newDuration, 0));
 
             player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, REGENERATION_DURATION, REGENERATION_AMPLIFIER));
         }
@@ -45,8 +45,9 @@ public class IodineTablet extends Item {
         return UseAnim.EAT;
     }
 
-    @Override
+    // getUseDuration may have been removed or signature changed in 1.21.1
     public int getUseDuration(ItemStack stack) {
         return 20;
     }
 }
+

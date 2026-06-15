@@ -1,8 +1,12 @@
 package com.fxd927.mekanismelements.common.config;
 
+import mekanism.common.config.IMekanismConfig;
 import mekanism.common.config.MekanismConfigHelper;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModLoadingContext;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MSConfig {
     private MSConfig() {
@@ -13,7 +17,9 @@ public class MSConfig {
 
     public static void registerConfigs(ModLoadingContext modLoadingContext) {
         ModContainer modContainer = modLoadingContext.getActiveContainer();
-        MekanismConfigHelper.registerConfig(modContainer, storageConfig);
-        MekanismConfigHelper.registerConfig(modContainer, usageConfig);
+        Map<net.neoforged.fml.config.IConfigSpec, IMekanismConfig> configs = new HashMap<>();
+        MekanismConfigHelper.registerConfig(configs, modContainer, storageConfig);
+        MekanismConfigHelper.registerConfig(configs, modContainer, usageConfig);
     }
 }
+

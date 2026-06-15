@@ -1,13 +1,12 @@
 {
   "type":"mekanism:crystallizing",
-  "chemicalType":"gas",
   "input":
   {
     "amount":1000,
-    "gas":"mekanismelements:potassium_hydroxide"
+    "chemical":"mekanismelements:potassium_hydroxide"
   },
   "output":
   {
-    "item":"chemlib:potassium_hydroxide_dust"
+    "id":"chemlib:potassium_hydroxide_dust"
   }
 }

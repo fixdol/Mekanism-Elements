@@ -1,0 +1,15 @@
+{
+  "type": "mekanism:chemical_infusing",
+  "output": {
+    "amount": 5,
+    "id": "mekanismelements:potassium_iodide"
+  },
+  "left_input": {
+    "amount": 6,
+    "chemical": "mekanismelements:potassium_hydroxide"
+  },
+  "right_input": {
+    "amount": 3,
+    "chemical": "mekanismelements:iodine"
+  }
+}

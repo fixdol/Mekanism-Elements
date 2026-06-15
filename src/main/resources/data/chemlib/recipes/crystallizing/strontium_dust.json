@@ -1,13 +1,12 @@
 {
   "type":"mekanism:crystallizing",
-  "chemicalType":"gas",
   "input":
   {
     "amount":1000,
-    "gas":"mekanismelements:strontium"
+    "chemical":"mekanismelements:strontium"
   },
   "output":
   {
-    "item":"chemlib:strontium_dust"
+    "id":"chemlib:strontium_dust"
   }
 }

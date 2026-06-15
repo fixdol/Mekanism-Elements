@@ -10,16 +10,17 @@ import com.fxd927.mekanismelements.common.recipe.impl.RadiationIrradiatingIRecip
 import com.fxd927.mekanismelements.common.recipe.serializer.AdsorptionRecipeSerializer;
 import com.fxd927.mekanismelements.common.recipe.serializer.ChemicalDemolitionRecipeSerializer;
 import com.fxd927.mekanismelements.common.recipe.serializer.RadiationIrradiatorRecipeSerializer;
-import mekanism.common.registration.impl.RecipeSerializerDeferredRegister;
-import mekanism.common.registration.impl.RecipeSerializerRegistryObject;
+import mekanism.common.registration.MekanismDeferredRegister;
+import mekanism.common.registration.MekanismDeferredHolder;
 
 public class MSRecipeSerializers {
-    public static final RecipeSerializerDeferredRegister RECIPE_SERIALIZERS = new RecipeSerializerDeferredRegister(MekanismElements.MODID);
+    public static final MekanismDeferredRegister<net.minecraft.world.item.crafting.RecipeSerializer<?>> RECIPE_SERIALIZERS = new MekanismDeferredRegister<>(net.minecraft.core.registries.Registries.RECIPE_SERIALIZER, MekanismElements.MODID);
 
-    public static final RecipeSerializerRegistryObject<AdsorptionRecipe> ADSORPTION_SEPARATOR = RECIPE_SERIALIZERS.register("adsorption", () -> new AdsorptionRecipeSerializer<>(AdsorptionIRecipe::new));
-    public static final RecipeSerializerRegistryObject<RadiationIrradiatingRecipe> RADIATION_IRRADIATOR = RECIPE_SERIALIZERS.register("radiation_irradiating", () -> new RadiationIrradiatorRecipeSerializer<>(RadiationIrradiatingIRecipe::new));
-    public static final RecipeSerializerRegistryObject<ChemicalDemolitionRecipe> CHEMICAL_DEMOLITION = RECIPE_SERIALIZERS.register("chemical_demolition", () -> new ChemicalDemolitionRecipeSerializer<>(ChemicalDemolitionIRecipe::new));
+    public static final MekanismDeferredHolder<net.minecraft.world.item.crafting.RecipeSerializer<?>, AdsorptionRecipeSerializer<AdsorptionRecipe>> ADSORPTION_SEPARATOR = RECIPE_SERIALIZERS.register("adsorption", () -> new AdsorptionRecipeSerializer<>(AdsorptionIRecipe::new));
+    public static final MekanismDeferredHolder<net.minecraft.world.item.crafting.RecipeSerializer<?>, RadiationIrradiatorRecipeSerializer<RadiationIrradiatingRecipe>> RADIATION_IRRADIATOR = RECIPE_SERIALIZERS.register("radiation_irradiating", () -> new RadiationIrradiatorRecipeSerializer<>(RadiationIrradiatingIRecipe::new));
+    public static final MekanismDeferredHolder<net.minecraft.world.item.crafting.RecipeSerializer<?>, ChemicalDemolitionRecipeSerializer<ChemicalDemolitionRecipe>> CHEMICAL_DEMOLITION = RECIPE_SERIALIZERS.register("chemical_demolition", () -> new ChemicalDemolitionRecipeSerializer<>(ChemicalDemolitionIRecipe::new));
 
     private MSRecipeSerializers(){
     }
 }
+

@@ -1,0 +1,14 @@
+{
+  "type": "mekanism:dissolution",
+  "chemical_input": {
+    "amount": 1,
+    "chemical": "mekanismelements:aqua_regia"
+  },
+  "item_input": {
+    "tag": "c:dusts/netherite"
+  },
+  "output": {
+    "amount": 100,
+    "id": "mekanismelements:netherite_acid"
+  }
+}

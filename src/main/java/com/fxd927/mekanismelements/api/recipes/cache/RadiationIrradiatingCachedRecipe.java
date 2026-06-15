@@ -1,12 +1,11 @@
 package com.fxd927.mekanismelements.api.recipes.cache;
 
 import com.fxd927.mekanismelements.api.recipes.RadiationIrradiatingRecipe;
-import mekanism.api.chemical.gas.GasStack;
-import mekanism.api.chemical.merged.BoxedChemicalStack;
+import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.api.recipes.inputs.IInputHandler;
 import mekanism.api.recipes.inputs.ILongInputHandler;
-import mekanism.api.recipes.outputs.BoxedChemicalOutputHandler;
+import mekanism.api.recipes.outputs.IOutputHandler;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,15 +14,15 @@ import java.util.function.BooleanSupplier;
 import java.util.function.LongSupplier;
 
 public class RadiationIrradiatingCachedRecipe extends CachedRecipe<RadiationIrradiatingRecipe> {
-    private final BoxedChemicalOutputHandler outputHandler;
+    private final IOutputHandler<ChemicalStack> outputHandler;
     private final IInputHandler<@NotNull ItemStack> itemInputHandler;
-    private final ILongInputHandler<@NotNull GasStack> gasInputHandler;
+    private final ILongInputHandler<@NotNull ChemicalStack> gasInputHandler;
     private final LongSupplier gasUsage;
     private long gasUsageMultiplier;
 
     private ItemStack recipeItem = ItemStack.EMPTY;
-    private GasStack recipeGas = GasStack.EMPTY;
-    private BoxedChemicalStack output = BoxedChemicalStack.EMPTY;
+    private ChemicalStack recipeGas = ChemicalStack.EMPTY;
+    private ChemicalStack output = ChemicalStack.EMPTY;
 
     /**
      * @param recipe           Recipe.
@@ -31,15 +30,15 @@ public class RadiationIrradiatingCachedRecipe extends CachedRecipe<RadiationIrra
      *                         do this every tick or if there is no one viewing recipes.
      * @param itemInputHandler Item input handler.
      * @param gasInputHandler  Chemical input handler.
-     * @param gasUsage         Gas usage multiplier.
+     * @param gasUsage         Chemical usage multiplier.
      * @param outputHandler    Output handler.
      */
     public RadiationIrradiatingCachedRecipe(RadiationIrradiatingRecipe recipe, BooleanSupplier recheckAllErrors, IInputHandler<@NotNull ItemStack> itemInputHandler,
-                                            ILongInputHandler<@NotNull GasStack> gasInputHandler, LongSupplier gasUsage, BoxedChemicalOutputHandler outputHandler) {
+                                            ILongInputHandler<@NotNull ChemicalStack> gasInputHandler, LongSupplier gasUsage, IOutputHandler<ChemicalStack> outputHandler) {
         super(recipe, recheckAllErrors);
         this.itemInputHandler = Objects.requireNonNull(itemInputHandler, "Item input handler cannot be null.");
-        this.gasInputHandler = Objects.requireNonNull(gasInputHandler, "Gas input handler cannot be null.");
-        this.gasUsage = Objects.requireNonNull(gasUsage, "Gas usage cannot be null.");
+        this.gasInputHandler = Objects.requireNonNull(gasInputHandler, "Chemical input handler cannot be null.");
+        this.gasUsage = Objects.requireNonNull(gasUsage, "Chemical usage cannot be null.");
         this.outputHandler = Objects.requireNonNull(outputHandler, "Input handler cannot be null.");
     }
 
@@ -68,7 +67,7 @@ public class RadiationIrradiatingCachedRecipe extends CachedRecipe<RadiationIrra
                     gasInputHandler.calculateOperationsCanSupport(tracker, recipeGas, gasUsageMultiplier);
                     if (tracker.shouldContinueChecking()) {
                         output = recipe.getOutput(recipeItem, recipeGas);
-                        outputHandler.calculateOperationsRoomFor(tracker, output);
+                        outputHandler.calculateOperationsCanSupport(tracker, output);
                     }
                 }
             }
@@ -79,10 +78,10 @@ public class RadiationIrradiatingCachedRecipe extends CachedRecipe<RadiationIrra
     public boolean isInputValid() {
         ItemStack itemInput = itemInputHandler.getInput();
         if (!itemInput.isEmpty()) {
-            GasStack gasStack = gasInputHandler.getInput();
+            ChemicalStack gasStack = gasInputHandler.getInput();
             //Ensure that we check that we have enough for that the recipe matches *and* also that we have enough for how much we need to use
             if (!gasStack.isEmpty() && recipe.test(itemInput, gasStack)) {
-                GasStack recipeGas = gasInputHandler.getRecipeInput(recipe.getGasInput());
+                ChemicalStack recipeGas = gasInputHandler.getRecipeInput(recipe.getGasInput());
                 return !recipeGas.isEmpty() && gasStack.getAmount() >= recipeGas.getAmount();
             }
         }
@@ -103,11 +102,8 @@ public class RadiationIrradiatingCachedRecipe extends CachedRecipe<RadiationIrra
     @Override
     protected void finishProcessing(int operations) {
         //Validate something didn't go horribly wrong
-        if (!recipeItem.isEmpty() && !recipeGas.isEmpty() && !output.isEmpty()) {
+        if (!output.isEmpty()) {
             itemInputHandler.use(recipeItem, operations);
-            if (gasUsageMultiplier > 0) {
-                gasInputHandler.use(recipeGas, operations * gasUsageMultiplier);
-            }
             outputHandler.handleOutput(output, operations);
         }
     }

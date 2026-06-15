@@ -1,13 +1,12 @@
 {
   "type":"mekanism:crystallizing",
-  "chemicalType":"gas",
   "input":
   {
     "amount":1000,
-    "gas":"mekanismelements:helium"
+    "chemical":"mekanismelements:helium"
   },
   "output":
   {
-    "item":"chemlib:helium"
+    "id":"chemlib:helium"
   }
 }

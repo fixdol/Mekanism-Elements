@@ -2,18 +2,17 @@ package com.fxd927.mekanismelements.common.recipe.lookup;
 
 import com.fxd927.mekanismelements.common.recipe.lookup.cache.MSInputRecipeCache;
 import com.fxd927.mekanismelements.common.recipe.lookup.cache.MSSingleInputRecipeCache;
-import mekanism.api.chemical.Chemical;
 import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.recipes.MekanismRecipe;
 import mekanism.api.recipes.inputs.IInputHandler;
 import mekanism.common.util.ChemicalUtil;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
-public interface IMSSingleRecipeLookupHandler <INPUT, RECIPE extends MekanismRecipe & Predicate<INPUT>, INPUT_CACHE extends MSSingleInputRecipeCache<INPUT, ?, RECIPE, ?>>
+public interface IMSSingleRecipeLookupHandler <INPUT, RECIPE extends MekanismRecipe<?> & Predicate<INPUT>, INPUT_CACHE extends MSSingleInputRecipeCache<INPUT, ?, RECIPE, ?>>
         extends IMSRecipeLookupHandler.IMSRecipeTypedLookupHandler<RECIPE, INPUT_CACHE> {
     default boolean containsRecipe(INPUT input) {
         return getMSRecipeType().getInputCache().containsInput(getHandlerWorld(), input);
@@ -46,26 +45,27 @@ public interface IMSSingleRecipeLookupHandler <INPUT, RECIPE extends MekanismRec
     /**
      * Helper interface to make the generics that we have to pass to {@link IMSSingleRecipeLookupHandler} not as messy.
      */
-    interface ItemRecipeLookupHandler<RECIPE extends MekanismRecipe & Predicate<ItemStack>> extends IMSSingleRecipeLookupHandler<ItemStack, RECIPE, MSInputRecipeCache.SingleItem<RECIPE>> {
+    interface ItemRecipeLookupHandler<RECIPE extends MekanismRecipe<?> & Predicate<ItemStack>> extends IMSSingleRecipeLookupHandler<ItemStack, RECIPE, MSInputRecipeCache.SingleItem<RECIPE>> {
     }
 
     /**
      * Helper interface to make the generics that we have to pass to {@link IMSSingleRecipeLookupHandler} not as messy.
      */
-    interface FluidRecipeLookupHandler<RECIPE extends MekanismRecipe & Predicate<FluidStack>> extends IMSSingleRecipeLookupHandler<FluidStack, RECIPE, MSInputRecipeCache.SingleFluid<RECIPE>> {
+    interface FluidRecipeLookupHandler<RECIPE extends MekanismRecipe<?> & Predicate<FluidStack>> extends IMSSingleRecipeLookupHandler<FluidStack, RECIPE, MSInputRecipeCache.SingleFluid<RECIPE>> {
     }
 
     /**
      * Helper interface to make the generics that we have to pass to {@link IMSSingleRecipeLookupHandler} not as messy.
      */
-    interface ChemicalRecipeLookupHandler<CHEMICAL extends Chemical<CHEMICAL>, STACK extends ChemicalStack<CHEMICAL>, RECIPE extends MekanismRecipe & Predicate<STACK>>
-            extends IMSSingleRecipeLookupHandler<STACK, RECIPE, MSInputRecipeCache.SingleChemical<CHEMICAL, STACK, RECIPE>> {
+    interface ChemicalRecipeLookupHandler<RECIPE extends MekanismRecipe<?> & Predicate<ChemicalStack>>
+            extends IMSSingleRecipeLookupHandler<ChemicalStack, RECIPE, MSInputRecipeCache.SingleChemical<RECIPE>> {
 
         /**
          * Helper wrapper to convert a chemical to a chemical stack and pass it to {@link #containsRecipe(Object)} to make validity predicates easier and cleaner.
          */
-        default boolean containsRecipe(CHEMICAL input) {
-            return containsRecipe(ChemicalUtil.withAmount(input, 1));
+        default boolean containsRecipe(mekanism.api.chemical.Chemical input) {
+            return containsRecipe(new ChemicalStack(input, 1));
         }
     }
 }
+

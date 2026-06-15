@@ -5,7 +5,7 @@ import mekanism.api.recipes.MekanismRecipe;
 import mekanism.api.recipes.ingredients.InputIngredient;
 import mekanism.common.recipe.lookup.cache.type.IInputCache;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.TriPredicate;
+import net.neoforged.neoforge.common.util.TriPredicate;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -15,7 +15,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public abstract class MSTripleInputRecipeCache <INPUT_A, INGREDIENT_A extends InputIngredient<INPUT_A>, INPUT_B, INGREDIENT_B extends InputIngredient<INPUT_B>,
-        INPUT_C, INGREDIENT_C extends InputIngredient<INPUT_C>, RECIPE extends MekanismRecipe & TriPredicate<INPUT_A, INPUT_B, INPUT_C>,
+        INPUT_C, INGREDIENT_C extends InputIngredient<INPUT_C>, RECIPE extends MekanismRecipe<?> & TriPredicate<INPUT_A, INPUT_B, INPUT_C>,
         CACHE_A extends IInputCache<INPUT_A, INGREDIENT_A, RECIPE>, CACHE_B extends IInputCache<INPUT_B, INGREDIENT_B, RECIPE>,
         CACHE_C extends IInputCache<INPUT_C, INGREDIENT_C, RECIPE>> extends MSAbstractInputRecipeCache<RECIPE> {
 
@@ -239,3 +239,4 @@ public abstract class MSTripleInputRecipeCache <INPUT_A, INGREDIENT_A extends In
         }
     }
 }
+

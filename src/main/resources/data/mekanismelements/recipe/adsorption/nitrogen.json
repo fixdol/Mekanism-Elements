@@ -1,0 +1,14 @@
+{
+  "type": "mekanismelements:adsorption",
+  "fluid_input": {
+    "amount": 50,
+    "fluid": "mekanismelements:compressed_air"
+  },
+  "item_input": {
+    "tag": "c:dusts/charcoal"
+  },
+  "output": {
+    "amount": 800,
+    "id": "mekanismelements:nitrogen"
+  }
+}

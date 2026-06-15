@@ -18,3 +18,4 @@ public class MSBasicInventorySlot extends BasicInventorySlot {
         super(1, canExtract, canInsert, validator, listener, x, y);
     }
 }
+

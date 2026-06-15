@@ -1,5 +1,6 @@
 package com.fxd927.mekanismelements.common.tile.machine;
 
+import mekanism.common.tile.component.config.ConfigInfo;
 import com.fxd927.mekanismelements.api.recipes.ChemicalDemolitionRecipe;
 import com.fxd927.mekanismelements.api.recipes.cache.ChemicalDemolitionCachedRecipe;
 import com.fxd927.mekanismelements.common.recipe.IMSRecipeTypeProvider;
@@ -9,21 +10,14 @@ import com.fxd927.mekanismelements.common.recipe.lookup.cache.MSInputRecipeCache
 import com.fxd927.mekanismelements.common.tile.prefab.MSTileEntityProgressMachine;
 import mekanism.api.AutomationType;
 import mekanism.api.IContentsListener;
+import mekanism.api.chemical.Chemical;
+import com.fxd927.mekanismelements.common.registries.MSBlocks;
 import mekanism.api.Upgrade;
-import mekanism.api.chemical.ChemicalTankBuilder;
-import mekanism.api.chemical.gas.Gas;
-import mekanism.api.chemical.gas.GasStack;
-import mekanism.api.chemical.gas.IGasTank;
-import mekanism.api.chemical.infuse.IInfusionTank;
-import mekanism.api.chemical.infuse.InfuseType;
-import mekanism.api.chemical.infuse.InfusionStack;
-import mekanism.api.chemical.pigment.IPigmentTank;
-import mekanism.api.chemical.pigment.Pigment;
-import mekanism.api.chemical.pigment.PigmentStack;
-import mekanism.api.chemical.slurry.ISlurryTank;
-import mekanism.api.chemical.slurry.Slurry;
-import mekanism.api.chemical.slurry.SlurryStack;
-import mekanism.api.math.FloatingLong;
+import mekanism.api.chemical.ChemicalStack;
+import mekanism.api.chemical.IChemicalTank;
+import mekanism.api.chemical.BasicChemicalTank;
+import mekanism.api.chemical.ChemicalStack;
+import mekanism.api.functions.ConstantPredicates;
 import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.api.recipes.inputs.IInputHandler;
 import mekanism.api.recipes.inputs.ILongInputHandler;
@@ -45,7 +39,7 @@ import mekanism.common.inventory.container.slot.SlotOverlay;
 import mekanism.common.inventory.slot.EnergyInventorySlot;
 import mekanism.common.inventory.slot.InputInventorySlot;
 import mekanism.common.inventory.slot.OutputInventorySlot;
-import mekanism.common.inventory.slot.chemical.GasInventorySlot;
+import mekanism.common.inventory.slot.chemical.ChemicalInventorySlot;
 import mekanism.common.inventory.warning.WarningTracker;
 import mekanism.common.lib.transmitter.TransmissionType;
 import mekanism.common.tile.component.TileComponentConfig;
@@ -60,10 +54,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiPredicate;
 
 public class TileEntityChemicalDemolitionMachine extends MSTileEntityProgressMachine<ChemicalDemolitionRecipe> implements
-        IMSDoubleRecipeLookupHandler.ItemChemicalRecipeLookupHandler<Gas, GasStack, ChemicalDemolitionRecipe>{
+        IMSDoubleRecipeLookupHandler.ItemChemicalRecipeLookupHandler<ChemicalDemolitionRecipe>{
     public static final CachedRecipe.OperationTracker.RecipeError NOT_ENOUGH_SPACE_SECOND_OUTPUT_ERROR = CachedRecipe.OperationTracker.RecipeError.create();
     private static final List<CachedRecipe.OperationTracker.RecipeError> TRACKED_ERROR_TYPES = List.of(
             CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_ENERGY,
@@ -76,19 +71,19 @@ public class TileEntityChemicalDemolitionMachine extends MSTileEntityProgressMac
     private static final long MAX_CHEMICAL = 10_000;
     public static final int BASE_TICKS_REQUIRED = 100;
 
-    @WrappingComputerMethod(wrapper = SpecialComputerMethodWrapper.ComputerChemicalTankWrapper.class, methodNames = {"getGasInput", "getGasInputCapacity", "getGasInputNeeded",
-            "getGasInputFilledPercentage"}, docPlaceholder = "gas input tank")
-    public IGasTank injectTank;
+    @WrappingComputerMethod(wrapper = SpecialComputerMethodWrapper.ComputerChemicalTankWrapper.class, methodNames = {"getChemicalInput", "getChemicalInputCapacity", "getChemicalInputNeeded",
+            "getChemicalInputFilledPercentage"}, docPlaceholder = "chemical input tank")
+    public IChemicalTank injectTank;
     public double injectUsage = 1;
 
     private final IOutputHandler firstOutputHandler;
     private final IOutputHandler secondOutputHandler;
     private final IInputHandler<@NotNull ItemStack> itemInputHandler;
-    private final ILongInputHandler<@NotNull GasStack> gasInputHandler;
+    private final ILongInputHandler<@NotNull ChemicalStack> chemicalInputHandler;
 
     private MachineEnergyContainer<TileEntityChemicalDemolitionMachine> energyContainer;
-    @WrappingComputerMethod(wrapper = SpecialComputerMethodWrapper.ComputerIInventorySlotWrapper.class, methodNames = "getInputGasItem", docPlaceholder = "gas input item slot")
-    GasInventorySlot gasInputSlot;
+    @WrappingComputerMethod(wrapper = SpecialComputerMethodWrapper.ComputerIInventorySlotWrapper.class, methodNames = "getInputChemicalItem", docPlaceholder = "chemical input item slot")
+    ChemicalInventorySlot chemicalInputSlot;
     @WrappingComputerMethod(wrapper = SpecialComputerMethodWrapper.ComputerIInventorySlotWrapper.class, methodNames = "getInputItem", docPlaceholder = "input slot")
     InputInventorySlot inputSlot;
     @WrappingComputerMethod(wrapper = SpecialComputerMethodWrapper.ComputerIInventorySlotWrapper.class, methodNames = "getOutputItem", docPlaceholder = "output slot")
@@ -99,35 +94,51 @@ public class TileEntityChemicalDemolitionMachine extends MSTileEntityProgressMac
     EnergyInventorySlot energySlot;
 
     public TileEntityChemicalDemolitionMachine(BlockPos pos, BlockState state) {
-        super(null, pos, state, TRACKED_ERROR_TYPES, BASE_TICKS_REQUIRED);
-        configComponent = new TileComponentConfig(this, TransmissionType.ITEM, TransmissionType.GAS, TransmissionType.INFUSION, TransmissionType.PIGMENT,
-                TransmissionType.SLURRY, TransmissionType.ENERGY);
-        configComponent.setupItemIOExtraConfig(inputSlot, firstOutputSlot, gasInputSlot, energySlot);
-        configComponent.setupInputConfig(TransmissionType.GAS, injectTank).setEjecting(true);
-        configComponent.setupInputConfig(TransmissionType.INFUSION, injectTank).setEjecting(true);
-        configComponent.setupInputConfig(TransmissionType.PIGMENT, injectTank).setEjecting(true);
-        configComponent.setupInputConfig(TransmissionType.SLURRY, injectTank).setEjecting(true);
-        configComponent.setupItemIOConfig(Collections.singletonList(inputSlot), List.of(firstOutputSlot, secondOutputSlot), energySlot, false);
-        configComponent.setupInputConfig(TransmissionType.ENERGY, energyContainer);
+        // TODO: Uncomment when CHEMICAL_DEMOLITION_MACHINE block is registered
+        // super(MSBlocks.CHEMICAL_DEMOLITION_MACHINE, pos, state, TRACKED_ERROR_TYPES, BASE_TICKS_REQUIRED);
+        super(null, pos, state, TRACKED_ERROR_TYPES, BASE_TICKS_REQUIRED); // Temporary fix - block is commented out
+        // Config is created from block attributes in parent constructor
+        getConfig().setupItemIOExtraConfig(inputSlot, firstOutputSlot, chemicalInputSlot, energySlot);
+        
+        // Chemical Input Config - LEFT/BACK sides
+        ConfigInfo chemicalConfig = getConfig().setupInputConfig(TransmissionType.CHEMICAL, injectTank);
+        if (chemicalConfig != null) {
+            chemicalConfig.setDataType(mekanism.common.tile.component.config.DataType.INPUT, mekanism.api.RelativeSide.LEFT);
+            chemicalConfig.setDataType(mekanism.common.tile.component.config.DataType.INPUT, mekanism.api.RelativeSide.BACK);
+            chemicalConfig.setEjecting(true);
+        }
+        
+        // Energy Config - all sides accept
+        ConfigInfo energyConfig = getConfig().setupInputConfig(TransmissionType.ENERGY, energyContainer);
+        if (energyConfig != null) {
+            for (mekanism.api.RelativeSide side : mekanism.api.RelativeSide.values()) {
+                energyConfig.setDataType(mekanism.common.tile.component.config.DataType.INPUT, side);
+            }
+        }
 
         ejectorComponent = new TileComponentEjector(this);
-        ejectorComponent.setOutputData(configComponent, TransmissionType.ITEM, TransmissionType.GAS, TransmissionType.INFUSION, TransmissionType.PIGMENT,
-                        TransmissionType.SLURRY)
+        ejectorComponent.setOutputData(getConfig(), TransmissionType.ITEM, TransmissionType.CHEMICAL)
                 .setCanTankEject(tank -> tank != injectTank);
 
         itemInputHandler = InputHelper.getInputHandler(inputSlot, CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_INPUT);
-        gasInputHandler = InputHelper.getConstantInputHandler(injectTank);
+        chemicalInputHandler = InputHelper.getInputHandler(injectTank, CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_SECONDARY_INPUT);
         firstOutputHandler = OutputHelper.getOutputHandler(firstOutputSlot, CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_OUTPUT_SPACE);
         secondOutputHandler = OutputHelper.getOutputHandler(secondOutputSlot, NOT_ENOUGH_SPACE_SECOND_OUTPUT_ERROR);
     }
 
+    @Override
+    protected void presetVariables() {
+        super.presetVariables();
+        injectTank = BasicChemicalTank.createModern(MAX_CHEMICAL, allowExtractingChemical() ? ConstantPredicates.alwaysTrueBi() : ConstantPredicates.notExternal(),
+                (chemical, automationType) -> containsRecipeBA(inputSlot.getStack(), chemical), this::containsRecipeB, recipeCacheLookupMonitor);
+        energyContainer = MachineEnergyContainer.input(this, recipeCacheLookupMonitor);
+    }
+
     @NotNull
     @Override
-    public IChemicalTankHolder<Gas, GasStack, IGasTank> getInitialGasTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
-        ChemicalTankHelper<Gas, GasStack, IGasTank> builder = ChemicalTankHelper.forSideGasWithConfig(this::getDirection, this::getConfig);
-        BiPredicate<@NotNull Gas, @NotNull AutomationType> canExtract = allowExtractingChemical() ? ChemicalTankBuilder.GAS.alwaysTrueBi : ChemicalTankBuilder.GAS.notExternal;
-        builder.addTank(injectTank = ChemicalTankBuilder.GAS.create(MAX_CHEMICAL, canExtract, (gas, automationType) -> containsRecipeBA(inputSlot.getStack(), gas),
-                this::containsRecipeB, recipeCacheListener));
+    public IChemicalTankHolder getInitialGasTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
+        ChemicalTankHelper builder = ChemicalTankHelper.forSideWithConfig(this);
+        builder.addTank(injectTank);
         return builder.build();
     }
 
@@ -142,72 +153,81 @@ public class TileEntityChemicalDemolitionMachine extends MSTileEntityProgressMac
 
     @NotNull
     @Override
-    public IChemicalTankHolder<InfuseType, InfusionStack, IInfusionTank> getInitialInfusionTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
-        ChemicalTankHelper<InfuseType, InfusionStack, IInfusionTank> builder = ChemicalTankHelper.forSideInfusionWithConfig(this::getDirection, this::getConfig);
+    public IChemicalTankHolder getInitialInfusionTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
+        ChemicalTankHelper builder = ChemicalTankHelper.forSideWithConfig(this);
         return builder.build();
     }
 
     @NotNull
     @Override
-    public IChemicalTankHolder<Pigment, PigmentStack, IPigmentTank> getInitialPigmentTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
-        ChemicalTankHelper<Pigment, PigmentStack, IPigmentTank> builder = ChemicalTankHelper.forSidePigmentWithConfig(this::getDirection, this::getConfig);
+    public IChemicalTankHolder getInitialPigmentTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
+        ChemicalTankHelper builder = ChemicalTankHelper.forSideWithConfig(this);
         return builder.build();
     }
 
     @NotNull
     @Override
-    public IChemicalTankHolder<Slurry, SlurryStack, ISlurryTank> getInitialSlurryTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
-        ChemicalTankHelper<Slurry, SlurryStack, ISlurryTank> builder = ChemicalTankHelper.forSideSlurryWithConfig(this::getDirection, this::getConfig);
+    public IChemicalTankHolder getInitialSlurryTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
+        ChemicalTankHelper builder = ChemicalTankHelper.forSideWithConfig(this);
         return builder.build();
     }
 
     @NotNull
     @Override
     protected IEnergyContainerHolder getInitialEnergyContainers(IContentsListener listener, IContentsListener recipeCacheListener) {
-        EnergyContainerHelper builder = EnergyContainerHelper.forSideWithConfig(this::getDirection, this::getConfig);
-        builder.addContainer(energyContainer = MachineEnergyContainer.input(this, listener));
+        EnergyContainerHelper builder = EnergyContainerHelper.forSideWithConfig(this);
+        builder.addContainer(energyContainer);
         return builder.build();
     }
 
     @NotNull
     @Override
     protected IInventorySlotHolder getInitialInventory(IContentsListener listener, IContentsListener recipeCacheListener) {
-        InventorySlotHelper builder = InventorySlotHelper.forSideWithConfig(this::getDirection, this::getConfig);
-        builder.addSlot(gasInputSlot = GasInventorySlot.fillOrConvert(injectTank, this::getLevel, listener, 8, 65));
+        InventorySlotHelper builder = InventorySlotHelper.forSideWithConfig(this);
+        builder.addSlot(chemicalInputSlot = ChemicalInventorySlot.fillOrConvert(injectTank, this::getLevel, recipeCacheListener, 8, 65));
         builder.addSlot(inputSlot = InputInventorySlot.at(item -> containsRecipeAB(item, injectTank.getStack()), this::containsRecipeA, recipeCacheListener, 28, 36))
                 .tracksWarnings(slot -> slot.warning(WarningTracker.WarningType.NO_MATCHING_RECIPE, getWarningCheck(CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_INPUT)));
-        builder.addSlot(firstOutputSlot = OutputInventorySlot.at(listener, 116, 35));
-        builder.addSlot(secondOutputSlot = OutputInventorySlot.at(listener, 132, 35));
-        builder.addSlot(energySlot = EnergyInventorySlot.fillOrConvert(energyContainer, this::getLevel, listener, 154, 62));
-        gasInputSlot.setSlotOverlay(SlotOverlay.MINUS);
+        builder.addSlot(firstOutputSlot = OutputInventorySlot.at(recipeCacheListener, 116, 35));
+        builder.addSlot(secondOutputSlot = OutputInventorySlot.at(recipeCacheListener, 132, 35));
+        builder.addSlot(energySlot = EnergyInventorySlot.fillOrConvert(energyContainer, this::getLevel, recipeCacheListener, 154, 62));
+        chemicalInputSlot.setSlotOverlay(SlotOverlay.MINUS);
         return builder.build();
     }
 
     @Override
-    protected void onUpdateServer() {
-        super.onUpdateServer();
+    protected boolean onUpdateServer() {
+        boolean needsUpdate = super.onUpdateServer();
         energySlot.fillContainerOrConvert();
-        gasInputSlot.fillTankOrConvert();
-        recipeCacheLookupMonitor.updateAndProcess();
+        chemicalInputSlot.fillTank();
+        if (recipeCacheLookupMonitor.updateAndProcess()) {
+            needsUpdate = true;
+        }
+
+        if (level.getGameTime() % 40 == 0) {
+             com.fxd927.mekanismelements.common.MekanismElements.logger.info("DEBUG: ChemicalDemolition Tick | Energy: {}/{} | InputItem: {} | InputChemical: {} | Active: {}", 
+                 energyContainer.getEnergy(), energyContainer.getMaxEnergy(),
+                 inputSlot.getStack(), injectTank.getStack(), getActive());
+        }
+        return needsUpdate;
     }
 
     @Override
-    public IMSRecipeTypeProvider<ChemicalDemolitionRecipe, MSInputRecipeCache.ItemChemical<Gas, GasStack, ChemicalDemolitionRecipe>> getMSRecipeType() {
+    public IMSRecipeTypeProvider<ChemicalDemolitionRecipe, MSInputRecipeCache.ItemChemical<ChemicalDemolitionRecipe>> getMSRecipeType() {
         return MSRecipeType.CHEMICAL_DEMOLITION;
     }
 
     @Nullable
     @Override
     public ChemicalDemolitionRecipe getRecipe(int cacheIndex) {
-        return findFirstRecipe(itemInputHandler, gasInputHandler);
+        return findFirstRecipe(itemInputHandler, chemicalInputHandler);
     }
 
     @NotNull
     @Override
     public CachedRecipe<ChemicalDemolitionRecipe> createNewCachedRecipe(@NotNull ChemicalDemolitionRecipe recipe, int cacheIndex) {
-        return new ChemicalDemolitionCachedRecipe(recipe, recheckAllRecipeErrors, itemInputHandler, gasInputHandler, () -> StatUtils.inversePoisson(injectUsage), firstOutputHandler, secondOutputHandler)
+        return new ChemicalDemolitionCachedRecipe(recipe, recheckAllRecipeErrors, itemInputHandler, chemicalInputHandler, () -> StatUtils.inversePoisson(injectUsage), firstOutputHandler, secondOutputHandler)
                 .setErrorsChanged(this::onErrorsChanged)
-                .setCanHolderFunction(() -> MekanismUtils.canFunction(this))
+                .setCanHolderFunction(this::canFunction)
                 .setActive(this::setActive)
                 .setEnergyRequirements(energyContainer::getEnergyPerTick, energyContainer)
                 .setRequiredTicks(this::getTicksRequired)
@@ -218,7 +238,7 @@ public class TileEntityChemicalDemolitionMachine extends MSTileEntityProgressMac
     @Override
     public void recalculateUpgrades(Upgrade upgrade) {
         super.recalculateUpgrades(upgrade);
-        if (upgrade == Upgrade.GAS || upgrade == Upgrade.SPEED) {
+        if (upgrade == Upgrade.CHEMICAL || upgrade == Upgrade.SPEED) {
             injectUsage = MekanismUtils.getGasPerTickMeanMultiplier(this);
         }
     }
@@ -228,7 +248,8 @@ public class TileEntityChemicalDemolitionMachine extends MSTileEntityProgressMac
     }
 
     @ComputerMethod(methodDescription = ComputerConstants.DESCRIPTION_GET_ENERGY_USAGE)
-    FloatingLong getEnergyUsage() {
-        return getActive() ? energyContainer.getEnergyPerTick() : FloatingLong.ZERO;
+    long getEnergyUsage() {
+        return getActive() ? energyContainer.getEnergyPerTick() : 0;
     }
 }
+

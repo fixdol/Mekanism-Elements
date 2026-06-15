@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class MSSingleInputRecipeCache <INPUT, INGREDIENT extends InputIngredient<INPUT>, RECIPE extends MekanismRecipe & Predicate<INPUT>,
+public class MSSingleInputRecipeCache <INPUT, INGREDIENT extends InputIngredient<INPUT>, RECIPE extends MekanismRecipe<?> & Predicate<INPUT>,
         CACHE extends IInputCache<INPUT, INGREDIENT, RECIPE>> extends MSAbstractInputRecipeCache<RECIPE> {
 
     private final Set<RECIPE> complexRecipes = new HashSet<>();
@@ -108,3 +108,4 @@ public class MSSingleInputRecipeCache <INPUT, INGREDIENT extends InputIngredient
         }
     }
 }
+

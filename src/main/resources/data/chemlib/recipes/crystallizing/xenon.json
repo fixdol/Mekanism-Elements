@@ -1,13 +1,12 @@
 {
   "type":"mekanism:crystallizing",
-  "chemicalType":"gas",
   "input":
   {
     "amount":1000,
-    "gas":"mekanismelements:xenon"
+    "chemical":"mekanismelements:xenon"
   },
   "output":
   {
-    "item":"chemlib:xenon"
+    "id":"chemlib:xenon"
   }
 }

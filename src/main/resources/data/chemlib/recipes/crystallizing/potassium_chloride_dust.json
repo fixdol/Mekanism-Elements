@@ -1,13 +1,12 @@
 {
   "type":"mekanism:crystallizing",
-  "chemicalType":"gas",
   "input":
   {
     "amount":1000,
-    "gas":"mekanismelements:potassium_chloride"
+    "chemical":"mekanismelements:potassium_chloride"
   },
   "output":
   {
-    "item":"chemlib:potassium_chloride_dust"
+    "id":"chemlib:potassium_chloride_dust"
   }
 }

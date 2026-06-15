@@ -1,0 +1,15 @@
+{
+  "type": "mekanism:chemical_infusing",
+  "output": {
+    "amount": 1,
+    "id": "mekanismelements:aqua_regia"
+  },
+  "left_input": {
+    "amount": 1,
+    "chemical": "mekanismelements:nitric_acid"
+  },
+  "right_input": {
+    "amount": 3,
+    "chemical": "mekanism:hydrogen_chloride"
+  }
+}

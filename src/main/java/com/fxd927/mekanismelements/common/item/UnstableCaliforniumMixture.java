@@ -29,9 +29,10 @@ public class UnstableCaliforniumMixture extends Item {
     }
 
     private void forceRadiate(LivingEntity entity, double magnitude) {
-        entity.getCapability(Capabilities.RADIATION_ENTITY).ifPresent(c -> {
-            c.radiate(magnitude);
-        });
+        var radiationEntity = entity.getCapability(Capabilities.RADIATION_ENTITY);
+        if (radiationEntity != null) {
+            radiationEntity.radiate(magnitude);
+        }
     }
 
     @Override
@@ -39,3 +40,4 @@ public class UnstableCaliforniumMixture extends Item {
         return TextComponentUtil.build(this.color, super.getName(stack));
     }
 }
+

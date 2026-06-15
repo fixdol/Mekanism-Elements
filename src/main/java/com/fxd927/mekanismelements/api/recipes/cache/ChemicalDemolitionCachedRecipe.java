@@ -1,7 +1,7 @@
 package com.fxd927.mekanismelements.api.recipes.cache;
 
 import com.fxd927.mekanismelements.api.recipes.ChemicalDemolitionRecipe;
-import mekanism.api.chemical.gas.GasStack;
+import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.api.recipes.inputs.IInputHandler;
 import mekanism.api.recipes.inputs.ILongInputHandler;
@@ -17,12 +17,12 @@ public class ChemicalDemolitionCachedRecipe extends CachedRecipe<ChemicalDemolit
     private final IOutputHandler firstOutputHandler;
     private final IOutputHandler secondOutputHandler;
     private final IInputHandler<@NotNull ItemStack> itemInputHandler;
-    private final ILongInputHandler<@NotNull GasStack> gasInputHandler;
+    private final ILongInputHandler<@NotNull ChemicalStack> gasInputHandler;
     private final LongSupplier gasUsage;
     private long gasUsageMultiplier;
 
     private ItemStack recipeItem = ItemStack.EMPTY;
-    private GasStack recipeGas = GasStack.EMPTY;
+    private ChemicalStack recipeGas = ChemicalStack.EMPTY;
     private ItemStack firstOutput = ItemStack.EMPTY;
     private ItemStack secondOutput = ItemStack.EMPTY;
 
@@ -32,15 +32,15 @@ public class ChemicalDemolitionCachedRecipe extends CachedRecipe<ChemicalDemolit
      *                         do this every tick or if there is no one viewing recipes.
      * @param itemInputHandler Item input handler.
      * @param gasInputHandler  Chemical input handler.
-     * @param gasUsage         Gas usage multiplier.
+     * @param gasUsage         Chemical usage multiplier.
      * @param firstOutputHandler    Output handler.
      */
     public ChemicalDemolitionCachedRecipe(ChemicalDemolitionRecipe recipe, BooleanSupplier recheckAllErrors, IInputHandler<@NotNull ItemStack> itemInputHandler,
-                                            ILongInputHandler<@NotNull GasStack> gasInputHandler, LongSupplier gasUsage, IOutputHandler firstOutputHandler, IOutputHandler secondOutputHandler) {
+                                            ILongInputHandler<@NotNull ChemicalStack> gasInputHandler, LongSupplier gasUsage, IOutputHandler firstOutputHandler, IOutputHandler secondOutputHandler) {
         super(recipe, recheckAllErrors);
         this.itemInputHandler = Objects.requireNonNull(itemInputHandler, "Item input handler cannot be null.");
-        this.gasInputHandler = Objects.requireNonNull(gasInputHandler, "Gas input handler cannot be null.");
-        this.gasUsage = Objects.requireNonNull(gasUsage, "Gas usage cannot be null.");
+        this.gasInputHandler = Objects.requireNonNull(gasInputHandler, "Chemical input handler cannot be null.");
+        this.gasUsage = Objects.requireNonNull(gasUsage, "Chemical usage cannot be null.");
         this.firstOutputHandler = Objects.requireNonNull(firstOutputHandler, "First Input handler cannot be null.");
         this.secondOutputHandler = Objects.requireNonNull(secondOutputHandler, "Second Input handler cannot be null.");
     }
@@ -83,9 +83,9 @@ public class ChemicalDemolitionCachedRecipe extends CachedRecipe<ChemicalDemolit
     public boolean isInputValid() {
         ItemStack itemInput = itemInputHandler.getInput();
         if (!itemInput.isEmpty()) {
-            GasStack gasStack = gasInputHandler.getInput();
+            ChemicalStack gasStack = gasInputHandler.getInput();
             if (!gasStack.isEmpty() && recipe.test(itemInput, gasStack)) {
-                GasStack recipeGas = gasInputHandler.getRecipeInput(recipe.getGasInput());
+                ChemicalStack recipeGas = gasInputHandler.getRecipeInput(recipe.getGasInput());
                 return !recipeGas.isEmpty() && gasStack.getAmount() >= recipeGas.getAmount();
             }
         }
@@ -95,17 +95,11 @@ public class ChemicalDemolitionCachedRecipe extends CachedRecipe<ChemicalDemolit
     @Override
     protected void useResources(int operations) {
         super.useResources(operations);
-        if (gasUsageMultiplier <= 0) {
-            return;
-        } else if (recipeGas.isEmpty()) {
-            return;
-        }
-        gasInputHandler.use(recipeGas, operations * gasUsageMultiplier);
     }
 
     @Override
     protected void finishProcessing(int operations) {
-        if (!recipeItem.isEmpty() && !recipeGas.isEmpty() && !firstOutput.isEmpty() && !secondOutput.isEmpty()) {
+        if (!firstOutput.isEmpty() && !secondOutput.isEmpty()) {
             itemInputHandler.use(recipeItem, operations);
             if (gasUsageMultiplier > 0) {
                 gasInputHandler.use(recipeGas, operations * gasUsageMultiplier);
@@ -115,3 +109,4 @@ public class ChemicalDemolitionCachedRecipe extends CachedRecipe<ChemicalDemolit
         }
     }
 }
+

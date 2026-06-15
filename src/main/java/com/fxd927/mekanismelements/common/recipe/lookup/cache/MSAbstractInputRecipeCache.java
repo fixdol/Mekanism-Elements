@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public abstract class MSAbstractInputRecipeCache<RECIPE extends MekanismRecipe> implements IInputRecipeCache {
+public abstract class MSAbstractInputRecipeCache<RECIPE extends MekanismRecipe<?>> implements IInputRecipeCache {
     protected final MSRecipeType<RECIPE, ?> recipeType;
     protected boolean initialized;
 
@@ -92,3 +92,4 @@ public abstract class MSAbstractInputRecipeCache<RECIPE extends MekanismRecipe> 
         return complexIngredients1.stream().anyMatch(recipe -> input1Extractor.apply(recipe).testType(input1) && input2Extractor.apply(recipe).testType(input2));
     }
 }
+

@@ -1,0 +1,19 @@
+{
+  "type": "mekanism:rotary",
+  "fluid_input": {
+    "amount": 1,
+    "fluid": "mekanismelements:bromine"
+  },
+  "chemical_output": {
+    "id": "mekanismelements:bromine",
+    "amount": 1
+  },
+  "chemical_input": {
+    "amount": 1,
+    "chemical": "mekanismelements:bromine"
+  },
+  "fluid_output": {
+    "id": "mekanismelements:bromine",
+    "amount": 1
+  }
+}

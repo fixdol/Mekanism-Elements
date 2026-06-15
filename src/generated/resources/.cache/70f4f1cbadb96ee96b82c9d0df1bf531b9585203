@@ -1,0 +1,4 @@
+// 1.21.1	2026-02-26T18:53:00.2653635	Tags for minecraft:block mod id mekanismelements
+424a065a4b67f6ce0f84bf6af144af1666730932 data/minecraft/tags/block/mineable/pickaxe.json
+81f57b99065da995f8820a67d8bee0d6562039ec data/minecraft/tags/block/needs_diamond_tool.json
+424a065a4b67f6ce0f84bf6af144af1666730932 data/minecraft/tags/block/needs_iron_tool.json

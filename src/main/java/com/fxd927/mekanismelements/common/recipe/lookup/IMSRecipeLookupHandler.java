@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface IMSRecipeLookupHandler <RECIPE extends MekanismRecipe> extends IContentsListener {
+public interface IMSRecipeLookupHandler <RECIPE extends MekanismRecipe<?>> extends IContentsListener {
     /**
      * @return The world for this {@link IMSRecipeLookupHandler}.
      */
@@ -86,7 +86,7 @@ public interface IMSRecipeLookupHandler <RECIPE extends MekanismRecipe> extends 
      * would just make the class definitions a lot messier with very long generics that can be folded away into the helper interfaces we use anyway ofr actual lookup
      * purposes.
      */
-    interface IMSRecipeTypedLookupHandler<RECIPE extends MekanismRecipe, INPUT_CACHE extends IInputRecipeCache> extends IMSRecipeLookupHandler<RECIPE> {
+    interface IMSRecipeTypedLookupHandler<RECIPE extends MekanismRecipe<?>, INPUT_CACHE extends IInputRecipeCache> extends IMSRecipeLookupHandler<RECIPE> {
 
         @NotNull
         @Override
@@ -108,3 +108,4 @@ public interface IMSRecipeLookupHandler <RECIPE extends MekanismRecipe> extends 
     }
 
 }
+

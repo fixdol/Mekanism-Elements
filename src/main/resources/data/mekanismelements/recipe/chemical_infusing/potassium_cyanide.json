@@ -1,0 +1,15 @@
+{
+  "type": "mekanism:chemical_infusing",
+  "output": {
+    "amount": 1,
+    "id": "mekanismelements:potassium_cyanide"
+  },
+  "left_input": {
+    "amount": 1,
+    "chemical": "mekanismelements:potassium_hydroxide"
+  },
+  "right_input": {
+    "amount": 1,
+    "chemical": "mekanismelements:hydrogen_cyanide"
+  }
+}

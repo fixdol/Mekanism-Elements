@@ -1,8 +1,8 @@
 package com.fxd927.mekanismelements.common.tile.prefab;
 
-import mekanism.api.NBTConstants;
 import mekanism.api.Upgrade;
-import mekanism.api.providers.IBlockProvider;
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.block.Block;
 import mekanism.api.recipes.MekanismRecipe;
 import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.common.integration.computer.annotation.ComputerMethod;
@@ -11,6 +11,7 @@ import mekanism.common.inventory.container.sync.SyncableInt;
 import mekanism.common.util.MekanismUtils;
 import mekanism.common.util.UpgradeUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,12 +19,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public abstract class MSTileEntityProgressMachine<RECIPE extends MekanismRecipe> extends MSTileEntityRecipeMachine<RECIPE> {
+public abstract class MSTileEntityProgressMachine<RECIPE extends MekanismRecipe<?>> extends MSTileEntityRecipeMachine<RECIPE> {
     public int ticksRequired;
     protected int baseTicksRequired;
     private int operatingTicks;
 
-    protected MSTileEntityProgressMachine(IBlockProvider blockProvider, BlockPos pos, BlockState state, List<CachedRecipe.OperationTracker.RecipeError> errorTypes, int baseTicksRequired) {
+    protected MSTileEntityProgressMachine(Holder<Block> blockProvider, BlockPos pos, BlockState state, List<CachedRecipe.OperationTracker.RecipeError> errorTypes, int baseTicksRequired) {
         super(blockProvider, pos, state, errorTypes);
         this.baseTicksRequired = baseTicksRequired;
         ticksRequired = this.baseTicksRequired;
@@ -53,15 +54,15 @@ public abstract class MSTileEntityProgressMachine<RECIPE extends MekanismRecipe>
     }
 
     @Override
-    public void load(@NotNull CompoundTag nbt) {
-        super.load(nbt);
-        operatingTicks = nbt.getInt(NBTConstants.PROGRESS);
+    public void loadAdditional(@NotNull CompoundTag nbt, @NotNull HolderLookup.Provider provider) {
+        super.loadAdditional(nbt, provider);
+        operatingTicks = nbt.getInt("progress");
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag nbtTags) {
-        super.saveAdditional(nbtTags);
-        nbtTags.putInt(NBTConstants.PROGRESS, getOperatingTicks());
+    public void saveAdditional(@NotNull CompoundTag nbtTags, @NotNull HolderLookup.Provider provider) {
+        super.saveAdditional(nbtTags, provider);
+        nbtTags.putInt("progress", getOperatingTicks());
     }
 
     @Override
@@ -85,3 +86,4 @@ public abstract class MSTileEntityProgressMachine<RECIPE extends MekanismRecipe>
         container.track(SyncableInt.create(this::getTicksRequired, value -> ticksRequired = value));
     }
 }
+

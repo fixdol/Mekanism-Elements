@@ -1,0 +1,10 @@
+{
+  "type": "mekanism:crystallizing",
+  "input": {
+    "amount": 100,
+    "chemical": "mekanismelements:potassium_iodide"
+  },
+  "output": {
+    "id": "mekanismelements:tablet_iodine"
+  }
+}

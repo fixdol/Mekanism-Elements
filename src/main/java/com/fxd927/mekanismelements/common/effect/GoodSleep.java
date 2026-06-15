@@ -10,15 +10,12 @@ public class GoodSleep extends MobEffect {
         super(mobEffectCategory, color);
     }
 
-    @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    // applyEffectTick replaced with tick() in 1.21.1
+    public boolean tick(LivingEntity entity, int amplifier) {
         if (entity instanceof Player player && player.isSleeping()) {
             player.setHealth(player.getMaxHealth());
         }
-    }
-
-    @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
         return true;
     }
 }
+

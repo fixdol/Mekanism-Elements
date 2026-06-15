@@ -16,7 +16,7 @@ import mekanism.common.util.text.TextUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class GuiSeawaterPump extends GuiConfigurableTile<TileEntitySeawaterPump,
         addRenderableWidget(new GuiVerticalPowerBar(this, tile.getEnergyContainer(), 164, 15))
                 .warning(WarningTracker.WarningType.NOT_ENOUGH_ENERGY, () -> {
                     MachineEnergyContainer<TileEntitySeawaterPump> energyContainer = tile.getEnergyContainer();
-                    return energyContainer.getEnergyPerTick().greaterThan(energyContainer.getEnergy());
+                    return energyContainer.getEnergyPerTick() > energyContainer.getEnergy();
                 });
         addRenderableWidget(new GuiFluidGauge(() -> tile.fluidTank, () -> tile.getFluidTanks(null), GaugeType.STANDARD, this, 6, 13))
                 .warning(WarningTracker.WarningType.NO_SPACE_IN_OUTPUT, () -> tile.fluidTank.getNeeded() < TileEntitySeawaterPump.SEAWATER_STACK.getAmount());
@@ -60,8 +60,9 @@ public class GuiSeawaterPump extends GuiConfigurableTile<TileEntitySeawaterPump,
     @Override
     protected void drawForegroundText(@Nonnull GuiGraphics matrix, int mouseX, int mouseY) {
         renderTitleText(matrix);
-        drawString(matrix, playerInventoryTitle, inventoryLabelX, inventoryLabelY, titleTextColor());
+        matrix.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, titleTextColor());
         super.drawForegroundText(matrix, mouseX, mouseY);
     }
 }
+
 

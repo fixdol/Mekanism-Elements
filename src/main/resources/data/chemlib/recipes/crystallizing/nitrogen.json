@@ -1,13 +1,12 @@
 {
   "type":"mekanism:crystallizing",
-  "chemicalType":"gas",
   "input":
   {
     "amount":1000,
-    "gas":"mekanismelements:nitrogen"
+    "chemical":"mekanismelements:nitrogen"
   },
   "output":
   {
-    "item":"chemlib:nitrogen"
+    "id":"chemlib:nitrogen"
   }
 }

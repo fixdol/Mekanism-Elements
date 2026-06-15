@@ -1,0 +1,20 @@
+{
+  "type": "mekanism:reaction",
+  "duration": 25,
+  "fluid_input": {
+    "amount": 1000,
+    "fluid": "mekanismelements:beryllium"
+  },
+  "chemical_input": {
+    "amount": 100,
+    "chemical": "mekanismelements:americium"
+  },
+  "item_output": {
+    "amount": 1,
+    "id": "mekanismelements:pellet_neutron_source"
+  },
+  "item_input": {
+    "amount": 1,
+    "tag": "c:dusts/steel"
+  }
+}

@@ -1,82 +1,55 @@
 package com.fxd927.mekanismelements.common.recipe.serializer;
 
 import com.fxd927.mekanismelements.api.recipes.RadiationIrradiatingRecipe;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-import mekanism.api.JsonConstants;
-import mekanism.api.SerializerHelper;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import mekanism.api.SerializationConstants;
 import mekanism.api.chemical.ChemicalStack;
-import mekanism.api.chemical.ChemicalType;
-import mekanism.api.chemical.gas.GasStack;
-import mekanism.api.chemical.infuse.InfusionStack;
-import mekanism.api.chemical.pigment.PigmentStack;
-import mekanism.api.chemical.slurry.SlurryStack;
 import mekanism.api.recipes.ingredients.ChemicalStackIngredient;
 import mekanism.api.recipes.ingredients.ItemStackIngredient;
-import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
 import mekanism.common.Mekanism;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import org.jetbrains.annotations.NotNull;
 
 public class RadiationIrradiatorRecipeSerializer<RECIPE extends RadiationIrradiatingRecipe> implements RecipeSerializer<RECIPE> {
     private final RadiationIrradiatorRecipeSerializer.IFactory<RECIPE> factory;
+    private final MapCodec<RECIPE> codec;
+    private final StreamCodec<RegistryFriendlyByteBuf, RECIPE> streamCodec;
 
     public RadiationIrradiatorRecipeSerializer(RadiationIrradiatorRecipeSerializer.IFactory<RECIPE> factory) {
         this.factory = factory;
+        this.codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ItemStackIngredient.CODEC.fieldOf(SerializationConstants.ITEM_INPUT).forGetter(RadiationIrradiatingRecipe::getItemInput),
+                ChemicalStackIngredient.CODEC.fieldOf(SerializationConstants.CHEMICAL_INPUT).forGetter(RadiationIrradiatingRecipe::getGasInput),
+                ChemicalStack.CODEC.fieldOf(SerializationConstants.OUTPUT).forGetter(recipe -> recipe.getOutput(ItemStack.EMPTY, ChemicalStack.EMPTY))
+        ).apply(instance, factory::create));
+
+        this.streamCodec = StreamCodec.composite(
+                ItemStackIngredient.STREAM_CODEC, RadiationIrradiatingRecipe::getItemInput,
+                ChemicalStackIngredient.STREAM_CODEC, RadiationIrradiatingRecipe::getGasInput,
+                ChemicalStack.STREAM_CODEC, recipe -> recipe.getOutput(ItemStack.EMPTY, ChemicalStack.EMPTY),
+                factory::create
+        );
     }
 
+    @Override
     @NotNull
-    @Override
-    public RECIPE fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
-        JsonElement itemInput = GsonHelper.isArrayNode(json, JsonConstants.ITEM_INPUT) ? GsonHelper.getAsJsonArray(json, JsonConstants.ITEM_INPUT) :
-                GsonHelper.getAsJsonObject(json, JsonConstants.ITEM_INPUT);
-        ItemStackIngredient itemIngredient = IngredientCreatorAccess.item().deserialize(itemInput);
-        JsonElement gasInput = GsonHelper.isArrayNode(json, JsonConstants.GAS_INPUT) ? GsonHelper.getAsJsonArray(json, JsonConstants.GAS_INPUT) :
-                GsonHelper.getAsJsonObject(json, JsonConstants.GAS_INPUT);
-        ChemicalStackIngredient.GasStackIngredient gasIngredient = IngredientCreatorAccess.gas().deserialize(gasInput);
-        ChemicalStack<?> output = SerializerHelper.getBoxedChemicalStack(json, JsonConstants.OUTPUT);
-        if (output.isEmpty()) {
-            throw new JsonSyntaxException("Recipe output must not be empty.");
-        }
-        return this.factory.create(recipeId, itemIngredient, gasIngredient, output);
+    public MapCodec<RECIPE> codec() {
+        return this.codec;
     }
 
     @Override
-    public RECIPE fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
-        try {
-            ItemStackIngredient itemInput = IngredientCreatorAccess.item().read(buffer);
-            ChemicalStackIngredient.GasStackIngredient gasInput = IngredientCreatorAccess.gas().read(buffer);
-            ChemicalType chemicalType = buffer.readEnum(ChemicalType.class);
-            ChemicalStack<?> output = switch (chemicalType) {
-                case GAS -> GasStack.readFromPacket(buffer);
-                case INFUSION -> InfusionStack.readFromPacket(buffer);
-                case PIGMENT -> PigmentStack.readFromPacket(buffer);
-                case SLURRY -> SlurryStack.readFromPacket(buffer);
-            };
-            return this.factory.create(recipeId, itemInput, gasInput, output);
-        } catch (Exception e) {
-            Mekanism.logger.error("Error reading itemstack gas to gas recipe from packet.", e);
-            throw e;
-        }
-    }
-
-    @Override
-    public void toNetwork(@NotNull FriendlyByteBuf buffer, @NotNull RECIPE recipe) {
-        try {
-            recipe.write(buffer);
-        } catch (Exception e) {
-            Mekanism.logger.error("Error writing itemstack gas to gas recipe to packet.", e);
-            throw e;
-        }
+    @NotNull
+    public StreamCodec<RegistryFriendlyByteBuf, RECIPE> streamCodec() {
+        return this.streamCodec;
     }
 
     @FunctionalInterface
     public interface IFactory<RECIPE extends RadiationIrradiatingRecipe> {
-
-        RECIPE create(ResourceLocation id, ItemStackIngredient itemInput, ChemicalStackIngredient.GasStackIngredient gasInput, ChemicalStack<?> output);
+        RECIPE create(ItemStackIngredient itemInput, ChemicalStackIngredient gasInput, ChemicalStack output);
     }
 }
+

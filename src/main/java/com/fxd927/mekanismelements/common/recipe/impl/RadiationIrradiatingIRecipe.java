@@ -7,14 +7,17 @@ import com.fxd927.mekanismelements.common.registries.MSRecipeSerializers;
 import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.recipes.ingredients.ChemicalStackIngredient;
 import mekanism.api.recipes.ingredients.ItemStackIngredient;
+import mekanism.api.recipes.vanilla_input.ItemChemicalRecipeInput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 
 public class RadiationIrradiatingIRecipe extends RadiationIrradiatingRecipe {
-    public RadiationIrradiatingIRecipe(ResourceLocation id, ItemStackIngredient itemInput, ChemicalStackIngredient.GasStackIngredient gasInput, ChemicalStack<?> output) {
-        super(id, itemInput, gasInput, output);
+
+    public RadiationIrradiatingIRecipe(ItemStackIngredient itemInput, ChemicalStackIngredient gasInput, ChemicalStack output) {
+        super(itemInput, gasInput, output);
     }
 
     @Override
@@ -34,6 +37,19 @@ public class RadiationIrradiatingIRecipe extends RadiationIrradiatingRecipe {
 
     @Override
     public ItemStack getToastSymbol() {
-        return MSBlocks.RADIATION_IRRADIATOR.getItemStack();
+        return new ItemStack(MSBlocks.RADIATION_IRRADIATOR.asItem());
+    }
+
+    @Override
+    public boolean matches(ItemChemicalRecipeInput input, Level level) {
+        if (isIncomplete()) {
+            return false;
+        }
+        boolean itemMatch = this.test(input.getItem(0), input.getChemical(0));
+        if (level.getGameTime() % 100 == 0) { // Log occasionally to avoid spam
+             com.fxd927.mekanismelements.common.MekanismElements.logger.info("DEBUG: RadiationIrradiatingIRecipe.matches? {} | Item: {} | Chemical: {}", itemMatch, input.getItem(0), input.getChemical(0).getChemical());
+        }
+        return itemMatch;
     }
 }
+

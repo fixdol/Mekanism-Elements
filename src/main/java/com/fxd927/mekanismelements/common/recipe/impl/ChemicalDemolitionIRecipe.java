@@ -6,14 +6,17 @@ import com.fxd927.mekanismelements.common.registries.MSBlocks;
 import com.fxd927.mekanismelements.common.registries.MSRecipeSerializers;
 import mekanism.api.recipes.ingredients.ChemicalStackIngredient;
 import mekanism.api.recipes.ingredients.ItemStackIngredient;
+import mekanism.api.recipes.vanilla_input.ItemChemicalRecipeInput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 
 public class ChemicalDemolitionIRecipe extends ChemicalDemolitionRecipe {
-    public ChemicalDemolitionIRecipe(ResourceLocation id, ItemStackIngredient itemInput, ChemicalStackIngredient.GasStackIngredient fluidInput, ItemStack firstOutput, ItemStack secondOutput) {
-        super(id, itemInput, fluidInput, firstOutput, secondOutput);
+
+    public ChemicalDemolitionIRecipe(ItemStackIngredient itemInput, ChemicalStackIngredient fluidInput, ItemStack firstOutput, ItemStack secondOutput) {
+        super(itemInput, fluidInput, firstOutput, secondOutput);
     }
 
     @Override
@@ -33,6 +36,15 @@ public class ChemicalDemolitionIRecipe extends ChemicalDemolitionRecipe {
 
     @Override
     public ItemStack getToastSymbol() {
-        return MSBlocks.ADSORPTION_SEPARATOR.getItemStack();
+        return new ItemStack(MSBlocks.ADSORPTION_SEPARATOR.asItem());
+    }
+
+    @Override
+    public boolean matches(ItemChemicalRecipeInput input, Level level) {
+        if (isIncomplete()) {
+            return false;
+        }
+        return this.test(input.getItem(0), input.getChemical(0));
     }
 }
+

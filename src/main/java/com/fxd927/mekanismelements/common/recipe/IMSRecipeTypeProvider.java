@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public interface IMSRecipeTypeProvider<RECIPE extends MekanismRecipe, INPUT_CACHE extends IInputRecipeCache>{
+public interface IMSRecipeTypeProvider<RECIPE extends MekanismRecipe<?>, INPUT_CACHE extends IInputRecipeCache>{
     default ResourceLocation getRegistryName() {
         return getMSRecipeType().getRegistryName();
     }
@@ -46,3 +46,4 @@ public interface IMSRecipeTypeProvider<RECIPE extends MekanismRecipe, INPUT_CACH
         return stream(world).anyMatch(matchCriteria);
     }
 }
+

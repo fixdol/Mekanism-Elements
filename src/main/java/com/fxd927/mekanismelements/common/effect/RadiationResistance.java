@@ -10,16 +10,14 @@ public class RadiationResistance extends MobEffect {
         super(mobEffectCategory, color);
     }
 
-    @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
-        entity.getCapability(Capabilities.RADIATION_ENTITY).ifPresent(radiationEntity -> {
+    // applyEffectTick replaced with tick() in 1.21.1
+    public boolean tick(LivingEntity entity, int amplifier) {
+        var radiationEntity = entity.getCapability(Capabilities.RADIATION_ENTITY);
+        if (radiationEntity != null) {
             radiationEntity.set(0);
-        });
-    }
-
-    @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+        }
         return true;
     }
 }
+
 

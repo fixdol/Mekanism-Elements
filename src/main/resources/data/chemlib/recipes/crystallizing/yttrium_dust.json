@@ -1,13 +1,12 @@
 {
   "type":"mekanism:crystallizing",
-  "chemicalType":"gas",
   "input":
   {
     "amount":1000,
-    "gas":"mekanismelements:yttrium"
+    "chemical":"mekanismelements:yttrium"
   },
   "output":
   {
-    "item":"chemlib:yttrium_dust"
+    "id":"chemlib:yttrium_dust"
   }
 }

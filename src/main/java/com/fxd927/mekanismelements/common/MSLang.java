@@ -11,7 +11,9 @@ public enum MSLang implements ILangEntry {
     DESCRIPTION_ORGANIC_LIQUID_EXTRACTOR("description","organic_liquid_extractor"),
     DESCRIPTION_SEAWATER_PUMP("description", "seawater_pump"),
     MEKANISM_SCIENCE("constants","mod_name"),
-    MEKANISM_SCIENCE_BUILDING("constants","building");
+    MEKANISM_SCIENCE_BUILDING("constants","building"),
+    NAME_RADIATION_IRRADIATOR("block","radiation_irradiator"),
+    NAME_ADSORPTION_SEPARATOR("block","adsorption_separator");
 
     private final String key;
 
@@ -28,3 +30,4 @@ public enum MSLang implements ILangEntry {
         return key;
     }
 }
+

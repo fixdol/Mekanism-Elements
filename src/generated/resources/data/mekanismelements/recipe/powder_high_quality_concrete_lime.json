@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mekanismelements:powder_high_quality_concrete"
+    },
+    {
+      "item": "mekanismelements:powder_high_quality_concrete"
+    },
+    {
+      "item": "mekanismelements:powder_high_quality_concrete"
+    },
+    {
+      "item": "mekanismelements:powder_high_quality_concrete"
+    },
+    {
+      "item": "mekanismelements:powder_high_quality_concrete"
+    },
+    {
+      "item": "mekanismelements:powder_high_quality_concrete"
+    },
+    {
+      "item": "mekanismelements:powder_high_quality_concrete"
+    },
+    {
+      "item": "mekanismelements:powder_high_quality_concrete"
+    },
+    {
+      "item": "minecraft:lime_dye"
+    }
+  ],
+  "result": {
+    "count": 8,
+    "id": "mekanismelements:powder_high_quality_concrete_lime"
+  }
+}

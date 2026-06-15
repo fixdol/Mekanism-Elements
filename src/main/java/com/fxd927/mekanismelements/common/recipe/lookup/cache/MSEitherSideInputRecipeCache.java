@@ -16,7 +16,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public abstract class MSEitherSideInputRecipeCache<INPUT, INGREDIENT extends InputIngredient<INPUT>, RECIPE extends MekanismRecipe & BiPredicate<INPUT, INPUT>,
+public abstract class MSEitherSideInputRecipeCache<INPUT, INGREDIENT extends InputIngredient<INPUT>, RECIPE extends MekanismRecipe<?> & BiPredicate<INPUT, INPUT>,
         CACHE extends IInputCache<INPUT, INGREDIENT, RECIPE>> extends MSAbstractInputRecipeCache<RECIPE> {
     private final Set<RECIPE> complexRecipes = new HashSet<>();
     private final Function<RECIPE, INGREDIENT> inputAExtractor;
@@ -133,3 +133,4 @@ public abstract class MSEitherSideInputRecipeCache<INPUT, INGREDIENT extends Inp
         }
     }
 }
+

@@ -1,0 +1,19 @@
+{
+  "type": "mekanism:rotary",
+  "fluid_input": {
+    "fluid": "mekanismscience:potassium_hydroxide",
+    "amount": 1
+  },
+  "gasOutput": {
+    "gas": "mekanismscience:potassium_hydroxide",
+    "amount": 1
+  },
+  "gasInput": {
+    "gas": "mekanismscience:potassium_hydroxide",
+    "amount": 1
+  },
+  "fluidOutput": {
+    "fluid": "mekanismscience:potassium_hydroxide",
+    "amount": 1
+  }
+}

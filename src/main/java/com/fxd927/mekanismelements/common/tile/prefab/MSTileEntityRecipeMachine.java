@@ -3,19 +3,11 @@ package com.fxd927.mekanismelements.common.tile.prefab;
 import com.fxd927.mekanismelements.common.recipe.lookup.IMSRecipeLookupHandler;
 import com.fxd927.mekanismelements.common.recipe.lookup.monitor.MSRecipeCacheLookupMonitor;
 import mekanism.api.IContentsListener;
-import mekanism.api.chemical.gas.Gas;
-import mekanism.api.chemical.gas.GasStack;
-import mekanism.api.chemical.gas.IGasTank;
-import mekanism.api.chemical.infuse.IInfusionTank;
-import mekanism.api.chemical.infuse.InfuseType;
-import mekanism.api.chemical.infuse.InfusionStack;
-import mekanism.api.chemical.pigment.IPigmentTank;
-import mekanism.api.chemical.pigment.Pigment;
-import mekanism.api.chemical.pigment.PigmentStack;
-import mekanism.api.chemical.slurry.ISlurryTank;
-import mekanism.api.chemical.slurry.Slurry;
-import mekanism.api.chemical.slurry.SlurryStack;
-import mekanism.api.providers.IBlockProvider;
+import mekanism.api.chemical.Chemical;
+import mekanism.api.chemical.ChemicalStack;
+import mekanism.api.chemical.IChemicalTank;
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.block.Block;
 import mekanism.api.recipes.MekanismRecipe;
 import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.common.capabilities.heat.CachedAmbientTemperature;
@@ -26,6 +18,7 @@ import mekanism.common.capabilities.holder.heat.IHeatCapacitorHolder;
 import mekanism.common.capabilities.holder.slot.IInventorySlotHolder;
 import mekanism.common.inventory.container.MekanismContainer;
 import mekanism.common.tile.base.TileEntityMekanism;
+import mekanism.common.tile.component.TileComponentConfig;
 import mekanism.common.tile.prefab.TileEntityConfigurableMachine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
@@ -37,7 +30,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BooleanSupplier;
 
-public abstract class MSTileEntityRecipeMachine<RECIPE extends MekanismRecipe> extends TileEntityConfigurableMachine implements IMSRecipeLookupHandler<RECIPE> {
+public abstract class MSTileEntityRecipeMachine<RECIPE extends MekanismRecipe<?>> extends TileEntityConfigurableMachine implements IMSRecipeLookupHandler<RECIPE> {
     public static final int RECIPE_CHECK_FREQUENCY = 100;
 
     protected final BooleanSupplier recheckAllRecipeErrors;
@@ -48,7 +41,7 @@ public abstract class MSTileEntityRecipeMachine<RECIPE extends MekanismRecipe> e
     @Nullable
     private IContentsListener recipeCacheSaveOnlyListener;
 
-    protected MSTileEntityRecipeMachine(IBlockProvider blockProvider, BlockPos pos, BlockState state, List<CachedRecipe.OperationTracker.RecipeError> errorTypes) {
+    protected MSTileEntityRecipeMachine(Holder<Block> blockProvider, BlockPos pos, BlockState state, List<CachedRecipe.OperationTracker.RecipeError> errorTypes) {
         super(blockProvider, pos, state);
         this.errorTypes = List.copyOf(errorTypes);
         recheckAllRecipeErrors = shouldRecheckAllErrors(this);
@@ -111,8 +104,7 @@ public abstract class MSTileEntityRecipeMachine<RECIPE extends MekanismRecipe> e
     }
 
     @Nullable
-    @Override
-    public final IChemicalTankHolder<Gas, GasStack, IGasTank> getInitialGasTanks(IContentsListener listener) {
+    public final IChemicalTankHolder getInitialGasTanks(IContentsListener listener) {
         return getInitialGasTanks(listener, listener == this ? recipeCacheLookupMonitor : getRecipeCacheSaveOnlyListener());
     }
 
@@ -120,13 +112,12 @@ public abstract class MSTileEntityRecipeMachine<RECIPE extends MekanismRecipe> e
      * @apiNote Do not call directly, only override implementation
      */
     @Nullable
-    protected IChemicalTankHolder<Gas, GasStack, IGasTank> getInitialGasTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
+    protected IChemicalTankHolder getInitialGasTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
         return null;
     }
 
     @Nullable
-    @Override
-    public final IChemicalTankHolder<InfuseType, InfusionStack, IInfusionTank> getInitialInfusionTanks(IContentsListener listener) {
+    public final IChemicalTankHolder getInitialInfusionTanks(IContentsListener listener) {
         return getInitialInfusionTanks(listener, listener == this ? recipeCacheLookupMonitor : getRecipeCacheSaveOnlyListener());
     }
 
@@ -134,13 +125,12 @@ public abstract class MSTileEntityRecipeMachine<RECIPE extends MekanismRecipe> e
      * @apiNote Do not call directly, only override implementation
      */
     @Nullable
-    protected IChemicalTankHolder<InfuseType, InfusionStack, IInfusionTank> getInitialInfusionTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
+    protected IChemicalTankHolder getInitialInfusionTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
         return null;
     }
 
     @Nullable
-    @Override
-    public final IChemicalTankHolder<Pigment, PigmentStack, IPigmentTank> getInitialPigmentTanks(IContentsListener listener) {
+    public final IChemicalTankHolder getInitialPigmentTanks(IContentsListener listener) {
         return getInitialPigmentTanks(listener, listener == this ? recipeCacheLookupMonitor : getRecipeCacheSaveOnlyListener());
     }
 
@@ -148,13 +138,12 @@ public abstract class MSTileEntityRecipeMachine<RECIPE extends MekanismRecipe> e
      * @apiNote Do not call directly, only override implementation
      */
     @Nullable
-    protected IChemicalTankHolder<Pigment, PigmentStack, IPigmentTank> getInitialPigmentTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
+    protected IChemicalTankHolder getInitialPigmentTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
         return null;
     }
 
     @Nullable
-    @Override
-    public final IChemicalTankHolder<Slurry, SlurryStack, ISlurryTank> getInitialSlurryTanks(IContentsListener listener) {
+    public final IChemicalTankHolder getInitialSlurryTanks(IContentsListener listener) {
         return getInitialSlurryTanks(listener, listener == this ? recipeCacheLookupMonitor : getRecipeCacheSaveOnlyListener());
     }
 
@@ -162,7 +151,7 @@ public abstract class MSTileEntityRecipeMachine<RECIPE extends MekanismRecipe> e
      * @apiNote Do not call directly, only override implementation
      */
     @Nullable
-    protected IChemicalTankHolder<Slurry, SlurryStack, ISlurryTank> getInitialSlurryTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
+    protected IChemicalTankHolder getInitialSlurryTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
         return null;
     }
 
@@ -222,3 +211,4 @@ public abstract class MSTileEntityRecipeMachine<RECIPE extends MekanismRecipe> e
         return null;
     }
 }
+

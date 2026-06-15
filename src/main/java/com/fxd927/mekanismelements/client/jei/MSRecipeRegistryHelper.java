@@ -2,8 +2,9 @@ package com.fxd927.mekanismelements.client.jei;
 
 import com.fxd927.mekanismelements.common.recipe.IMSRecipeTypeProvider;
 import mekanism.api.recipes.MekanismRecipe;
-import mekanism.client.jei.MekanismJEI;
-import mekanism.client.jei.MekanismJEIRecipeType;
+import mekanism.client.MekanismClient;
+import mekanism.client.recipe_viewer.jei.MekanismJEI;
+import mekanism.client.recipe_viewer.type.IRecipeViewerRecipeType;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -14,16 +15,20 @@ public class MSRecipeRegistryHelper {
     private MSRecipeRegistryHelper() {
     }
 
-    public static <RECIPE extends MekanismRecipe> void register(IRecipeRegistration registry, MekanismJEIRecipeType<RECIPE> recipeType,
+    public static <RECIPE extends MekanismRecipe<?>> void register(IRecipeRegistration registry, IRecipeViewerRecipeType<RECIPE> recipeType,
                                                                 IMSRecipeTypeProvider<RECIPE, ?> type) {
-        register(registry, recipeType, type.getRecipes(getWorld()));
+        ClientLevel world = Minecraft.getInstance().level;
+        if (world != null) {
+            List<RECIPE> recipes = type.getMSRecipeType().getRecipes(world);
+            if (!recipes.isEmpty()) {
+                register(registry, recipeType, recipes);
+            }
+        }
     }
 
-    public static <RECIPE> void register(IRecipeRegistration registry, MekanismJEIRecipeType<RECIPE> recipeType, List<RECIPE> recipes) {
-        registry.addRecipes(MekanismJEI.recipeType(recipeType), recipes);
-    }
-
-    private static ClientLevel getWorld() {
-        return Minecraft.getInstance().level;
+    public static <RECIPE> void register(IRecipeRegistration registry, IRecipeViewerRecipeType<RECIPE> recipeType, List<RECIPE> recipes) {
+        if (!recipes.isEmpty()) {
+            registry.addRecipes(MekanismJEI.recipeType(recipeType), recipes);
+        }
     }
 }

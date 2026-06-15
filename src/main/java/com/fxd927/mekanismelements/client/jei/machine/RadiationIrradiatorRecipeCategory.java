@@ -4,26 +4,24 @@ import com.fxd927.mekanismelements.api.recipes.RadiationIrradiatingRecipe;
 import com.fxd927.mekanismelements.common.registries.MSBlocks;
 import com.fxd927.mekanismelements.common.tile.machine.TileEntityRadiationIrradiator;
 import mekanism.api.chemical.ChemicalStack;
-import mekanism.api.chemical.ChemicalType;
-import mekanism.api.chemical.gas.GasStack;
-import mekanism.api.chemical.merged.BoxedChemicalStack;
 import mekanism.client.gui.element.bar.GuiHorizontalPowerBar;
 import mekanism.client.gui.element.gauge.GaugeType;
-import mekanism.client.gui.element.gauge.GuiGasGauge;
+import mekanism.client.gui.element.gauge.GuiChemicalGauge;
 import mekanism.client.gui.element.gauge.GuiGauge;
 import mekanism.client.gui.element.progress.ProgressType;
 import mekanism.client.gui.element.slot.GuiSlot;
 import mekanism.client.gui.element.slot.SlotType;
-import mekanism.client.jei.BaseRecipeCategory;
-import mekanism.client.jei.MekanismJEI;
-import mekanism.client.jei.MekanismJEIRecipeType;
+import mekanism.client.recipe_viewer.jei.BaseRecipeCategory;
+import mekanism.client.recipe_viewer.jei.MekanismJEI;
+import mekanism.client.recipe_viewer.type.IRecipeViewerRecipeType;
 import mekanism.common.inventory.container.slot.SlotOverlay;
 import mekanism.common.tile.component.config.DataType;
-import mekanism.common.util.ChemicalUtil;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.helpers.ICodecHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.IRecipeManager;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,52 +32,53 @@ public class RadiationIrradiatorRecipeCategory extends BaseRecipeCategory<Radiat
     private final GuiGauge<?> outputGauge;
     private final GuiSlot inputSlot;
 
-    public RadiationIrradiatorRecipeCategory(IGuiHelper helper, MekanismJEIRecipeType<RadiationIrradiatingRecipe> recipeType) {
-        super(helper, recipeType, MSBlocks.RADIATION_IRRADIATOR, 3, 3, 170, 79);
-        inputGauge = addElement(GuiGasGauge.getDummy(GaugeType.STANDARD.with(DataType.INPUT), this, 28, 13));
-        outputGauge = addElement(GuiGasGauge.getDummy(GaugeType.STANDARD.with(DataType.OUTPUT), this, 131, 13));
+    public RadiationIrradiatorRecipeCategory(IGuiHelper helper, IRecipeViewerRecipeType<RadiationIrradiatingRecipe> recipeType) {
+        super(helper, recipeType);
+        inputGauge = addElement(GuiChemicalGauge.getDummy(GaugeType.STANDARD.with(DataType.INPUT), this, 28, 13));
+        outputGauge = addElement(GuiChemicalGauge.getDummy(GaugeType.STANDARD.with(DataType.OUTPUT), this, 131, 13));
         inputSlot = addSlot(SlotType.INPUT, 7, 36);
         addSlot(SlotType.EXTRA, 7, 55).with(SlotOverlay.MINUS);
         addSlot(SlotType.OUTPUT, 152, 55).with(SlotOverlay.PLUS);
         addSlot(SlotType.POWER, 152, 14).with(SlotOverlay.POWER);
         addSimpleProgress(ProgressType.LARGE_RIGHT, 64, 40);
-        addElement(new GuiHorizontalPowerBar(this, FULL_BAR, 115, 75));
+        addElement(new GuiHorizontalPowerBar(this, () -> 1.0, 115, 75));
     }
 
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, RadiationIrradiatingRecipe recipe, @NotNull IFocusGroup focusGroup) {
         initItem(builder, RecipeIngredientRole.INPUT, inputSlot, recipe.getItemInput().getRepresentations());
-        List<@NotNull GasStack> gasInputs = recipe.getGasInput().getRepresentations();
-        List<GasStack> scaledGases = gasInputs.stream().map(gas -> new GasStack(gas, gas.getAmount() * TileEntityRadiationIrradiator.BASE_TICKS_REQUIRED))
+        List<@NotNull ChemicalStack> chemicalInputs = recipe.getGasInput().getRepresentations();
+        List<ChemicalStack> scaledChemicals = chemicalInputs.stream().map(chemical -> chemical.copyWithAmount(chemical.getAmount() * TileEntityRadiationIrradiator.BASE_TICKS_REQUIRED))
                 .toList();
-        initChemical(builder, MekanismJEI.TYPE_GAS, RecipeIngredientRole.INPUT, inputGauge, scaledGases);
-        List<BoxedChemicalStack> outputDefinition = recipe.getOutputDefinition();
+        initChemical(builder, RecipeIngredientRole.INPUT, inputGauge, scaledChemicals);
+        List<ChemicalStack> outputDefinition = recipe.getOutputDefinition();
         if (outputDefinition.size() == 1) {
-            BoxedChemicalStack output = outputDefinition.get(0);
-            initChemicalOutput(builder, MekanismJEI.getIngredientType(output.getChemicalType()), Collections.singletonList(output.getChemicalStack()));
+            ChemicalStack output = outputDefinition.get(0);
+            initChemicalOutput(builder, getIngredientType(output), Collections.singletonList(output));
         } else {
-            Map<ChemicalType, List<ChemicalStack<?>>> outputs = new EnumMap<>(ChemicalType.class);
-            for (BoxedChemicalStack output : outputDefinition) {
-                outputs.computeIfAbsent(output.getChemicalType(), type -> new ArrayList<>());
-            }
-            for (BoxedChemicalStack output : outputDefinition) {
-                ChemicalType chemicalType = output.getChemicalType();
-                for (Map.Entry<ChemicalType, List<ChemicalStack<?>>> entry : outputs.entrySet()) {
-                    if (entry.getKey() == chemicalType) {
-                        entry.getValue().add(output.getChemicalStack());
-                    } else {
-                        entry.getValue().add(ChemicalUtil.getEmptyStack(entry.getKey()));
-                    }
-                }
-            }
-            for (Map.Entry<ChemicalType, List<ChemicalStack<?>>> entry : outputs.entrySet()) {
-                initChemicalOutput(builder, MekanismJEI.getIngredientType(entry.getKey()), entry.getValue());
-            }
+            // In unified system, all outputs use TYPE_CHEMICAL
+            initChemicalOutput(builder, MekanismJEI.TYPE_CHEMICAL, outputDefinition);
         }
     }
 
     @SuppressWarnings("unchecked")
-    private <STACK extends ChemicalStack<?>> void initChemicalOutput(IRecipeLayoutBuilder builder, IIngredientType<STACK> type, List<ChemicalStack<?>> stacks) {
-        initChemical(builder, type, RecipeIngredientRole.OUTPUT, outputGauge, (List<STACK>) stacks);
+    private <STACK extends ChemicalStack> void initChemicalOutput(IRecipeLayoutBuilder builder, IIngredientType<STACK> type, List<ChemicalStack> stacks) {
+        initChemical(builder, RecipeIngredientRole.OUTPUT, outputGauge, stacks);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <STACK extends ChemicalStack> IIngredientType<STACK> getIngredientType(ChemicalStack stack) {
+        // Use the unified TYPE_CHEMICAL for all chemical stacks in Mekanism 10.7
+        return (IIngredientType<STACK>) MekanismJEI.TYPE_CHEMICAL;
+    }
+
+    @Override
+    public com.mojang.serialization.Codec<RadiationIrradiatingRecipe> getCodec(ICodecHelper codecHelper, IRecipeManager recipeManager) {
+        return com.fxd927.mekanismelements.common.registries.MSRecipeSerializers.RADIATION_IRRADIATOR.get().codec().codec();
+    }
+
+    @Override
+    public net.minecraft.resources.ResourceLocation getRegistryName(RadiationIrradiatingRecipe recipe) {
+        return recipe.getId();
     }
 }

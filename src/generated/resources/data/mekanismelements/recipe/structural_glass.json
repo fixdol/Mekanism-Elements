@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "item": "mekanismelements:dust_calcium_oxide"
+    },
+    "S": {
+      "tag": "c:glass_blocks/cheap"
+    }
+  },
+  "pattern": [
+    "SSS",
+    "SGS",
+    "SSS"
+  ],
+  "result": {
+    "count": 8,
+    "id": "mekanism:structural_glass"
+  }
+}

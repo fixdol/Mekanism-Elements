@@ -1,13 +1,12 @@
 {
   "type":"mekanism:crystallizing",
-  "chemicalType":"gas",
   "input":
   {
     "amount":1000,
-    "gas":"mekanismelements:nitrogen_dioxide"
+    "chemical":"mekanismelements:nitrogen_dioxide"
   },
   "output":
   {
-    "item":"chemlib:nitrogen_dioxide"
+    "id":"chemlib:nitrogen_dioxide"
   }
 }

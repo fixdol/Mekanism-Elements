@@ -1,12 +1,12 @@
 package com.fxd927.mekanismelements.api.recipes.cache;
 
 import com.fxd927.mekanismelements.api.recipes.AdsorptionRecipe;
-import mekanism.api.chemical.merged.BoxedChemicalStack;
+import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.api.recipes.inputs.IInputHandler;
-import mekanism.api.recipes.outputs.BoxedChemicalOutputHandler;
+import mekanism.api.recipes.outputs.IOutputHandler;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -14,7 +14,8 @@ import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
 
 public class AdsorptionCachedRecipe extends CachedRecipe<AdsorptionRecipe> {
-    private final BoxedChemicalOutputHandler outputHandler;
+    private static int diagCounter = 0;
+    private final IOutputHandler<ChemicalStack> outputHandler;
     private final IInputHandler<@NotNull ItemStack> itemInputHandler;
     private final IInputHandler<@NotNull FluidStack> fluidInputHandler;
     private final IntSupplier fluidUsage;
@@ -22,7 +23,7 @@ public class AdsorptionCachedRecipe extends CachedRecipe<AdsorptionRecipe> {
 
     private ItemStack recipeItem = ItemStack.EMPTY;
     private FluidStack recipeFluid = FluidStack.EMPTY;
-    private BoxedChemicalStack output = BoxedChemicalStack.EMPTY;
+    private ChemicalStack output = ChemicalStack.EMPTY;
 
     /**
      * @param recipe            Recipe.
@@ -30,16 +31,16 @@ public class AdsorptionCachedRecipe extends CachedRecipe<AdsorptionRecipe> {
      *                          do this every tick or if there is no one viewing recipes.
      * @param itemInputHandler  Item input handler.
      * @param fluidInputHandler Chemical input handler.
-     * @param fluidUsage        Gas usage multiplier.
+     * @param fluidUsage        Chemical usage multiplier.
      * @param outputHandler     Output handler.
      */
     public AdsorptionCachedRecipe(AdsorptionRecipe recipe, BooleanSupplier recheckAllErrors, IInputHandler<@NotNull ItemStack> itemInputHandler,
-                                  IInputHandler<@NotNull FluidStack> fluidInputHandler, IntSupplier fluidUsage, BoxedChemicalOutputHandler outputHandler) {
+                                  IInputHandler<@NotNull FluidStack> fluidInputHandler, IntSupplier fluidUsage, IOutputHandler<ChemicalStack> outputHandler) {
         super(recipe, recheckAllErrors);
         this.itemInputHandler = Objects.requireNonNull(itemInputHandler, "Item input handler cannot be null.");
-        this.fluidInputHandler = Objects.requireNonNull(fluidInputHandler, "Gas input handler cannot be null.");
-        this.fluidUsage = Objects.requireNonNull(fluidUsage, "Gas usage cannot be null.");
-        this.outputHandler = Objects.requireNonNull(outputHandler, "Input handler cannot be null.");
+        this.fluidInputHandler = Objects.requireNonNull(fluidInputHandler, "Fluid input handler cannot be null.");
+        this.fluidUsage = Objects.requireNonNull(fluidUsage, "Fluid usage cannot be null.");
+        this.outputHandler = Objects.requireNonNull(outputHandler, "Output handler cannot be null.");
     }
 
     @Override
@@ -67,7 +68,7 @@ public class AdsorptionCachedRecipe extends CachedRecipe<AdsorptionRecipe> {
                     fluidInputHandler.calculateOperationsCanSupport(tracker, recipeFluid, fluidUsageMultiplier);
                     if (tracker.shouldContinueChecking()) {
                         output = recipe.getOutput(recipeItem, recipeFluid);
-                        outputHandler.calculateOperationsRoomFor(tracker, output);
+                        outputHandler.calculateOperationsCanSupport(tracker, output);
                     }
                 }
             }
@@ -100,10 +101,7 @@ public class AdsorptionCachedRecipe extends CachedRecipe<AdsorptionRecipe> {
 
     @Override
     protected void finishProcessing(int operations) {
-        if (!recipeItem.isEmpty() && !recipeFluid.isEmpty() && !output.isEmpty()) {
-            if (fluidUsageMultiplier > 0) {
-                fluidInputHandler.use(recipeFluid, operations * fluidUsageMultiplier);
-            }
+        if (!output.isEmpty()) {
             outputHandler.handleOutput(output, operations);
         }
     }

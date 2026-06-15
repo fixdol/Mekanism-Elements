@@ -11,3 +11,4 @@ public class MSReloadListener implements ResourceManagerReloadListener {
         MSRecipeType.clearCache();
     }
 }
+

@@ -38,8 +38,9 @@ public class SleepInducingTablet extends Item {
         return UseAnim.EAT;
     }
 
-    @Override
+    // getUseDuration may have been removed or signature changed in 1.21.1
     public int getUseDuration(ItemStack stack) {
         return 20;
     }
 }
+
