@@ -1,56 +1,57 @@
-name: Neoforge Github Build
+name: Build and Release
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - "Neo/1.21.1"
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          fetch-tags: true
 
-      - name: Setup JDK 21
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'temurin'
+          java-version: "21"
+          distribution: "temurin"
 
-      - name: Build with Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          arguments: build
-
-      - name: Read version from gradle.properties
-        id: version
+      - name: Read Version
+        id: gradle_props
         run: |
-          MC=$(grep '^minecraft_version=' gradle.properties | cut -d'=' -f2 | tr -d '[:space:]')
-          MOD=$(grep '^mod_version=' gradle.properties | cut -d'=' -f2 | tr -d '[:space:]')
-          TAG="${MC}-${MOD}"
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-          echo "Tag will be: $TAG"
+          VERSION=$(grep '^mod_version=' gradle.properties | cut -d'=' -f2)
+          echo "mod_version=$VERSION" >> $GITHUB_OUTPUT
+          echo "release_version=${VERSION}-build.${{ github.run_number }}" >> $GITHUB_OUTPUT
 
-      - name: Create and push tag
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Build
+        run: ./gradlew build
+
+      - name: Create Tag
         run: |
-          TAG="${{ steps.version.outputs.tag }}"
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          if git rev-parse "$TAG" >/dev/null 2>&1; then
-            echo "Tag $TAG already exists, skipping."
-          else
-            git tag "$TAG"
-            git push origin "$TAG"
-          fi
+          git tag v${{ steps.gradle_props.outputs.release_version }}
+          git push origin v${{ steps.gradle_props.outputs.release_version }}
 
-      - name: Publish Release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.version.outputs.tag }}
-          name: ${{ steps.version.outputs.tag }}
-          files: build/libs/*.jar
+          tag_name: v${{ steps.gradle_props.outputs.release_version }}
+          name: AE2NoMeteorCraters v${{ steps.gradle_props.outputs.release_version }}
+          generate_release_notes: true
+          files: |
+            build/libs/*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
