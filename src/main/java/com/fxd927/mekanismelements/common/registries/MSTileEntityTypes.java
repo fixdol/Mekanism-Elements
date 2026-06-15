@@ -12,7 +12,7 @@ public class MSTileEntityTypes {
 
     public static final TileEntityTypeRegistryObject<TileEntityAdsorptionSeparator> ADSORPTION_SEPARATOR;
     public static final TileEntityTypeRegistryObject<TileEntityAirCompressor> AIR_COMPRESSOR;
-    //public static final TileEntityTypeRegistryObject<TileEntityChemicalDemolitionMachine> CHEMICAL_DEMOLITION_MACHINE;
+    public static final TileEntityTypeRegistryObject<TileEntityChemicalDemolitionMachine> CHEMICAL_DEMOLITION_MACHINE;
     public static final TileEntityTypeRegistryObject<TileEntityRadiationIrradiator> RADIATION_IRRADIATOR;
     public static final TileEntityTypeRegistryObject<TileEntitySeawaterPump> SEAWATER_PUMP;
 
@@ -34,11 +34,12 @@ public class MSTileEntityTypes {
             .withSimple(Capabilities.CONFIG_CARD)
             .withSimple(Capabilities.CONFIGURABLE)
             .build();
-        //CHEMICAL_DEMOLITION_MACHINE = TILE_ENTITY_TYPES.mekBuilder(MSBlocks.CHEMICAL_DEMOLITION_MACHINE, TileEntityChemicalDemolitionMachine::new)
-        //    .clientTicker(TileEntityMekanism::tickClient)
-        //    .serverTicker(TileEntityMekanism::tickServer)
-        //    .withSimple(mekanism.common.capabilities.Capabilities.CONFIG_CARD)
-        //    .build();
+        CHEMICAL_DEMOLITION_MACHINE = TILE_ENTITY_TYPES.mekBuilder(MSBlocks.CHEMICAL_DEMOLITION_MACHINE, TileEntityChemicalDemolitionMachine::new)
+            .clientTicker(TileEntityMekanism::tickClient)
+            .serverTicker(TileEntityMekanism::tickServer)
+            .withSimple(Capabilities.CONFIG_CARD)
+            .withSimple(Capabilities.CONFIGURABLE)
+            .build();
         RADIATION_IRRADIATOR = TILE_ENTITY_TYPES.mekBuilder(MSBlocks.RADIATION_IRRADIATOR, TileEntityRadiationIrradiator::new)
             .clientTicker(TileEntityMekanism::tickClient)
             .serverTicker(TileEntityMekanism::tickServer)
@@ -56,4 +57,3 @@ public class MSTileEntityTypes {
     private MSTileEntityTypes(){
     }
 }
-

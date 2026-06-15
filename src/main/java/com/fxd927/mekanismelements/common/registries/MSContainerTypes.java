@@ -12,7 +12,7 @@ public class MSContainerTypes {
 
     public static final ContainerTypeRegistryObject<MekanismTileContainer<TileEntityAdsorptionSeparator>> ADSORPTION_SEPARATOR;
     public static final ContainerTypeRegistryObject<MekanismTileContainer<TileEntityAirCompressor>> AIR_COMPRESSOR;
-    //public static final ContainerTypeRegistryObject<MekanismTileContainer<TileEntityChemicalDemolitionMachine>> CHEMICAL_DEMOLITION_MACHINE;
+    public static final ContainerTypeRegistryObject<MekanismTileContainer<TileEntityChemicalDemolitionMachine>> CHEMICAL_DEMOLITION_MACHINE;
     public static final ContainerTypeRegistryObject<MekanismTileContainer<TileEntityRadiationIrradiator>> RADIATION_IRRADIATOR;
     public static final ContainerTypeRegistryObject<MekanismTileContainer<TileEntitySeawaterPump>> SEAWATER_PUMP;
 
@@ -24,7 +24,7 @@ public class MSContainerTypes {
     static {
         ADSORPTION_SEPARATOR = CONTAINER_TYPES.register(MSBlocks.ADSORPTION_SEPARATOR, TileEntityAdsorptionSeparator.class);
         AIR_COMPRESSOR = CONTAINER_TYPES.register(MSBlocks.AIR_COMPRESSOR, TileEntityAirCompressor.class);
-        //CHEMICAL_DEMOLITION_MACHINE = CONTAINER_TYPES.register(MSBlocks.CHEMICAL_DEMOLITION_MACHINE, TileEntityChemicalDemolitionMachine.class);
+        CHEMICAL_DEMOLITION_MACHINE = CONTAINER_TYPES.register(MSBlocks.CHEMICAL_DEMOLITION_MACHINE, TileEntityChemicalDemolitionMachine.class);
         RADIATION_IRRADIATOR = CONTAINER_TYPES.register(MSBlocks.RADIATION_IRRADIATOR, TileEntityRadiationIrradiator.class);
         SEAWATER_PUMP = CONTAINER_TYPES.register(MSBlocks.SEAWATER_PUMP, TileEntitySeawaterPump.class);
     }

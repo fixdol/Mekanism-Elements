@@ -1,0 +1,10 @@
+{
+  "values": {
+    "mekanismelements:californium": {
+      "radioactivity": 0.1
+    },
+    "mekanismelements:curium": {
+      "radioactivity": 0.07
+    }
+  }
+}

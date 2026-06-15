@@ -27,7 +27,7 @@ public class MSBlocks {
 
     public static final BlockRegistryObject<BlockTile.BlockTileModel<TileEntityAdsorptionSeparator,MSMachine<TileEntityAdsorptionSeparator>>,ItemBlockTooltip> ADSORPTION_SEPARATOR;
     public static final BlockRegistryObject<BlockTile.BlockTileModel<TileEntityAirCompressor,MSMachine<TileEntityAirCompressor>>,ItemBlockTooltip> AIR_COMPRESSOR;
-    //public static final BlockRegistryObject<BlockTile.BlockTileModel<TileEntityChemicalDemolitionMachine,MSMachine<TileEntityChemicalDemolitionMachine>>,ItemBlockTooltip> CHEMICAL_DEMOLITION_MACHINE;
+    public static final BlockRegistryObject<BlockTile.BlockTileModel<TileEntityChemicalDemolitionMachine,MSMachine<TileEntityChemicalDemolitionMachine>>,ItemBlockTooltip> CHEMICAL_DEMOLITION_MACHINE;
     public static final BlockRegistryObject<BlockTile.BlockTileModel<TileEntityRadiationIrradiator,MSMachine<TileEntityRadiationIrradiator>>,ItemBlockTooltip> RADIATION_IRRADIATOR;
     public static final BlockRegistryObject<BlockTile.BlockTileModel<TileEntitySeawaterPump,MSMachine<TileEntitySeawaterPump>>,ItemBlockTooltip> SEAWATER_PUMP;
 
@@ -94,7 +94,7 @@ public class MSBlocks {
     static {
         ADSORPTION_SEPARATOR = BLOCKS.register("adsorption_separator",() -> new BlockTile.BlockTileModel<>(MSBlockTypes.ADSORPTION_SEPARATOR, properties -> properties.strength(3.5F, 16F).requiresCorrectToolForDrops().mapColor(BlockResourceInfo.STEEL.getMapColor())),ItemBlockTooltip::new);
         AIR_COMPRESSOR = BLOCKS.register("air_compressor",() -> new BlockTile.BlockTileModel<>(MSBlockTypes.AIR_COMPRESSOR, properties -> properties.strength(3.5F, 16F).requiresCorrectToolForDrops().mapColor(BlockResourceInfo.STEEL.getMapColor())),ItemBlockTooltip::new);
-        //CHEMICAL_DEMOLITION_MACHINE = BLOCKS.register("chemical_demolition_machine",() -> new BlockTile.BlockTileModel<>(MSBlockTypes.CHEMICAL_DEMOLITION_MACHINE, properties -> properties.mapColor(BlockResourceInfo.STEEL.getMapColor())),ItemBlockMachine::new);
+        CHEMICAL_DEMOLITION_MACHINE = BLOCKS.register("chemical_demolition_machine",() -> new BlockTile.BlockTileModel<>(MSBlockTypes.CHEMICAL_DEMOLITION_MACHINE, properties -> properties.strength(3.5F, 16F).requiresCorrectToolForDrops().mapColor(BlockResourceInfo.STEEL.getMapColor())),ItemBlockTooltip::new);
         RADIATION_IRRADIATOR = BLOCKS.register("radiation_irradiator", () -> new BlockTile.BlockTileModel<>(MSBlockTypes.RADIATION_IRRADIATOR, properties -> properties.strength(3.5F, 16F).requiresCorrectToolForDrops().mapColor(BlockResourceInfo.STEEL.getMapColor())),ItemBlockTooltip::new);
         SEAWATER_PUMP = BLOCKS.register("seawater_pump", () -> new BlockTile.BlockTileModel<>(MSBlockTypes.SEAWATER_PUMP, properties -> properties.strength(3.5F, 16F).requiresCorrectToolForDrops().mapColor(BlockResourceInfo.STEEL.getMapColor())),ItemBlockTooltip::new);
 
@@ -176,4 +176,3 @@ public class MSBlocks {
         return BLOCKS.register(name, blockSupplier, (block, props) -> new ItemBlockTooltip<>(block, props.rarity(rarity)));
     }
 }
-

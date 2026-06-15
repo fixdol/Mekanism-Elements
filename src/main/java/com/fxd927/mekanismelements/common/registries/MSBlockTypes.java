@@ -9,6 +9,8 @@ import mekanism.api.Upgrade;
 import mekanism.common.block.attribute.Attributes;
 // GeneratorsSounds not available - using MSSounds instead
 
+import java.util.EnumSet;
+
 
 public class MSBlockTypes {
     public static final MSMachine<TileEntityAdsorptionSeparator> ADSORPTION_SEPARATOR = MSMachine.MSMachineBuilder
@@ -32,18 +34,19 @@ public class MSBlockTypes {
             .withSideConfig(mekanism.common.lib.transmitter.TransmissionType.ITEM, mekanism.common.lib.transmitter.TransmissionType.CHEMICAL, mekanism.common.lib.transmitter.TransmissionType.ENERGY)
             .replace(Attributes.ACTIVE_LIGHT)
             .build();
-    //public static final MSMachine<TileEntityChemicalDemolitionMachine> CHEMICAL_DEMOLITION_MACHINE = MSMachine.MSMachineBuilder
-    // .createMSMachine(() -> MSTileEntityTypes.CHEMICAL_DEMOLITION_MACHINE, MSLang.DESCRIPTION_ADSORPTION_SEPARATOR)
-    // .withGui(() -> MSContainerTypes.CHEMICAL_DEMOLITION_MACHINE)
-    // .withEnergyConfig(MSConfig.usageConfig.adsorptionSeparator, MSConfig.storageConfig.adsorptionSeparator)
-    //.withSupportedUpgrades(EnumSet.of(Upgrade.SPEED, Upgrade.ENERGY, Upgrade.MUFFLING))
-    // .withComputerSupport("chemicalDemolitionMachine")
-    //  .replace(Attributes.ACTIVE_LIGHT)
-    //  .build();
+    public static final MSMachine<TileEntityChemicalDemolitionMachine> CHEMICAL_DEMOLITION_MACHINE = MSMachine.MSMachineBuilder
+    .createMSMachine(() -> MSTileEntityTypes.CHEMICAL_DEMOLITION_MACHINE, MSLang.DESCRIPTION_ADSORPTION_SEPARATOR)
+    .withGui(() -> MSContainerTypes.CHEMICAL_DEMOLITION_MACHINE)
+    .withEnergyConfig(MSConfig.usageConfig.adsorptionSeparator, MSConfig.storageConfig.adsorptionSeparator)
+    .withSupportedUpgrades(Upgrade.SPEED, Upgrade.ENERGY, Upgrade.MUFFLING)
+    .withComputerSupport("chemicalDemolitionMachine")
+    .withSideConfig(mekanism.common.lib.transmitter.TransmissionType.ITEM, mekanism.common.lib.transmitter.TransmissionType.CHEMICAL, mekanism.common.lib.transmitter.TransmissionType.ENERGY)
+     .replace(Attributes.ACTIVE_LIGHT)
+     .build();
     public static final MSMachine<TileEntityRadiationIrradiator> RADIATION_IRRADIATOR = MSMachine.MSMachineBuilder
             .createMSMachine(() -> MSTileEntityTypes.RADIATION_IRRADIATOR, MSLang.DESCRIPTION_RADIATION_IRRADIATOR)
             .withGui(() -> MSContainerTypes.RADIATION_IRRADIATOR)
-            .withSound(MSSounds.AIR_COMPRESSOR) // Using available sound instead of GeneratorsSounds
+            .withSound(MSSounds.AIR_COMPRESSOR) 
             .withEnergyConfig(MSConfig.usageConfig.radiationIrradiator, MSConfig.storageConfig.radiationIrradiator)
             .withSupportedUpgrades(Upgrade.SPEED, Upgrade.ENERGY, Upgrade.MUFFLING)
             .withComputerSupport("radiationIrradiator")
@@ -72,4 +75,3 @@ public class MSBlockTypes {
     private MSBlockTypes(){
     }
 }
-

@@ -52,7 +52,6 @@ public class MekanismElements
         MSRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
         MSSounds.SOUND_EVENTS.register(modEventBus);
 
-        MSGases.Coolants.init();
 
         versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
         // Events are registered via addListener() calls above, no need to register this class
@@ -85,7 +84,7 @@ public class MekanismElements
         setRecipeCacheManager(new MSReloadListener());
 
         event.enqueueWork(() -> {
-            // Chunk loading callback registration - may need to be handled differently in NeoForge
+            // Chunk loading callback registration 
             MSFluids.FLUIDS.registerBucketDispenserBehavior();
         });
     }
@@ -119,7 +118,7 @@ public class MekanismElements
                     logger.info("Processing chemical: {}", chemicalName);
                     holder.value().updateFromDataMap(holder);
                     
-                    // Programmatically add fuel datamap for ammonia if not found
+                    // Programmatically
                     if (chemicalName.equals("ammonia")) {
                         logger.info("=== AMMONIA FUEL DATAMAP PROCESSING START ===");
                         ChemicalFuel fuel = holder.getData(IMekanismDataMapTypes.INSTANCE.chemicalFuel());
@@ -128,9 +127,6 @@ public class MekanismElements
                         
                         if (fuel == null) {
                             logger.info("AMMONIA: Fuel datamap not found, adding programmatically...");
-                            // Datamap file didn't load, add it programmatically
-                            // Note: ChemicalFuel constructor takes (burnTicks, energyPerTick)
-                            // If total energy is 600000 and burn_time is 100, then energyPerTick = 600000 / 100 = 6000
                             try {
                                 ChemicalFuel ammoniaFuel = new ChemicalFuel(100, 6000L);
                                 logger.info("AMMONIA: Creating fuel object: burn_time={}, energy={}, energyPerTick={}, energyDensity={}", 
@@ -189,7 +185,7 @@ public class MekanismElements
                                             eFuel != null ? String.format("burn_time=%d, energy=%d", eFuel.burnTicks(), eFuel.energyPerTick()) : "null");
                                     }
                                     
-                                    // Simulate what the generator does - test getFuel() on a mock tank
+                                    // Simulate what the generator 
                                     logger.info("=== SIMULATING GENERATOR FUEL CHECK ===");
                                     ChemicalStack ammoniaStack = new ChemicalStack(holder.value(), 1000);
                                     ChemicalFuel ammoniaFuelFromStack = ammoniaStack.getData(IMekanismDataMapTypes.INSTANCE.chemicalFuel());
@@ -228,4 +224,3 @@ public class MekanismElements
         logger.info("=== DATA MAPS UPDATED EVENT END ===");
     }
 }
-

@@ -29,7 +29,7 @@ public class MSClientRegistration {
     public static void registerContainers(RegisterMenuScreensEvent event) {
         ClientRegistrationUtil.registerScreen(event, MSContainerTypes.ADSORPTION_SEPARATOR, GuiAdsorptionSeparator::new);
         ClientRegistrationUtil.registerScreen(event, MSContainerTypes.AIR_COMPRESSOR, GuiAirCompressor::new);
-        //ClientRegistrationUtil.registerScreen(event, MSContainerTypes.CHEMICAL_DEMOLITION_MACHINE, GuiChemicalDemolitionMachine::new);
+        ClientRegistrationUtil.registerScreen(event, MSContainerTypes.CHEMICAL_DEMOLITION_MACHINE, GuiChemicalDemolitionMachine::new);
         ClientRegistrationUtil.registerScreen(event, MSContainerTypes.RADIATION_IRRADIATOR, GuiRadiationIrradiator::new);
 
         //ClientRegistrationUtil.registerScreen(event, MSContainerTypes.ADSORPTION_TYPE_SEAWATER_METAL_EXTRACTOR, GuiAdsorptionTypeSeawaterMetalExtractor::new);
