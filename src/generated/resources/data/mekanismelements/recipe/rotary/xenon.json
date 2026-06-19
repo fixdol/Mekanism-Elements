@@ -1,0 +1,19 @@
+{
+  "type": "mekanism:rotary",
+  "chemical_input": {
+    "amount": 1,
+    "chemical": "mekanismelements:xenon"
+  },
+  "chemical_output": {
+    "amount": 1,
+    "id": "mekanismelements:xenon"
+  },
+  "fluid_input": {
+    "amount": 1,
+    "fluid": "mekanismelements:xenon"
+  },
+  "fluid_output": {
+    "amount": 1,
+    "id": "mekanismelements:xenon"
+  }
+}

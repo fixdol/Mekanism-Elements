@@ -1,0 +1,19 @@
+{
+  "type": "mekanism:rotary",
+  "chemical_input": {
+    "amount": 1,
+    "chemical": "mekanismelements:potassium_iodide"
+  },
+  "chemical_output": {
+    "amount": 1,
+    "id": "mekanismelements:potassium_iodide"
+  },
+  "fluid_input": {
+    "amount": 1,
+    "fluid": "mekanismelements:potassium_iodide"
+  },
+  "fluid_output": {
+    "amount": 1,
+    "id": "mekanismelements:potassium_iodide"
+  }
+}

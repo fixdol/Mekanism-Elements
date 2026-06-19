@@ -1,0 +1,11 @@
+{
+  "type": "mekanism:oxidizing",
+  "input": {
+    "count": 1,
+    "item": "mekanism:bio_fuel"
+  },
+  "output": {
+    "amount": 100,
+    "id": "mekanismelements:methane"
+  }
+}

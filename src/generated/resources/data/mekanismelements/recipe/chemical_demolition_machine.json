@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "mekanism:pellet_polonium"
+    },
+    "C": {
+      "item": "minecraft:netherite_block"
+    },
+    "S": {
+      "item": "minecraft:nether_star"
+    },
+    "T": {
+      "item": "mekanism:ultimate_chemical_tank"
+    },
+    "X": {
+      "item": "mekanismelements:adsorption_separator"
+    }
+  },
+  "pattern": [
+    "ACA",
+    "SXS",
+    "ATA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mekanismelements:chemical_demolition_machine"
+  }
+}

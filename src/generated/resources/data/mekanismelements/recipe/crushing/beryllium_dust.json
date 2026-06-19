@@ -1,0 +1,11 @@
+{
+  "type": "mekanism:crushing",
+  "input": {
+    "count": 1,
+    "item": "mekanismelements:ingot_beryllium"
+  },
+  "output": {
+    "count": 1,
+    "id": "mekanismelements:dust_beryllium"
+  }
+}

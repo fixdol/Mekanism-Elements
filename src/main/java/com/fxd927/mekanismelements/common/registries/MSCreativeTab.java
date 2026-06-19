@@ -16,9 +16,7 @@ public class MSCreativeTab {
     public static final CreativeTabDeferredRegister CREATIVE_TABS = new CreativeTabDeferredRegister(MekanismElements.MODID);
 
     public static final MekanismDeferredHolder<CreativeModeTab, CreativeModeTab> MEKANISM_SCIENCE = CREATIVE_TABS.registerMain(MSLang.MEKANISM_SCIENCE, MSItems.NEUTRON_SOURCE_PELLET, builder ->
-              builder.withSearchBar(65)
-                      .backgroundTexture(MekanismElements.rl("textures/gui/creative_tab.png"))
-                      .withTabsBefore(MekanismCreativeTabs.MEKANISM.getId())
+              builder.withTabsBefore(MekanismCreativeTabs.MEKANISM.getId())
                       .displayItems((displayParameters, output) -> {
                           CreativeTabDeferredRegister.addToDisplay(MSItems.ITEMS, output);
                           CreativeTabDeferredRegister.addToDisplay(MSBlocks.BLOCKS, output);

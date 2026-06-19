@@ -1,0 +1,19 @@
+{
+  "type": "mekanism:rotary",
+  "chemical_input": {
+    "amount": 1,
+    "chemical": "mekanismelements:nitrogen"
+  },
+  "chemical_output": {
+    "amount": 1,
+    "id": "mekanismelements:nitrogen"
+  },
+  "fluid_input": {
+    "amount": 1,
+    "fluid": "mekanismelements:nitrogen"
+  },
+  "fluid_output": {
+    "amount": 1,
+    "id": "mekanismelements:nitrogen"
+  }
+}

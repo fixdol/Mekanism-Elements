@@ -1,0 +1,19 @@
+{
+  "type": "mekanism:rotary",
+  "chemical_input": {
+    "amount": 1,
+    "chemical": "mekanismelements:iodine"
+  },
+  "chemical_output": {
+    "amount": 1,
+    "id": "mekanismelements:iodine"
+  },
+  "fluid_input": {
+    "amount": 1,
+    "fluid": "mekanismelements:iodine"
+  },
+  "fluid_output": {
+    "amount": 1,
+    "id": "mekanismelements:iodine"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "mekanismelements:chemical_demolition",
+  "chemical_input": {
+    "amount": 1,
+    "chemical": "mekanismelements:aqua_regia"
+  },
+  "item_input": {
+    "count": 1,
+    "item": "minecraft:compass"
+  },
+  "main_output": {
+    "count": 4,
+    "id": "minecraft:iron_ingot"
+  },
+  "secondary_output": {
+    "count": 1,
+    "id": "minecraft:redstone"
+  }
+}
