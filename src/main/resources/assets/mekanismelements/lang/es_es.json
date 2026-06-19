@@ -23,7 +23,7 @@
 
   "block.mekanismelements.ammonia": "Amoníaco líquido",
   "block.mekanismelements.ammonium_nitrate": "Nitrato de amonio líquido",
-  "block.mekanismelements.aqua_regia": "Aqua regia líquida",
+  "block.mekanismelements.aqua_regia": "Agua regia líquida",
   "block.mekanismelements.beryllium": "Berilio líquido",
   "block.mekanismelements.bromine": "Bromo líquido",
   "block.mekanismelements.compressed_air": "Aire comprimido líquido",
@@ -106,7 +106,7 @@
   "chemical.mekanismelements.americium": "Americio",
   "chemical.mekanismelements.ammonia": "Amoníaco",
   "chemical.mekanismelements.ammonium_nitrate": "Nitrato de amonio",
-  "chemical.mekanismelements.aqua_regia": "Aqua regia",
+  "chemical.mekanismelements.aqua_regia": "Agua regia",
   "chemical.mekanismelements.beryllium": "Berilio",
   "chemical.mekanismelements.bromine": "Bromo",
   "chemical.mekanismelements.californium": "Californio",
@@ -155,7 +155,7 @@
 
   "item.mekanismelements.ammonia_bucket": "Cubo de amoníaco líquido",
   "item.mekanismelements.ammonium_nitrate_bucket": "Cubo de nitrato de amonio líquido",
-  "item.mekanismelements.aqua_regia_bucket": "Cubo de aqua regia líquida",
+  "item.mekanismelements.aqua_regia_bucket": "Cubo de agua regia líquida",
   "item.mekanismelements.beryllium_bucket": "Cubo de berilio líquido",
   "item.mekanismelements.bromine_bucket": "Cubo de bromo líquido",
   "item.mekanismelements.compressed_air_bucket": "Cubo de aire comprimido líquido",
