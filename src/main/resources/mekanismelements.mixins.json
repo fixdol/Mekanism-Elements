@@ -5,7 +5,16 @@
   "refmap": "mekanismelements.refmap.json",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "MixinTileEntityChemicalInfuser"
+    "MixinTileEntityChemicalInfuser",
+    "MixinTileEntityGasGenerator",
+    "MixinClientTickHandler",
+    "MixinCommonPlayerTickHandler",
+    "MixinComponentBackedChemicalTank",
+    "MixinItemChemicalArmor",
+    "MixinItemJetpack",
+    "MixinItemMekaSuitArmor",
+    "MixinModuleJetpackUnit"
+    
   ],
   "client": [
   ],

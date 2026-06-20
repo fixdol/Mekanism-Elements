@@ -2,7 +2,14 @@ package com.fxd927.mekanismelements.client;
 
 import com.fxd927.mekanismelements.client.jei.MSRecipeRegistryHelper;
 import com.fxd927.mekanismelements.client.jei.machine.AdsorptionSeparatorRecipeCategory;
+import com.fxd927.mekanismelements.client.jei.machine.AirCompressorInfoRecipe;
+import com.fxd927.mekanismelements.client.jei.machine.AirCompressorRecipeCategory;
+import com.fxd927.mekanismelements.client.jei.machine.AirCompressorRecipeViewerType;
+import com.fxd927.mekanismelements.client.jei.machine.ChemicalDemolitionMachineRecipeCategory;
 import com.fxd927.mekanismelements.client.jei.machine.RadiationIrradiatorRecipeCategory;
+import com.fxd927.mekanismelements.client.jei.machine.SeawaterPumpInfoRecipe;
+import com.fxd927.mekanismelements.client.jei.machine.SeawaterPumpRecipeCategory;
+import com.fxd927.mekanismelements.client.jei.machine.SeawaterPumpRecipeViewerType;
 import com.fxd927.mekanismelements.common.MekanismElements;
 import com.fxd927.mekanismelements.common.recipe.MSRecipeType;
 import com.fxd927.mekanismelements.common.registries.MSBlocks;
@@ -45,22 +52,32 @@ public class MSJEI implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registry) {
         IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
         registry.addRecipeCategories(new AdsorptionSeparatorRecipeCategory(guiHelper, MSJEIRecipeType.ADSORPTION_SEPARATOR));
-        //registry.addRecipeCategories(new ChemicalDemolitionMachineRecipeCategory(guiHelper, MSJEIRecipeType.CHEMICAL_DEMOLITION_MACHINE));
+        registry.addRecipeCategories(new ChemicalDemolitionMachineRecipeCategory(guiHelper, MSJEIRecipeType.CHEMICAL_DEMOLITION_MACHINE));
         registry.addRecipeCategories(new RadiationIrradiatorRecipeCategory(guiHelper, MSJEIRecipeType.RADIATION_IRRADIATOR));
+        registry.addRecipeCategories(new AirCompressorRecipeCategory(guiHelper, AirCompressorRecipeViewerType.INSTANCE));
+        registry.addRecipeCategories(new SeawaterPumpRecipeCategory(guiHelper, SeawaterPumpRecipeViewerType.INSTANCE));
     }
 
     @Override
     public void registerRecipeCatalysts(@Nonnull IRecipeCatalystRegistration registry) {
         // Register catalysts using the recipe types directly
         CatalystRegistryHelper.register(registry, MSJEIRecipeType.ADSORPTION_SEPARATOR);
-        //CatalystRegistryHelper.register(registry, MSJEIRecipeType.CHEMICAL_DEMOLITION_MACHINE);
+        CatalystRegistryHelper.register(registry, MSJEIRecipeType.CHEMICAL_DEMOLITION_MACHINE);
         CatalystRegistryHelper.register(registry, MSJEIRecipeType.RADIATION_IRRADIATOR);
+        CatalystRegistryHelper.register(registry, AirCompressorRecipeViewerType.INSTANCE);
+        CatalystRegistryHelper.register(registry, SeawaterPumpRecipeViewerType.INSTANCE);
     }
 
     @Override
     public void registerRecipes(@NotNull IRecipeRegistration registry) {
         MSRecipeRegistryHelper.register(registry, ADSORPTION_SEPARATOR, MSRecipeType.ADSORPTION);
         MSRecipeRegistryHelper.register(registry, RADIATION_IRRADIATOR, MSRecipeType.RADIATION_IRRADIATING);
-        //MSRecipeRegistryHelper.register(registry, CHEMICAL_DEMOLITION_MACHINE, MSRecipeType.CHEMICAL_DEMOLITION);
+        MSRecipeRegistryHelper.register(registry, CHEMICAL_DEMOLITION_MACHINE, MSRecipeType.CHEMICAL_DEMOLITION);
+
+        // Maquinas sin receta JSON real: se registra una unica "receta" informativa fija
+        MSRecipeRegistryHelper.register(registry, AirCompressorRecipeViewerType.INSTANCE,
+                List.of(AirCompressorInfoRecipe.INSTANCE));
+        MSRecipeRegistryHelper.register(registry, SeawaterPumpRecipeViewerType.INSTANCE,
+                List.of(SeawaterPumpInfoRecipe.INSTANCE));
     }
 }

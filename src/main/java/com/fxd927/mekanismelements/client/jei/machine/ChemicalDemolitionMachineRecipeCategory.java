@@ -54,15 +54,11 @@ public class ChemicalDemolitionMachineRecipeCategory extends BaseRecipeCategory<
 
     @Override
     public com.mojang.serialization.Codec<ChemicalDemolitionRecipe> getCodec(ICodecHelper codecHelper, IRecipeManager recipeManager) {
-        // Codec should be provided by the recipe serializer
-        return com.mojang.serialization.Codec.unit(null);
+        return com.fxd927.mekanismelements.common.registries.MSRecipeSerializers.CHEMICAL_DEMOLITION.get().codec().codec();
     }
 
     @Override
     public net.minecraft.resources.ResourceLocation getRegistryName(ChemicalDemolitionRecipe recipe) {
-        // Recipes are wrapped in RecipeHolder, need to get ID from holder
-        // For now, return a placeholder - this will need to be fixed when recipes are properly registered
-        return getRecipeType().getUid();
+        return recipe.getId();
     }
 }
-

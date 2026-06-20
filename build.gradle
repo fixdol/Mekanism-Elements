@@ -13,7 +13,7 @@ tasks.named('wrapper', Wrapper).configure {
     distributionType = Wrapper.DistributionType.BIN
 }
 
-version =minecraft_version + "-" + mod_version + "-" + release_type + "-" + tag_lanzador
+version =minecraft_version + "-" + mod_version + "-" + tag_lanzador
 group = mod_group_id
 
 base {

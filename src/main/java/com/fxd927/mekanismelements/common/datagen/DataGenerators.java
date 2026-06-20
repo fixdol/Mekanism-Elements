@@ -1,6 +1,7 @@
 package com.fxd927.mekanismelements.common.datagen;
 
 import com.fxd927.mekanismelements.common.MekanismElements;
+import com.fxd927.mekanismelements.common.datagen.providers.LanguageGenerator;
 import com.fxd927.mekanismelements.common.datagen.providers.ModAdvancementProvider;
 import com.fxd927.mekanismelements.common.datagen.providers.ModLootTableProvider;
 import com.fxd927.mekanismelements.common.datagen.providers.ModRecipeProvider;
@@ -28,5 +29,12 @@ public class DataGenerators {
         generator.addProvider(event.includeServer(), new ModLootTableProvider(output, event.getLookupProvider()));
         generator.addProvider(event.includeServer(), new MSBlockTagsProvider(output, event.getLookupProvider(), existingFileHelper));
         generator.addProvider(event.includeServer(), new AdvancementProvider(output, event.getLookupProvider(), existingFileHelper, List.of(new ModAdvancementProvider())));
+
+        // Language Generation
+        generator.addProvider(event.includeClient(), new LanguageGenerator(output));
+        generator.addProvider(event.includeClient(), new LanguageGenerator.ESES(output));
+        generator.addProvider(event.includeClient(), new LanguageGenerator.ESES(output, "es_ar"));
+        generator.addProvider(event.includeClient(), new LanguageGenerator.ESES(output, "es_mx"));
+        generator.addProvider(event.includeClient(), new LanguageGenerator.JAJP(output));
     }
 }

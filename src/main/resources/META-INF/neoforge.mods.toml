@@ -27,6 +27,9 @@ description="${mod_description}"
     ordering="NONE"
     side="BOTH"
 
+[[mixins]]
+config="mekanismelements.mixins.json"
+
 [[dependencies.${mod_id}]]
     modId="mekanism"
     type="required"
