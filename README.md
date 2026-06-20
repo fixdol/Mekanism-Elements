@@ -1,6 +1,6 @@
 Mekanism: Elements
-[![CurseForge](https://cf.way2muchnoise.eu/versions/1103224.svg)](https://www.curseforge.com/minecraft/mc-mods/mekanism-science)
-[![CurseForge](https://cf.way2muchnoise.eu/1103224.svg)](https://www.curseforge.com/minecraft/mc-mods/mekanism-science)
+[![CurseForge](https://cf.way2muchnoise.eu/versions/1103224.svg)](https://www.curseforge.com/minecraft/mc-mods/mekanism-elements)
+[![CurseForge](https://cf.way2muchnoise.eu/1103224.svg)](https://www.curseforge.com/minecraft/mc-mods/mekanism-elements)
 
 Mekanism: Elements is a mod that adds many scientific elements to Mekanism
 
