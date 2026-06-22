@@ -2,7 +2,7 @@
   "type": "mekanismelements:chemical_demolition",
   "chemical_input": {
     "amount": 1,
-    "chemical": "mekanismelements:aqua_regia"
+    "chemical": "mekanismelements:seawater"
   },
   "item_input": {
     "count": 1,

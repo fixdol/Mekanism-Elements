@@ -20,6 +20,7 @@ import com.fxd927.mekanismelements.datagen.machines.PaintingRecipeProvider;
 import com.fxd927.mekanismelements.datagen.machines.CrystallizingRecipeProvider;
 import com.fxd927.mekanismelements.datagen.machines.ActivatingRecipeProvider;
 import com.fxd927.mekanismelements.datagen.machines.InjectingRecipeProvider;
+import com.fxd927.mekanismelements.datagen.machines.WashingRecipeProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
@@ -92,6 +93,7 @@ public class ModRecipeProvider extends RecipeProvider {
 
         // Colored High Quality Concrete Clumps
         addColorRecipe(recipeOutput, MSItems.HIGH_QUALITY_CONCRETE_POWDER_BLACK.get(), Items.BLACK_DYE);
+        addColorRecipe(recipeOutput, MSItems.HIGH_QUALITY_CONCRETE_POWDER_AQUA.get(), Items.CYAN_DYE);
         addColorRecipe(recipeOutput, MSItems.HIGH_QUALITY_CONCRETE_POWDER_BLUE.get(), Items.BLUE_DYE);
         addColorRecipe(recipeOutput, MSItems.HIGH_QUALITY_CONCRETE_POWDER_BROWN.get(), Items.BROWN_DYE);
         addColorRecipe(recipeOutput, MSItems.HIGH_QUALITY_CONCRETE_POWDER_CYAN.get(), Items.CYAN_DYE);
@@ -306,6 +308,7 @@ public class ModRecipeProvider extends RecipeProvider {
         CrystallizingRecipeProvider.buildRecipes(recipeOutput);
         ActivatingRecipeProvider.buildRecipes(recipeOutput);
         InjectingRecipeProvider.buildRecipes(recipeOutput);
+        WashingRecipeProvider.buildRecipes(recipeOutput);
 
         // Stonecutting: High Quality Concrete -> Slab / Stairs (todos los colores)
         addStonecuttingRecipes(recipeOutput);

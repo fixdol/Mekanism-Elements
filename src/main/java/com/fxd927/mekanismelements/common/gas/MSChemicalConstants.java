@@ -3,8 +3,10 @@ package com.fxd927.mekanismelements.common.gas;
 import mekanism.common.base.IChemicalConstant;
 
 public enum MSChemicalConstants implements IChemicalConstant {
+    ANTIMATTER("antimatter_fluid", 0xFFA464B3, 0, 240F, 0.6942F),
     AMMONIA("ammonia", 0xFFC8B3FF, 0, 240F, 0.6942F),
     AMMONIUM_NITRATE("ammonium_nitrate", 0xFF5E89FF, 0, 483.15F, 1700F),
+    AMMONIUM_NITRATE_SOLUTION("ammonium_nitrate_solution", 0xFF8BAEFF, 0, 373.15F, 1270F),
     AQUA_REGIA("aqua_regia", 0xFFF3DC44, 0, 381F, 1210F),
     BERYLLIUM("beryllium", 0xFF00DB1B, 0, 1560.15F, 1850F),
     BROMINE("bromine", 0xFFBA1A08, 0, 332F, 3102.8F),
@@ -68,5 +70,3 @@ public enum MSChemicalConstants implements IChemicalConstant {
     }
 
 }
-
-

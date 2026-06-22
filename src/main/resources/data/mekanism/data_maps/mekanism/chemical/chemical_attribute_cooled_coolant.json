@@ -4,6 +4,11 @@
             "hot_variant": "mekanismelements:superheated_helium",
             "thermal_enthalpy": 100.0,
             "conductivity": 1.0
-        }
+        },
+        "mekanismelements:ammonium_nitrate_solution": {
+            "hot_variant": "mekanismelements:ammonium_nitrate_solution",
+            "thermal_enthalpy": 120.0,
+            "conductivity": 0.7 
     }
+}
 }

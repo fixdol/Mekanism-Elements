@@ -31,6 +31,7 @@ public class LanguageGenerator extends LanguageProvider {
         add("block.mekanismelements.seawater_pump", "Seawater Pump");
         add("block.mekanismelements.ammonia", "Liquid Ammonia");
         add("block.mekanismelements.ammonium_nitrate", "Liquid Ammonium Nitrate");
+        add("block.mekanismelements.ammonium_nitrate_solution", "Liquid Ammonium Nitrate Solution");
         add("block.mekanismelements.aqua_regia", "Liquid Aqua Regia");
         add("block.mekanismelements.beryllium", "Liquid Beryllium");
         add("block.mekanismelements.bromine", "Liquid Bromine");
@@ -50,6 +51,16 @@ public class LanguageGenerator extends LanguageProvider {
         add("block.mekanismelements.superheated_helium", "Liquid Superheated Helium");
         add("block.mekanismelements.xenon", "Liquid Xenon");
         add("block.mekanismelements.yttrium", "Liquid Yttrium");
+        add("block.mekanismelements.antimatter_fluid", "Liquid Antimatter");
+        add("block.mekanismelements.methane", "Liquid Methane");
+        add("block.mekanismelements.potassium_cyanide", "Liquid Potassium Cyanide");
+        add("chemical.mekanismelements.hydrogen_cyanide", "Hydrogen Cyanide");
+        add("chemical.mekanismelements.methane", "Methane");
+        add("chemical.mekanismelements.potassium_cyanide", "Potassium Cyanide");
+        add("item.mekanismelements.antimatter_fluid_bucket", "Liquid Antimatter Bucket");
+        add("item.mekanismelements.hydrogen_cyanide_bucket", "Liquid Hydrogen Cyanide Bucket");
+        add("item.mekanismelements.methane_bucket", "Liquid Methane Bucket");
+        add("item.mekanismelements.potassium_cyanide_bucket", "Liquid Potassium Cyanide Bucket");
         add("block.mekanismelements.aqua_high_quality_concrete", "Aqua High-Quality Concrete");
         add("block.mekanismelements.black_high_quality_concrete", "Black High-Quality Concrete");
         add("block.mekanismelements.blue_high_quality_concrete", "Blue High-Quality Concrete");
@@ -97,6 +108,7 @@ public class LanguageGenerator extends LanguageProvider {
         add("block.mekanismelements.gray_high_quality_concrete_stairs", "Gray High-Quality Concrete Stairs");
         add("block.mekanismelements.green_high_quality_concrete_stairs", "Green High-Quality Concrete Stairs");
         add("block.mekanismelements.high_quality_concrete_stairs", "High-Quality Concrete Stairs");
+        add("block.mekanismelements.hydrogen_cyanide", "Hydrogen Cyanide");
         add("block.mekanismelements.light_blue_high_quality_concrete_stairs", "Light Blue High-Quality Concrete Stairs");
         add("block.mekanismelements.light_gray_high_quality_concrete_stairs", "Light Gray High-Quality Concrete Stairs");
         add("block.mekanismelements.lime_high_quality_concrete_stairs", "Lime High-Quality Concrete Stairs");
@@ -110,6 +122,7 @@ public class LanguageGenerator extends LanguageProvider {
         add("chemical.mekanismelements.americium", "Americium");
         add("chemical.mekanismelements.ammonia", "Ammonia");
         add("chemical.mekanismelements.ammonium_nitrate", "Ammonium Nitrate");
+        add("chemical.mekanismelements.ammonium_nitrate_solution", "Ammonium Nitrate Solution");
         add("chemical.mekanismelements.aqua_regia", "Aqua Regia");
         add("chemical.mekanismelements.beryllium", "Beryllium");
         add("chemical.mekanismelements.bromine", "Bromine");
@@ -155,6 +168,7 @@ public class LanguageGenerator extends LanguageProvider {
         add("effect.mekanismelements.sensory_paralysis", "Sensory Paralysis");
         add("item.mekanismelements.ammonia_bucket", "Liquid Ammonia Bucket");
         add("item.mekanismelements.ammonium_nitrate_bucket", "Liquid Ammonium Nitrate Bucket");
+        add("item.mekanismelements.ammonium_nitrate_solution_bucket", "Liquid Ammonium Nitrate Solution Bucket");
         add("item.mekanismelements.aqua_regia_bucket", "Liquid Aqua Regia Bucket");
         add("item.mekanismelements.beryllium_bucket", "Liquid Beryllium Bucket");
         add("item.mekanismelements.bromine_bucket", "Liquid Bromine Bucket");
@@ -267,6 +281,7 @@ public class LanguageGenerator extends LanguageProvider {
         add("block.mekanismelements.seawater_pump", "Bomba de agua de mar");
         add("block.mekanismelements.ammonia", "Amoníaco líquido");
         add("block.mekanismelements.ammonium_nitrate", "Nitrato de amonio líquido");
+        add("block.mekanismelements.ammonium_nitrate_solution", "Solución de nitrato de amonio líquida");
         add("block.mekanismelements.aqua_regia", "Agua regia líquida");
         add("block.mekanismelements.beryllium", "Berilio líquido");
         add("block.mekanismelements.bromine", "Bromo líquido");
@@ -286,6 +301,16 @@ public class LanguageGenerator extends LanguageProvider {
         add("block.mekanismelements.superheated_helium", "Helio líquido sobrecalentado");
         add("block.mekanismelements.xenon", "Xenón líquido");
         add("block.mekanismelements.yttrium", "Itrio líquido");
+        add("block.mekanismelements.antimatter_fluid", "Antimateria líquida");
+        add("block.mekanismelements.methane", "Metano líquido");
+        add("block.mekanismelements.potassium_cyanide", "Cianuro de potasio líquido");
+        add("chemical.mekanismelements.hydrogen_cyanide", "Cianuro de hidrógeno");
+        add("chemical.mekanismelements.methane", "Metano");
+        add("chemical.mekanismelements.potassium_cyanide", "Cianuro de potasio");
+        add("item.mekanismelements.antimatter_fluid_bucket", "Cubo de antimateria líquida");
+        add("item.mekanismelements.hydrogen_cyanide_bucket", "Cubo de cianuro de hidrógeno líquido");
+        add("item.mekanismelements.methane_bucket", "Cubo de metano líquido");
+        add("item.mekanismelements.potassium_cyanide_bucket", "Cubo de cianuro de potasio líquido");
         add("block.mekanismelements.aqua_high_quality_concrete", "Hormigón celeste de alta calidad");
         add("block.mekanismelements.black_high_quality_concrete", "Hormigón negro de alta calidad");
         add("block.mekanismelements.blue_high_quality_concrete", "Hormigón azul de alta calidad");
@@ -333,6 +358,7 @@ public class LanguageGenerator extends LanguageProvider {
         add("block.mekanismelements.gray_high_quality_concrete_stairs", "Escaleras de hormigón gris de alta calidad");
         add("block.mekanismelements.green_high_quality_concrete_stairs", "Escaleras de hormigón verde de alta calidad");
         add("block.mekanismelements.high_quality_concrete_stairs", "Escaleras de hormigón de alta calidad");
+        add("block.mekanismelements.hydrogen_cyanide", "Cianuro de hidrógeno líquido");
         add("block.mekanismelements.light_blue_high_quality_concrete_stairs", "Escaleras de hormigón azul claro de alta calidad");
         add("block.mekanismelements.light_gray_high_quality_concrete_stairs", "Escaleras de hormigón gris claro de alta calidad");
         add("block.mekanismelements.lime_high_quality_concrete_stairs", "Escaleras de hormigón verde lima de alta calidad");
@@ -346,6 +372,7 @@ public class LanguageGenerator extends LanguageProvider {
         add("chemical.mekanismelements.americium", "Americio");
         add("chemical.mekanismelements.ammonia", "Amoníaco");
         add("chemical.mekanismelements.ammonium_nitrate", "Nitrato de amonio");
+        add("chemical.mekanismelements.ammonium_nitrate_solution", "Solución de nitrato de amonio");
         add("chemical.mekanismelements.aqua_regia", "Agua regia");
         add("chemical.mekanismelements.beryllium", "Berilio");
         add("chemical.mekanismelements.bromine", "Bromo");
@@ -391,6 +418,7 @@ public class LanguageGenerator extends LanguageProvider {
         add("effect.mekanismelements.sensory_paralysis", "Parálisis sensorial");
         add("item.mekanismelements.ammonia_bucket", "Cubo de amoníaco líquido");
         add("item.mekanismelements.ammonium_nitrate_bucket", "Cubo de nitrato de amonio líquido");
+        add("item.mekanismelements.ammonium_nitrate_solution_bucket", "Cubo de solución de nitrato de amonio líquida");
         add("item.mekanismelements.aqua_regia_bucket", "Cubo de agua regia líquida");
         add("item.mekanismelements.beryllium_bucket", "Cubo de berilio líquido");
         add("item.mekanismelements.bromine_bucket", "Cubo de bromo líquido");
@@ -490,10 +518,13 @@ public class LanguageGenerator extends LanguageProvider {
         add("advancements.mekanismelements.neutron_source.title", "なぜ安全だと思った？");
         add("advancements.mekanismelements.seawater_pump.description", "海水汲上ポンプをクラフトする");
         add("advancements.mekanismelements.seawater_pump.title", "海の恵み");
+        add("block.mekanismelements.antimatter_fluid", "液体反物質");
+        add("item.mekanismelements.antimatter_fluid_bucket", "液体反物質入りバケツ");
         add("block.mekanismelements.adsorption_separator", "吸着分離機");
         add("block.mekanismelements.air_compressor", "空気圧縮機");
         add("block.mekanismelements.ammonia", "液体アンモニア");
         add("block.mekanismelements.ammonium_nitrate", "液体硝酸アンモニウム");
+        add("block.mekanismelements.ammonium_nitrate_solution", "液体硝酸アンモニウム溶液");
         add("block.mekanismelements.aqua_high_quality_concrete", "水色の高品質コンクリート");
         add("block.mekanismelements.aqua_high_quality_concrete_slab", "水色の高品質コンクリートのハーフブロック");
         add("block.mekanismelements.aqua_high_quality_concrete_stairs", "水色の高品質コンクリートの階段");
@@ -596,6 +627,7 @@ public class LanguageGenerator extends LanguageProvider {
         add("chemical.mekanismelements.americium", "アメリシウム");
         add("chemical.mekanismelements.ammonia", "アンモニア");
         add("chemical.mekanismelements.ammonium_nitrate", "硝酸アンモニウム");
+        add("chemical.mekanismelements.ammonium_nitrate_solution", "硝酸アンモニウム溶液");
         add("chemical.mekanismelements.aqua_regia", "王水");
         add("chemical.mekanismelements.beryllium", "ベリリウム");
         add("chemical.mekanismelements.bromine", "臭素");
@@ -625,6 +657,7 @@ public class LanguageGenerator extends LanguageProvider {
         add("chemical.mekanismelements.yttrium", "イットリウム");
         add("item.mekanismelements.ammonia_bucket", "液体アンモニア入りバケツ");
         add("item.mekanismelements.ammonium_nitrate_bucket", "液体硝酸アンモニウム入りバケツ");
+        add("item.mekanismelements.ammonium_nitrate_solution_bucket", "液体硝酸アンモニウム溶液入りバケツ");
         add("item.mekanismelements.aqua_regia_bucket", "液体王水入りバケツ");
         add("item.mekanismelements.beryllium_bucket", "液体ベリリウム入りバケツ");
         add("item.mekanismelements.dust_beryllium", "ベリリウムの粉");

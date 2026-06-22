@@ -32,7 +32,7 @@ public class ChemicalDemolitionRecipeProvider {
         // clock -> 4 gold ingot + redstone
         new Builder(
                 ItemStackIngredient.of(SizedIngredient.of(Items.CLOCK, 1)),
-                IngredientCreatorAccess.chemicalStack().fromHolder(MSGases.AQUA_REGIA, 1),
+                IngredientCreatorAccess.chemicalStack().fromHolder(MSGases.SEAWATER, 1),
                 new ItemStack(Items.GOLD_INGOT, 4),
                 new ItemStack(Items.REDSTONE, 1)
         )
@@ -42,12 +42,21 @@ public class ChemicalDemolitionRecipeProvider {
         // compass -> 4 iron ingot + redstone
         new Builder(
                 ItemStackIngredient.of(SizedIngredient.of(Items.COMPASS, 1)),
-                IngredientCreatorAccess.chemicalStack().fromHolder(MSGases.AQUA_REGIA, 1),
+                IngredientCreatorAccess.chemicalStack().fromHolder(MSGases.SEAWATER, 1),
                 new ItemStack(Items.IRON_INGOT, 4),
                 new ItemStack(Items.REDSTONE, 1)
         )
         .unlockedBy("has_compass", InventoryChangeTrigger.TriggerInstance.hasItems(Items.COMPASS))
         .save(output, ResourceLocation.fromNamespaceAndPath("mekanismelements", "chemical_demolition/compass"));
+
+    new Builder(
+                ItemStackIngredient.of(SizedIngredient.of(Items.TOTEM_OF_UNDYING, 1)),
+                IngredientCreatorAccess.chemicalStack().fromHolder(MSGases.SEAWATER, 1),
+                new ItemStack(Items.EMERALD, 20),
+                new ItemStack(Items.ENCHANTED_GOLDEN_APPLE, 7)
+        )
+        .unlockedBy("has_compass", InventoryChangeTrigger.TriggerInstance.hasItems(Items.COMPASS))
+        .save(output, ResourceLocation.fromNamespaceAndPath("mekanismelements", "chemical_demolition/totem_of_undying"));
     }
 
     private static class Builder implements RecipeBuilder {

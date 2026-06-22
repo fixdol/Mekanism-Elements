@@ -56,6 +56,8 @@ public class MSClientRegistration {
         // All other fluids: use Mekanism's generic tinted liquid sprites + our chemical tint
         registerFluidType(event, MSFluids.AMMONIA.getFluidType(), mekanismStill, mekanismFlow, MSChemicalConstants.AMMONIA.getColor());
         registerFluidType(event, MSFluids.AMMONIUM_NITRATE.getFluidType(), mekanismStill, mekanismFlow, MSChemicalConstants.AMMONIUM_NITRATE.getColor());
+        registerFluidType(event, MSFluids.AMMONIUM_NITRATE_SOLUTION.getFluidType(), mekanismStill, mekanismFlow, MSChemicalConstants.AMMONIUM_NITRATE_SOLUTION.getColor());
+        registerFluidType(event, MSFluids.ANTIMATTER_FLUID.getFluidType(), mekanismStill, mekanismFlow, MSChemicalConstants.ANTIMATTER.getColor());
         registerFluidType(event, MSFluids.BERYLLIUM.getFluidType(), mekanismStill, mekanismFlow, MSChemicalConstants.BERYLLIUM.getColor());
         registerFluidType(event, MSFluids.BROMINE.getFluidType(), mekanismStill, mekanismFlow, MSChemicalConstants.BROMINE.getColor());
         registerFluidType(event, MSFluids.COMPRESSED_AIR.getFluidType(), mekanismStill, mekanismFlow, MSChemicalConstants.COMPRESSED_AIR.getColor());
@@ -105,4 +107,3 @@ public class MSClientRegistration {
         }, fluidType);
     }
 }
-

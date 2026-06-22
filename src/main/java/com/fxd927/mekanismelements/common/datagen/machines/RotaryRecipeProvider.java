@@ -7,6 +7,7 @@ import mekanism.api.chemical.Chemical;
 import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.datagen.recipe.builder.RotaryRecipeBuilder;
 import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
+import mekanism.common.registries.MekanismChemicals;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
@@ -18,6 +19,7 @@ public class RotaryRecipeProvider {
         addRotary(recipeOutput, "ammonia",             MSFluids.AMMONIA.get(),             MSGases.AMMONIA.get());
         addRotary(recipeOutput, "ammonium_nitrate",    MSFluids.AMMONIUM_NITRATE.get(),    MSGases.AMMONIUM_NITRATE.get());
         // AQUA_REGIA: fluid comentado en MSFluids, descomentar cuando esté registrado
+        addRotary(recipeOutput, "antimatter_fluid",    MSFluids.ANTIMATTER_FLUID.get(),    MekanismChemicals.ANTIMATTER.get());
         addRotary(recipeOutput, "beryllium",           MSFluids.BERYLLIUM.get(),           MSGases.BERYLLIUM.get());
         addRotary(recipeOutput, "bromine",             MSFluids.BROMINE.get(),             MSGases.BROMINE.get());
         addRotary(recipeOutput, "compressed_air",      MSFluids.COMPRESSED_AIR.get(),      MSGases.COMPRESSED_AIR.get());

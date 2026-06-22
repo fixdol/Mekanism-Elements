@@ -14,6 +14,7 @@ public class MSGases {
     public static final DeferredChemical<Chemical> AMERICIUM;
     public static final DeferredChemical<Chemical> AMMONIA;
     public static final DeferredChemical<Chemical> AMMONIUM_NITRATE;
+    public static final DeferredChemical<Chemical> AMMONIUM_NITRATE_SOLUTION;
     public static final DeferredChemical<Chemical> AQUA_REGIA;
     public static final DeferredChemical<Chemical> BROMINE;
     public static final DeferredChemical<Chemical> BERYLLIUM;
@@ -44,6 +45,7 @@ public class MSGases {
         AMERICIUM                     = GASES.register("americium", 13983840);
         AMMONIA                       = GASES.register(MSChemicalConstants.AMMONIA);
         AMMONIUM_NITRATE              = GASES.register(MSChemicalConstants.AMMONIUM_NITRATE);
+        AMMONIUM_NITRATE_SOLUTION     = GASES.register(MSChemicalConstants.AMMONIUM_NITRATE_SOLUTION);
         AQUA_REGIA                    = GASES.register(MSChemicalConstants.AQUA_REGIA);
         BROMINE                       = GASES.register(MSChemicalConstants.BROMINE);
         BERYLLIUM                     = GASES.register(MSChemicalConstants.BERYLLIUM);
@@ -86,6 +88,18 @@ public class MSGases {
         public static ChemicalAttributes.HeatedCoolant getHeatedHeliumCoolant() {
             return new ChemicalAttributes.HeatedCoolant(
                     HELIUM.get().getAsHolder(), 100);
+        }
+
+        // Ammonium Nitrate Solution coolant
+        // thermalEnthalpy=120, conductivity=0.7 -> enfria mas rapido que Helium pero menos que Sodium
+        public static ChemicalAttributes.CooledCoolant getAmmoniumNitrateSolutionCoolant() {
+            return new ChemicalAttributes.CooledCoolant(
+                    AMMONIUM_NITRATE_SOLUTION.get().getAsHolder(), 120, 0.7);
+        }
+
+        public static ChemicalAttributes.HeatedCoolant getHeatedAmmoniumNitrateSolutionCoolant() {
+            return new ChemicalAttributes.HeatedCoolant(
+                    AMMONIUM_NITRATE_SOLUTION.get().getAsHolder(), 120);
         }
     }
 }
