@@ -22,6 +22,7 @@ public class MSBlockTagsProvider extends BlockTagsProvider {
                 .add(MSBlocks.ADSORPTION_SEPARATOR.get())
                 .add(MSBlocks.AIR_COMPRESSOR.get())
                 .add(MSBlocks.RADIATION_IRRADIATOR.get())
+                .add(MSBlocks.CHEMICAL_DEMOLITION_MACHINE.get())
                 .add(MSBlocks.SEAWATER_PUMP.get())
                 .add(MSBlocks.HIGH_QUALITY_CONCRETE.get())
                 .add(MSBlocks.AQUA_HIGH_QUALITY_CONCRETE.get())
@@ -85,6 +86,7 @@ public class MSBlockTagsProvider extends BlockTagsProvider {
                 .add(MSBlocks.ADSORPTION_SEPARATOR.get())
                 .add(MSBlocks.AIR_COMPRESSOR.get())
                 .add(MSBlocks.RADIATION_IRRADIATOR.get())
+                .add(MSBlocks.CHEMICAL_DEMOLITION_MACHINE.get())
                 .add(MSBlocks.SEAWATER_PUMP.get())
                 .add(MSBlocks.HIGH_QUALITY_CONCRETE.get())
                 .add(MSBlocks.AQUA_HIGH_QUALITY_CONCRETE.get())
@@ -149,6 +151,7 @@ public class MSBlockTagsProvider extends BlockTagsProvider {
                 .add(MSBlocks.ADSORPTION_SEPARATOR.get())
                 .add(MSBlocks.AIR_COMPRESSOR.get())
                 .add(MSBlocks.RADIATION_IRRADIATOR.get())
-                .add(MSBlocks.SEAWATER_PUMP.get());
+                .add(MSBlocks.SEAWATER_PUMP.get())
+                .add(MSBlocks.CHEMICAL_DEMOLITION_MACHINE.get());
     }
 }

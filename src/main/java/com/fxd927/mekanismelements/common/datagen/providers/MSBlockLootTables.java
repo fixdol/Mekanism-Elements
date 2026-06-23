@@ -21,6 +21,7 @@ public class MSBlockLootTables extends BlockLootSubProvider {
         dropSelf(MSBlocks.AIR_COMPRESSOR.get());
         dropSelf(MSBlocks.RADIATION_IRRADIATOR.get());
         dropSelf(MSBlocks.SEAWATER_PUMP.get());
+        dropSelf(MSBlocks.CHEMICAL_DEMOLITION_MACHINE.get());
 
         dropSelf(MSBlocks.HIGH_QUALITY_CONCRETE.get());
         dropSelf(MSBlocks.AQUA_HIGH_QUALITY_CONCRETE.get());
@@ -90,6 +91,7 @@ public class MSBlockLootTables extends BlockLootSubProvider {
                 MSBlocks.AIR_COMPRESSOR.get(),
                 MSBlocks.RADIATION_IRRADIATOR.get(),
                 MSBlocks.SEAWATER_PUMP.get(),
+                MSBlocks.CHEMICAL_DEMOLITION_MACHINE.get(),
 
                 MSBlocks.HIGH_QUALITY_CONCRETE.get(),
                 MSBlocks.AQUA_HIGH_QUALITY_CONCRETE.get(),
