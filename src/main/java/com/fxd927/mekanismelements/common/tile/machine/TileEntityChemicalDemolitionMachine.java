@@ -180,9 +180,6 @@ public class TileEntityChemicalDemolitionMachine extends MSTileEntityProgressMac
         }
 
         if (level.getGameTime() % 40 == 0) {
-             com.fxd927.mekanismelements.common.MekanismElements.logger.info("DEBUG: ChemicalDemolition Tick | Energy: {}/{} | InputItem: {} | InputChemical: {} | Active: {}", 
-                 energyContainer.getEnergy(), energyContainer.getMaxEnergy(),
-                 inputSlot.getStack(), injectTank.getStack(), getActive());
         }
         return needsUpdate;
     }

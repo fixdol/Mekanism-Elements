@@ -171,9 +171,6 @@ public class TileEntityRadiationIrradiator extends MSTileEntityProgressMachine<R
         }
         
         if (level.getGameTime() % 40 == 0) {
-             com.fxd927.mekanismelements.common.MekanismElements.logger.info("DEBUG: RadiationIrradiator Tick | Energy: {}/{} | InputItem: {} | InputChemical: {} | Output: {} | Active: {}", 
-                 energyContainer.getEnergy(), energyContainer.getMaxEnergy(),
-                 inputSlot.getStack(), injectTank.getStack(), chemicalOutputTank.getStack(), getActive());
         }
         return needsUpdate;
     }

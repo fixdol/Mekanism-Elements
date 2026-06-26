@@ -22,4 +22,3 @@ public class MSConfig {
         MekanismConfigHelper.registerConfig(configs, modContainer, usageConfig);
     }
 }
-

@@ -17,7 +17,7 @@ public class MSStorageConfig extends BaseMekanismConfig {
 
     MSStorageConfig() {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
-        builder.comment("Science Energy Storage Config. This config is synced from server to client.").push("storage");
+        builder.comment("Mekanism Eelements Energy Storage Config. This config is synced from server to client.").push("storage");
 
         airCompressor = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.storage.airCompressor", "Air Compressor", "Base energy storage (Joules)."), "airCompressor", 40_000L, 0L, Long.MAX_VALUE);
 
@@ -35,7 +35,7 @@ public class MSStorageConfig extends BaseMekanismConfig {
 
     @Override
     public String getFileName() {
-        return "science-storage";
+        return "MekanismElements-Storage";
     }
 
     @Override
@@ -53,4 +53,3 @@ public class MSStorageConfig extends BaseMekanismConfig {
         return "config.mekanismelements.storage";
     }
 }
-
