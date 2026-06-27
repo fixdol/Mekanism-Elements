@@ -1,5 +1,6 @@
 package com.fxd927.mekanismelements.client.gui.machine;
 
+import com.fxd927.mekanismelements.client.MSJEIRecipeType;
 import com.fxd927.mekanismelements.common.tile.machine.TileEntityChemicalDemolitionMachine;
 import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.client.gui.GuiConfigurableTile;
@@ -36,7 +37,8 @@ public class GuiChemicalDemolitionMachine extends GuiConfigurableTile<TileEntity
         addRenderableWidget(new GuiSlot(SlotType.OUTPUT_WIDE, this, 111, 30))
                 .warning(WarningTracker.WarningType.NO_SPACE_IN_OUTPUT, tile.getWarningCheck(CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_OUTPUT_SPACE))
                 .warning(WarningTracker.WarningType.NO_SPACE_IN_OUTPUT, tile.getWarningCheck(TileEntityChemicalDemolitionMachine.NOT_ENOUGH_SPACE_SECOND_OUTPUT_ERROR));
-        addRenderableWidget(new GuiProgress(tile::getScaledProgress, ProgressType.LARGE_RIGHT, this, 54, 40))
+        addRenderableWidget(new GuiProgress(tile::getScaledProgress, ProgressType.LARGE_RIGHT, this, 54, 40)
+                .recipeViewerCategories(MSJEIRecipeType.CHEMICAL_DEMOLITION_MACHINE))
                 .warning(WarningTracker.WarningType.INPUT_DOESNT_PRODUCE_OUTPUT, tile.getWarningCheck(CachedRecipe.OperationTracker.RecipeError.INPUT_DOESNT_PRODUCE_OUTPUT));
     }
 
@@ -46,4 +48,3 @@ public class GuiChemicalDemolitionMachine extends GuiConfigurableTile<TileEntity
         super.drawForegroundText(guiGraphics, mouseX, mouseY);
     }
 }
-

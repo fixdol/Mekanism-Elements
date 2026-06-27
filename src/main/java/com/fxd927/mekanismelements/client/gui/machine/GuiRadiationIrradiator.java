@@ -1,12 +1,12 @@
 package com.fxd927.mekanismelements.client.gui.machine;
 
+import com.fxd927.mekanismelements.client.MSJEIRecipeType;
 import com.fxd927.mekanismelements.common.tile.machine.TileEntityRadiationIrradiator;
 import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.client.gui.GuiConfigurableTile;
 import mekanism.client.gui.element.bar.GuiHorizontalPowerBar;
 import mekanism.client.gui.element.gauge.GaugeType;
 import mekanism.client.gui.element.gauge.GuiChemicalGauge;
-import mekanism.client.gui.element.gauge.GuiMergedTankGauge;
 import mekanism.client.gui.element.progress.GuiProgress;
 import mekanism.client.gui.element.progress.ProgressType;
 import mekanism.client.gui.element.tab.GuiEnergyTab;
@@ -35,7 +35,8 @@ public class GuiRadiationIrradiator extends GuiConfigurableTile<TileEntityRadiat
                 .warning(WarningTracker.WarningType.NO_MATCHING_RECIPE, tile.getWarningCheck(CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_SECONDARY_INPUT));
         addRenderableWidget(new GuiChemicalGauge(() -> tile.chemicalOutputTank, () -> tile.getChemicalTanks(null), GaugeType.STANDARD, this, 131, 13))
                 .warning(WarningTracker.WarningType.NO_SPACE_IN_OUTPUT, tile.getWarningCheck(CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_OUTPUT_SPACE));
-        addRenderableWidget(new GuiProgress(tile::getScaledProgress, ProgressType.LARGE_RIGHT, this, 64, 40))
+        addRenderableWidget(new GuiProgress(tile::getScaledProgress, ProgressType.LARGE_RIGHT, this, 64, 40)
+                .recipeViewerCategories(MSJEIRecipeType.RADIATION_IRRADIATOR))
                 .warning(WarningTracker.WarningType.INPUT_DOESNT_PRODUCE_OUTPUT, tile.getWarningCheck(CachedRecipe.OperationTracker.RecipeError.INPUT_DOESNT_PRODUCE_OUTPUT));
     }
 
@@ -45,4 +46,3 @@ public class GuiRadiationIrradiator extends GuiConfigurableTile<TileEntityRadiat
         super.drawForegroundText(guiGraphics, mouseX, mouseY);
     }
 }
-

@@ -7,6 +7,7 @@ import com.fxd927.mekanismelements.api.recipes.cache.AdsorptionCachedRecipe;
 import com.fxd927.mekanismelements.common.inventory.slot.MSInputInventorySlot;
 import com.fxd927.mekanismelements.common.recipe.IMSRecipeTypeProvider;
 import com.fxd927.mekanismelements.common.recipe.MSRecipeType;
+import com.fxd927.mekanismelements.client.MSJEIRecipeType;
 import com.fxd927.mekanismelements.common.recipe.lookup.IMSDoubleRecipeLookupHandler;
 import com.fxd927.mekanismelements.common.recipe.lookup.cache.MSInputRecipeCache;
 import com.fxd927.mekanismelements.common.registries.MSBlocks;
@@ -20,6 +21,8 @@ import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.chemical.IChemicalTank;
 import mekanism.api.chemical.BasicChemicalTank;
 import mekanism.api.recipes.cache.CachedRecipe;
+import mekanism.common.recipe.lookup.IRecipeLookupHandler;
+import mekanism.common.recipe.IMekanismRecipeTypeProvider;
 import mekanism.api.recipes.inputs.IInputHandler;
 import mekanism.api.recipes.inputs.InputHelper;
 import mekanism.api.recipes.outputs.IOutputHandler;
@@ -61,7 +64,8 @@ import java.util.Set;
 
 
 public class TileEntityAdsorptionSeparator extends MSTileEntityProgressMachine<AdsorptionRecipe> implements
-        IMSDoubleRecipeLookupHandler.ItemFluidRecipeLookupHandler<AdsorptionRecipe> {
+        IMSDoubleRecipeLookupHandler.ItemFluidRecipeLookupHandler<AdsorptionRecipe>,
+        IRecipeLookupHandler<AdsorptionRecipe> {
         private static final List<CachedRecipe.OperationTracker.RecipeError> TRACKED_ERROR_TYPES = List.of(
                 CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_ENERGY,
                 CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_ENERGY_REDUCED_RATE,
@@ -210,7 +214,20 @@ public class TileEntityAdsorptionSeparator extends MSTileEntityProgressMachine<A
                     .setOperatingTicksChanged(this::setOperatingTicks);
         }
 
-        public MachineEnergyContainer<com.fxd927.mekanismelements.common.tile.machine.TileEntityAdsorptionSeparator> getEnergyContainer() {
+
+
+        @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public IMekanismRecipeTypeProvider<?, AdsorptionRecipe, ?> getRecipeType() {
+        return (IMekanismRecipeTypeProvider) getMSRecipeType();
+    }
+
+    @Override
+    public void onCachedRecipeChanged(@Nullable mekanism.api.recipes.cache.CachedRecipe<AdsorptionRecipe> cachedRecipe, int cacheIndex) {
+        clearRecipeErrors(cacheIndex);
+    }
+
+    public MachineEnergyContainer<com.fxd927.mekanismelements.common.tile.machine.TileEntityAdsorptionSeparator> getEnergyContainer() {
             return energyContainer;
         }
 
@@ -224,4 +241,9 @@ public class TileEntityAdsorptionSeparator extends MSTileEntityProgressMachine<A
             // Return the chemical tank as default, or determine based on current output
             return chemicalOutputTank;
         }
+
+    @Override
+    public mekanism.client.recipe_viewer.type.IRecipeViewerRecipeType<AdsorptionRecipe> recipeViewerType() {
+        return MSJEIRecipeType.ADSORPTION_SEPARATOR;
+    }
 }

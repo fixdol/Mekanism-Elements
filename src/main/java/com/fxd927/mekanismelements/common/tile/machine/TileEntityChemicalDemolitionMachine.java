@@ -5,6 +5,7 @@ import com.fxd927.mekanismelements.api.recipes.ChemicalDemolitionRecipe;
 import com.fxd927.mekanismelements.api.recipes.cache.ChemicalDemolitionCachedRecipe;
 import com.fxd927.mekanismelements.common.recipe.IMSRecipeTypeProvider;
 import com.fxd927.mekanismelements.common.recipe.MSRecipeType;
+import com.fxd927.mekanismelements.client.MSJEIRecipeType;
 import com.fxd927.mekanismelements.common.recipe.lookup.IMSDoubleRecipeLookupHandler;
 import com.fxd927.mekanismelements.common.recipe.lookup.cache.MSInputRecipeCache;
 import com.fxd927.mekanismelements.common.tile.prefab.MSTileEntityProgressMachine;
@@ -19,6 +20,8 @@ import mekanism.api.chemical.BasicChemicalTank;
 import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.functions.ConstantPredicates;
 import mekanism.api.recipes.cache.CachedRecipe;
+import mekanism.common.recipe.lookup.IRecipeLookupHandler;
+import mekanism.common.recipe.IMekanismRecipeTypeProvider;
 import mekanism.api.recipes.inputs.IInputHandler;
 import mekanism.api.recipes.inputs.ILongInputHandler;
 import mekanism.api.recipes.inputs.InputHelper;
@@ -58,7 +61,8 @@ import java.util.Set;
 import java.util.function.BiPredicate;
 
 public class TileEntityChemicalDemolitionMachine extends MSTileEntityProgressMachine<ChemicalDemolitionRecipe> implements
-        IMSDoubleRecipeLookupHandler.ItemChemicalRecipeLookupHandler<ChemicalDemolitionRecipe>{
+        IMSDoubleRecipeLookupHandler.ItemChemicalRecipeLookupHandler<ChemicalDemolitionRecipe>,
+        IRecipeLookupHandler<ChemicalDemolitionRecipe> {
     public static final CachedRecipe.OperationTracker.RecipeError NOT_ENOUGH_SPACE_SECOND_OUTPUT_ERROR = CachedRecipe.OperationTracker.RecipeError.create();
     private static final List<CachedRecipe.OperationTracker.RecipeError> TRACKED_ERROR_TYPES = List.of(
             CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_ENERGY,
@@ -216,6 +220,19 @@ public class TileEntityChemicalDemolitionMachine extends MSTileEntityProgressMac
         }
     }
 
+
+
+    @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public IMekanismRecipeTypeProvider<?, ChemicalDemolitionRecipe, ?> getRecipeType() {
+        return (IMekanismRecipeTypeProvider) getMSRecipeType();
+    }
+
+    @Override
+    public void onCachedRecipeChanged(@Nullable mekanism.api.recipes.cache.CachedRecipe<ChemicalDemolitionRecipe> cachedRecipe, int cacheIndex) {
+        clearRecipeErrors(cacheIndex);
+    }
+
     public MachineEnergyContainer<TileEntityChemicalDemolitionMachine> getEnergyContainer() {
         return energyContainer;
     }
@@ -223,5 +240,10 @@ public class TileEntityChemicalDemolitionMachine extends MSTileEntityProgressMac
     @ComputerMethod(methodDescription = ComputerConstants.DESCRIPTION_GET_ENERGY_USAGE)
     long getEnergyUsage() {
         return getActive() ? energyContainer.getEnergyPerTick() : 0;
+    }
+
+    @Override
+    public mekanism.client.recipe_viewer.type.IRecipeViewerRecipeType<ChemicalDemolitionRecipe> recipeViewerType() {
+        return MSJEIRecipeType.CHEMICAL_DEMOLITION_MACHINE;
     }
 }

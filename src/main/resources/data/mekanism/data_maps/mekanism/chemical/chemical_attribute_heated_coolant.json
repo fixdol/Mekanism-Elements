@@ -1,8 +1,0 @@
-{
-    "values": {
-        "mekanismelements:superheated_helium": {
-            "cool_variant": "mekanismelements:helium",
-            "thermal_enthalpy": 100.0
-        }
-    }
-}

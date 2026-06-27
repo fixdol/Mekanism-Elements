@@ -6,6 +6,7 @@ import com.fxd927.mekanismelements.api.recipes.RadiationIrradiatingRecipe;
 import com.fxd927.mekanismelements.api.recipes.cache.RadiationIrradiatingCachedRecipe;
 import com.fxd927.mekanismelements.common.recipe.IMSRecipeTypeProvider;
 import com.fxd927.mekanismelements.common.recipe.MSRecipeType;
+import com.fxd927.mekanismelements.client.MSJEIRecipeType;
 import com.fxd927.mekanismelements.common.recipe.lookup.IMSDoubleRecipeLookupHandler;
 import com.fxd927.mekanismelements.common.recipe.lookup.cache.MSInputRecipeCache;
 import com.fxd927.mekanismelements.common.registries.MSBlocks;
@@ -20,6 +21,8 @@ import mekanism.api.chemical.BasicChemicalTank;
 import mekanism.api.chemical.attribute.ChemicalAttributeValidator;
 import mekanism.api.functions.ConstantPredicates;
 import mekanism.api.recipes.cache.CachedRecipe;
+import mekanism.common.recipe.lookup.IRecipeLookupHandler;
+import mekanism.common.recipe.IMekanismRecipeTypeProvider;
 import mekanism.api.recipes.inputs.IInputHandler;
 import mekanism.api.recipes.inputs.ILongInputHandler;
 import mekanism.api.recipes.inputs.InputHelper;
@@ -56,7 +59,8 @@ import java.util.List;
 import java.util.Set;
 
 public class TileEntityRadiationIrradiator extends MSTileEntityProgressMachine<RadiationIrradiatingRecipe> implements
-        IMSDoubleRecipeLookupHandler.ItemChemicalRecipeLookupHandler<RadiationIrradiatingRecipe> {
+        IMSDoubleRecipeLookupHandler.ItemChemicalRecipeLookupHandler<RadiationIrradiatingRecipe>,
+        IRecipeLookupHandler<RadiationIrradiatingRecipe> {
     private static final List<CachedRecipe.OperationTracker.RecipeError> TRACKED_ERROR_TYPES = List.of(
             CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_ENERGY,
             CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_ENERGY_REDUCED_RATE,
@@ -207,6 +211,19 @@ public class TileEntityRadiationIrradiator extends MSTileEntityProgressMachine<R
         }
     }
 
+
+
+    @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public IMekanismRecipeTypeProvider<?, RadiationIrradiatingRecipe, ?> getRecipeType() {
+        return (IMekanismRecipeTypeProvider) getMSRecipeType();
+    }
+
+    @Override
+    public void onCachedRecipeChanged(@Nullable mekanism.api.recipes.cache.CachedRecipe<RadiationIrradiatingRecipe> cachedRecipe, int cacheIndex) {
+        clearRecipeErrors(cacheIndex);
+    }
+
     public MachineEnergyContainer<TileEntityRadiationIrradiator> getEnergyContainer() {
         return energyContainer;
     }
@@ -223,5 +240,9 @@ public class TileEntityRadiationIrradiator extends MSTileEntityProgressMachine<R
         return chemicalOutputTank;
     }
     //End methods IComputerTile
-}
 
+    @Override
+    public mekanism.client.recipe_viewer.type.IRecipeViewerRecipeType<RadiationIrradiatingRecipe> recipeViewerType() {
+        return MSJEIRecipeType.RADIATION_IRRADIATOR;
+    }
+}
