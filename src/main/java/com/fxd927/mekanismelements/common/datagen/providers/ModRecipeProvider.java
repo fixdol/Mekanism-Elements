@@ -116,8 +116,8 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("SSS")
                 .pattern("SGS")
                 .pattern("SSS")
-                .define('S', net.minecraft.tags.ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "glass_blocks/cheap")))
-                .define('G', net.minecraft.tags.ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "glass_panes/cheap")))
+                .define('S', net.minecraft.tags.ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "glass_blocks")))
+                .define('G', net.minecraft.tags.ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "glass_panes")))
                 .unlockedBy("has_glass", has(Items.GLASS))
                 .save(recipeOutput);
 
