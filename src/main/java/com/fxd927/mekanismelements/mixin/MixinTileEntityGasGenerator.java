@@ -2,6 +2,7 @@ package com.fxd927.mekanismelements.mixin;
 
 import com.fxd927.mekanismelements.common.config.MSConfig;
 import mekanism.api.datamaps.chemical.attribute.ChemicalFuel;
+import mekanism.api.chemical.ChemicalStack;
 import mekanism.generators.common.tile.TileEntityGasGenerator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,6 +29,14 @@ public class MixinTileEntityGasGenerator {
 
     @Inject(method = "onUpdateServer()Z", at = @At("HEAD"))
     private void onUpdateServerHead(CallbackInfoReturnable<Boolean> cir) {
+        if (!fuelTank.isEmpty() && generationRate == 0) {
+            ChemicalFuel fuel = fuelTank.getFuel();
+            if (fuel != null) {
+                maxBurnTicks = Math.max(1, fuel.burnTicks());
+                generationRate = fuel.energyPerTick();
+            }
+        }
+
         if (!MSConfig.usageConfig.gasGeneratorDebug.get()) {
             return;
         }
@@ -45,7 +54,7 @@ public class MixinTileEntityGasGenerator {
 
         if (!tankEmpty) {
             ChemicalFuel fuel = fuelTank.getFuel();
-            mekanism.api.chemical.ChemicalStack stack = fuelTank.getStack();
+            ChemicalStack stack = fuelTank.getStack();
             mekanism.api.datamaps.chemical.attribute.ChemicalFuel directFuel = stack.getData(mekanism.api.datamaps.IMekanismDataMapTypes.INSTANCE.chemicalFuel());
 
             if (fuel != null) {

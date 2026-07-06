@@ -45,7 +45,12 @@ public class ModDataMapProvider extends DataMapProvider {
         builder(IMekanismDataMapTypes.INSTANCE.chemicalFuel())
                 .add(
                         MSGases.AMMONIA.get().getAsHolder(),
-                        new ChemicalFuel(300, 900000L),
+                        new ChemicalFuel(10, 99999),
+                        false
+                )
+                .add(
+                        MSGases.AMERICIUM.get().getAsHolder(),
+                        new ChemicalFuel(500, 60000),
                         false
                 );
 

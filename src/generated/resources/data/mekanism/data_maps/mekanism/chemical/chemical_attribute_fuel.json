@@ -1,8 +1,12 @@
 {
   "values": {
+    "mekanismelements:americium": {
+      "burn_time": 500,
+      "energy": 60000
+    },
     "mekanismelements:ammonia": {
-      "burn_time": 300,
-      "energy": 900000
+      "burn_time": 10,
+      "energy": 99999
     }
   }
 }
