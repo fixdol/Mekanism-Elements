@@ -2,7 +2,7 @@
   "type": "mekanism:oxidizing",
   "input": {
     "count": 1,
-    "item": "mekanism:bio_fuel"
+    "item": "mekanism:substrate"
   },
   "output": {
     "amount": 100,
