@@ -66,6 +66,7 @@ Translator
 
 ・Spanish: SrNadien
 ・Japanese: Fixdol
+・Russian and pre‑reform Russian: M998__
 
 GitHub: https://github.com/fixdol/Mekanism-Elements
 My Discord Channel: https://discord.gg/U5Npfwy3Fp
