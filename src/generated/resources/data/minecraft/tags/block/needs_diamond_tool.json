@@ -1,9 +1,0 @@
-{
-  "values": [
-    "mekanismelements:adsorption_separator",
-    "mekanismelements:air_compressor",
-    "mekanismelements:radiation_irradiator",
-    "mekanismelements:seawater_pump",
-    "mekanismelements:chemical_demolition_machine"
-  ]
-}
