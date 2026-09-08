@@ -1,0 +1,21 @@
+{
+  "category": "mekanismelements:materials",
+  "icon": "mekanismelements:dust_calcium_oxide",
+  "name": "book.mekanismelements.entry.dusts",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:dust_calcium_oxide",
+      "link_recipe": true,
+      "text": "item.mekanismelements.dust_calcium_oxide",
+      "title": "book.mekanismelements.entry.dusts"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:dust_beryllium",
+      "link_recipe": true,
+      "text": "item.mekanismelements.dust_beryllium",
+      "title": "book.mekanismelements.entry.dusts"
+    }
+  ]
+}

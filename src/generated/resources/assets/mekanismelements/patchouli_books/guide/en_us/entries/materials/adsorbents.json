@@ -1,0 +1,70 @@
+{
+  "category": "mekanismelements:materials",
+  "icon": "mekanismelements:high_performance_adsorbent",
+  "name": "book.mekanismelements.entry.adsorbents",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:high_performance_adsorbent",
+      "link_recipe": true,
+      "text": "item.mekanismelements.high_performance_adsorbent",
+      "title": "book.mekanismelements.entry.adsorbents"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:high_performance_adsorbent_beryllium",
+      "link_recipe": true,
+      "text": "item.mekanismelements.high_performance_adsorbent_beryllium",
+      "title": "book.mekanismelements.entry.adsorbents"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:high_performance_adsorbent_copper",
+      "link_recipe": true,
+      "text": "item.mekanismelements.high_performance_adsorbent_copper",
+      "title": "book.mekanismelements.entry.adsorbents"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:high_performance_adsorbent_gold",
+      "link_recipe": true,
+      "text": "item.mekanismelements.high_performance_adsorbent_gold",
+      "title": "book.mekanismelements.entry.adsorbents"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:high_performance_adsorbent_iron",
+      "link_recipe": true,
+      "text": "item.mekanismelements.high_performance_adsorbent_iron",
+      "title": "book.mekanismelements.entry.adsorbents"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:high_performance_adsorbent_lead",
+      "link_recipe": true,
+      "text": "item.mekanismelements.high_performance_adsorbent_lead",
+      "title": "book.mekanismelements.entry.adsorbents"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:high_performance_adsorbent_osmium",
+      "link_recipe": true,
+      "text": "item.mekanismelements.high_performance_adsorbent_osmium",
+      "title": "book.mekanismelements.entry.adsorbents"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:high_performance_adsorbent_tin",
+      "link_recipe": true,
+      "text": "item.mekanismelements.high_performance_adsorbent_tin",
+      "title": "book.mekanismelements.entry.adsorbents"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:high_performance_adsorbent_uranium",
+      "link_recipe": true,
+      "text": "item.mekanismelements.high_performance_adsorbent_uranium",
+      "title": "book.mekanismelements.entry.adsorbents"
+    }
+  ]
+}

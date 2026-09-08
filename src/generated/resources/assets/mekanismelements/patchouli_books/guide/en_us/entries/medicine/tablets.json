@@ -1,0 +1,14 @@
+{
+  "category": "mekanismelements:medicine",
+  "icon": "mekanismelements:tablet_iodine",
+  "name": "book.mekanismelements.entry.tablets",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:tablet_iodine",
+      "link_recipe": true,
+      "text": "item.mekanismelements.tablet_iodine",
+      "title": "book.mekanismelements.entry.tablets"
+    }
+  ]
+}

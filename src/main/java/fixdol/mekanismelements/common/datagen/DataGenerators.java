@@ -6,7 +6,13 @@ import fixdol.mekanismelements.common.datagen.providers.ModAdvancementProvider;
 import fixdol.mekanismelements.common.datagen.providers.ModDataMapProvider;
 import fixdol.mekanismelements.common.datagen.providers.ModLootTableProvider;
 import fixdol.mekanismelements.common.datagen.providers.ModRecipeProvider;
+import fixdol.mekanismelements.common.datagen.providers.ChemLibRecipeProvider;
+import fixdol.mekanismelements.common.datagen.providers.MSBlockStateProvider;
+import fixdol.mekanismelements.common.datagen.providers.MSFluidTagsProvider;
+import fixdol.mekanismelements.common.datagen.providers.MSItemTagsProvider;
+import fixdol.mekanismelements.common.datagen.providers.MSPatchouliProvider;
 import fixdol.mekanismelements.common.datagen.providers.MSBlockTagsProvider;
+import fixdol.mekanismelements.common.datagen.providers.MSItemModelProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -28,9 +34,18 @@ public class DataGenerators {
 
         generator.addProvider(event.includeServer(), new ModRecipeProvider(output, event.getLookupProvider()));
         generator.addProvider(event.includeServer(), new ModLootTableProvider(output, event.getLookupProvider()));
-        generator.addProvider(event.includeServer(), new MSBlockTagsProvider(output, event.getLookupProvider(), existingFileHelper));
+        MSBlockTagsProvider blockTags = new MSBlockTagsProvider(output, event.getLookupProvider(), existingFileHelper);
+        generator.addProvider(event.includeServer(), blockTags);
+        generator.addProvider(event.includeServer(), new MSItemTagsProvider(output, event.getLookupProvider(), blockTags.contentsGetter(), existingFileHelper));
+        generator.addProvider(event.includeServer(), new MSFluidTagsProvider(output, event.getLookupProvider(), existingFileHelper));
+        generator.addProvider(event.includeServer(), new ChemLibRecipeProvider(output));
         generator.addProvider(event.includeServer(), new AdvancementProvider(output, event.getLookupProvider(), existingFileHelper, List.of(new ModAdvancementProvider())));
         generator.addProvider(event.includeServer(), new ModDataMapProvider(output, event.getLookupProvider()));
+
+        // Models and blockstates
+        generator.addProvider(event.includeClient(), new MSBlockStateProvider(output, existingFileHelper));
+        generator.addProvider(event.includeClient(), new MSItemModelProvider(output, existingFileHelper));
+        generator.addProvider(event.includeClient() || event.includeServer(), new MSPatchouliProvider(output));
 
         // Language Generation
         generator.addProvider(event.includeClient(), new LanguageGenerator(output));
@@ -39,5 +54,7 @@ public class DataGenerators {
         generator.addProvider(event.includeClient(), new LanguageGenerator.ESES(output, "es_mx"));
         generator.addProvider(event.includeClient(), new LanguageGenerator.JAJP(output));
         generator.addProvider(event.includeClient(), new LanguageGenerator.ZHCN(output));
+        generator.addProvider(event.includeClient(), new LanguageGenerator.RURU(output));
+        generator.addProvider(event.includeClient(), new LanguageGenerator.RPR(output));
     }
 }

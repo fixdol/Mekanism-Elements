@@ -1,0 +1,17 @@
+{
+  "category": "mekanismelements:machines",
+  "icon": "mekanismelements:seawater_pump",
+  "name": "book.mekanismelements.entry.seawater_pump",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "description.mekanismelements.seawater_pump"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "mekanismelements:seawater_pump",
+      "title": "book.mekanismelements.page.crafting"
+    }
+  ],
+  "sortnum": 2
+}

@@ -1,0 +1,14 @@
+{
+  "category": "mekanismelements:materials",
+  "icon": "mekanismelements:pellet_neutron_source",
+  "name": "book.mekanismelements.entry.pellets",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:pellet_neutron_source",
+      "link_recipe": true,
+      "text": "item.mekanismelements.pellet_neutron_source",
+      "title": "book.mekanismelements.entry.pellets"
+    }
+  ]
+}

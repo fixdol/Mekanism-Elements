@@ -100,7 +100,11 @@ public class TileEntityChemicalDemolitionMachine extends MSTileEntityProgressMac
     public TileEntityChemicalDemolitionMachine(BlockPos pos, BlockState state) {
         super(MSBlocks.CHEMICAL_DEMOLITION_MACHINE, pos, state, TRACKED_ERROR_TYPES, BASE_TICKS_REQUIRED);
         // Config is created from block attributes in parent constructor
-        getConfig().setupItemIOExtraConfig(inputSlot, firstOutputSlot, chemicalInputSlot, energySlot);
+        ConfigInfo itemConfig = getConfig().setupItemIOConfig(List.of(inputSlot), List.of(firstOutputSlot, secondOutputSlot), energySlot, false);
+        if (itemConfig != null) {
+            itemConfig.addSlotInfo(mekanism.common.tile.component.config.DataType.EXTRA,
+                  new mekanism.common.tile.component.config.slot.InventorySlotInfo(true, true, chemicalInputSlot));
+        }
         
         // Chemical Input Config - LEFT/BACK sides
         ConfigInfo chemicalConfig = getConfig().setupInputConfig(TransmissionType.CHEMICAL, injectTank);

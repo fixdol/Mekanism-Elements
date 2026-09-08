@@ -184,6 +184,18 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_steel_casing", has(MekanismBlocks.STEEL_CASING.asItem()))
                 .save(recipeOutput);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MSBlocks.INFINITY_ORE_REPROCESSING.get().asItem())
+                .pattern("ACA")
+                .pattern("PXP")
+                .pattern("ATA")
+                .define('A', MekanismItems.ATOMIC_ALLOY.get())
+                .define('C', MekanismItems.ULTIMATE_CONTROL_CIRCUIT.get())
+                .define('P', MSBlocks.SEAWATER_PUMP.get())
+                .define('X', MSBlocks.ADSORPTION_SEPARATOR.get())
+                .define('T', MekanismBlocks.ULTIMATE_CHEMICAL_TANK.asItem())
+                .unlockedBy("has_seawater_pump", has(MSBlocks.SEAWATER_PUMP.get()))
+                .save(recipeOutput);
+
         // Blocks (slabs y stairs por color)
         addBlock(recipeOutput, MSItems.HIGH_QUALITY_CONCRETE_CLUMP.get(), MSBlocks.HIGH_QUALITY_CONCRETE.get(), MSBlocks.HIGH_QUALITY_CONCRETE.get(), MSBlocks.HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.HIGH_QUALITY_CONCRETE_STAIRS.get());
         addBlock(recipeOutput, MSItems.HIGH_QUALITY_CONCRETE_CLUMP_AQUA.get(), MSBlocks.AQUA_HIGH_QUALITY_CONCRETE.get(), MSBlocks.AQUA_HIGH_QUALITY_CONCRETE.get(), MSBlocks.AQUA_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.AQUA_HIGH_QUALITY_CONCRETE_STAIRS.get());

@@ -1,0 +1,35 @@
+{
+  "category": "mekanismelements:medicine",
+  "icon": "mekanismelements:syringe",
+  "name": "book.mekanismelements.entry.syringes",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:syringe",
+      "link_recipe": true,
+      "text": "item.mekanismelements.syringe",
+      "title": "book.mekanismelements.entry.syringes"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:syringe_anesthetic",
+      "link_recipe": true,
+      "text": "item.mekanismelements.syringe_anesthetic",
+      "title": "book.mekanismelements.entry.syringes"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:syringe_flame_retardant",
+      "link_recipe": true,
+      "text": "item.mekanismelements.syringe_flame_retardant",
+      "title": "book.mekanismelements.entry.syringes"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:syringe_levitation",
+      "link_recipe": true,
+      "text": "item.mekanismelements.syringe_levitation",
+      "title": "book.mekanismelements.entry.syringes"
+    }
+  ]
+}

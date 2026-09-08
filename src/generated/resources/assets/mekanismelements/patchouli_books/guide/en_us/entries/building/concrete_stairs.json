@@ -1,0 +1,140 @@
+{
+  "category": "mekanismelements:building",
+  "icon": "mekanismelements:high_quality_concrete_stairs",
+  "name": "book.mekanismelements.entry.concrete_stairs",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:aqua_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.aqua_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:black_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.black_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:blue_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.blue_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:green_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.green_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:cyan_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.cyan_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:dark_red_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.dark_red_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:purple_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.purple_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:orange_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.orange_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:light_gray_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.light_gray_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:gray_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.gray_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:light_blue_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.light_blue_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:lime_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.lime_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:red_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.red_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:magenta_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.magenta_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:yellow_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.yellow_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:white_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.white_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:brown_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.brown_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:pink_high_quality_concrete_stairs",
+      "link_recipe": true,
+      "text": "block.mekanismelements.pink_high_quality_concrete_stairs",
+      "title": "book.mekanismelements.entry.concrete_stairs"
+    }
+  ]
+}

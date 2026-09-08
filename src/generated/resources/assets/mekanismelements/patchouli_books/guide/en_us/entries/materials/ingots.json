@@ -1,0 +1,14 @@
+{
+  "category": "mekanismelements:materials",
+  "icon": "mekanismelements:ingot_beryllium",
+  "name": "book.mekanismelements.entry.ingots",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:ingot_beryllium",
+      "link_recipe": true,
+      "text": "item.mekanismelements.ingot_beryllium",
+      "title": "book.mekanismelements.entry.ingots"
+    }
+  ]
+}

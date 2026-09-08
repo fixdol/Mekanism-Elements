@@ -1,0 +1,175 @@
+{
+  "category": "mekanismelements:chemicals",
+  "icon": "mekanismelements:ammonia_bucket",
+  "name": "book.mekanismelements.entry.buckets",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:ammonia_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.ammonia_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:ammonium_nitrate_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.ammonium_nitrate_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:ammonium_nitrate_solution_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.ammonium_nitrate_solution_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:antimatter_fluid_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.antimatter_fluid_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:beryllium_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.beryllium_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:bromine_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.bromine_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:compressed_air_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.compressed_air_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:helium_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.helium_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:hydrogen_cyanide_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.hydrogen_cyanide_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:superheated_helium_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.superheated_helium_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:iodine_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.iodine_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:methane_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.methane_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:nitric_acid_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.nitric_acid_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:nitrogen_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.nitrogen_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:nitrogen_dioxide_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.nitrogen_dioxide_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:nitric_oxide_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.nitric_oxide_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:potassium_chloride_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.potassium_chloride_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:potassium_cyanide_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.potassium_cyanide_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:potassium_hydroxide_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.potassium_hydroxide_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:potassium_iodide_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.potassium_iodide_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:seawater_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.seawater_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:strontium_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.strontium_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:xenon_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.xenon_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:yttrium_bucket",
+      "link_recipe": true,
+      "text": "item.mekanismelements.yttrium_bucket",
+      "title": "book.mekanismelements.entry.buckets"
+    }
+  ]
+}

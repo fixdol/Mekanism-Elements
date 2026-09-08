@@ -1,0 +1,17 @@
+{
+  "category": "mekanismelements:machines",
+  "icon": "mekanismelements:air_compressor",
+  "name": "book.mekanismelements.entry.air_compressor",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "description.mekanismelements.air_compressor"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "mekanismelements:air_compressor",
+      "title": "book.mekanismelements.page.crafting"
+    }
+  ],
+  "sortnum": 1
+}

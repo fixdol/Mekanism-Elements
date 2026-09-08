@@ -1,0 +1,140 @@
+{
+  "category": "mekanismelements:building",
+  "icon": "mekanismelements:clump_high_quality_concrete",
+  "name": "book.mekanismelements.entry.concrete_clumps",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_aqua",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_aqua",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_black",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_black",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_blue",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_blue",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_brown",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_brown",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_cyan",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_cyan",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_dark_red",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_dark_red",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_gray",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_gray",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_green",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_green",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_light_blue",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_light_blue",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_light_gray",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_light_gray",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_lime",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_lime",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_magenta",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_magenta",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_orange",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_orange",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_pink",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_pink",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_purple",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_purple",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_red",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_red",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_white",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_white",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "mekanismelements:clump_high_quality_concrete_yellow",
+      "link_recipe": true,
+      "text": "item.mekanismelements.clump_high_quality_concrete_yellow",
+      "title": "book.mekanismelements.entry.concrete_clumps"
+    }
+  ]
+}

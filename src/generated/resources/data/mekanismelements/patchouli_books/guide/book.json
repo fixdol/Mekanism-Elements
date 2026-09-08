@@ -1,0 +1,16 @@
+{
+  "book_texture": "mekanismelements:textures/gui/book_guide.png",
+  "header_color": "1E4A10",
+  "i18n": true,
+  "landing_text": "book.mekanismelements.guide.landing",
+  "link_color": "2E7D32",
+  "link_hover_color": "7CC93A",
+  "model": "mekanismelements:guide_book",
+  "name": "book.mekanismelements.guide.name",
+  "nameplate_color": "5DBB2B",
+  "progress_bar_background": "23282C",
+  "progress_bar_color": "5DBB2B",
+  "text_color": "16191A",
+  "use_resource_pack": true,
+  "version": 1
+}

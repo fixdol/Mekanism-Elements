@@ -1,0 +1,17 @@
+{
+  "category": "mekanismelements:machines",
+  "icon": "mekanismelements:radiation_irradiator",
+  "name": "book.mekanismelements.entry.radiation_irradiator",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "description.mekanismelements.radiation_irradiator"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "mekanismelements:radiation_irradiator",
+      "title": "book.mekanismelements.page.crafting"
+    }
+  ],
+  "sortnum": 3
+}

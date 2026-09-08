@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:writable_book"
+    },
+    "B": {
+      "item": "mekanism:gauge_dropper"
+    },
+    "C": {
+      "item": "mekanismelements:syringe"
+    }
+  },
+  "pattern": [
+    "AB ",
+    "C  ",
+    "   "
+  ],
+  "result": {
+    "components": {
+      "patchouli:book": "mekanismelements:guide"
+    },
+    "count": 1,
+    "id": "patchouli:guide_book"
+  }
+}

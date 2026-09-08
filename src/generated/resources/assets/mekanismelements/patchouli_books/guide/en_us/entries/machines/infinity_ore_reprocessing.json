@@ -1,0 +1,17 @@
+{
+  "category": "mekanismelements:machines",
+  "icon": "mekanismelements:infinity_ore_reprocessing",
+  "name": "book.mekanismelements.entry.infinity_ore_reprocessing",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "description.mekanismelements.infinity_ore_reprocessing"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "mekanismelements:infinity_ore_reprocessing",
+      "title": "book.mekanismelements.page.crafting"
+    }
+  ],
+  "sortnum": 5
+}

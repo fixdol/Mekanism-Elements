@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "mekanismelements:block/infinity_ore_reprocessing/bottom",
+    "east": "mekanismelements:block/infinity_ore_reprocessing/side",
+    "north": "mekanismelements:block/infinity_ore_reprocessing/front",
+    "particle": "mekanismelements:block/infinity_ore_reprocessing/side",
+    "south": "mekanismelements:block/infinity_ore_reprocessing/back",
+    "up": "mekanismelements:block/infinity_ore_reprocessing/top",
+    "west": "mekanismelements:block/infinity_ore_reprocessing/side"
+  }
+}

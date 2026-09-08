@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "chemlib"
+    }
+  ],
+  "type": "mekanism:crystallizing",
+  "input": {
+    "amount": 1000,
+    "chemical": "mekanismelements:potassium_hydroxide"
+  },
+  "output": {
+    "id": "chemlib:potassium_hydroxide_dust"
+  }
+}

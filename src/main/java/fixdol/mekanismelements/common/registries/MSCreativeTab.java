@@ -10,7 +10,9 @@ import mekanism.common.registries.MekanismBlocks;
 import mekanism.common.registries.MekanismCreativeTabs;
 import mekanism.common.util.ChemicalUtil;
 import mekanism.generators.common.MekanismGenerators;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
+import vazkii.patchouli.api.PatchouliAPI;
 
 public class MSCreativeTab {
     public static final CreativeTabDeferredRegister CREATIVE_TABS = new CreativeTabDeferredRegister(MekanismElements.MODID);
@@ -33,6 +35,7 @@ public class MSCreativeTab {
                                              !holder.is(MekanismAPI.EMPTY_CHEMICAL_KEY);
                                   })
                                   .forEach(holder -> output.accept(ChemicalUtil.getFilledVariant(MekanismBlocks.CREATIVE_CHEMICAL_TANK.getItemHolder(), holder)));
+                          output.accept(PatchouliAPI.get().getBookStack(ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "guide")));
                       })
     );
 }

@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "active=false,facing=east": {
+      "model": "mekanismelements:block/seawater_pump",
+      "y": 90
+    },
+    "active=false,facing=north": {
+      "model": "mekanismelements:block/seawater_pump"
+    },
+    "active=false,facing=south": {
+      "model": "mekanismelements:block/seawater_pump",
+      "y": 180
+    },
+    "active=false,facing=west": {
+      "model": "mekanismelements:block/seawater_pump",
+      "y": 270
+    },
+    "active=true,facing=east": {
+      "model": "mekanismelements:block/seawater_pump",
+      "y": 90
+    },
+    "active=true,facing=north": {
+      "model": "mekanismelements:block/seawater_pump"
+    },
+    "active=true,facing=south": {
+      "model": "mekanismelements:block/seawater_pump",
+      "y": 180
+    },
+    "active=true,facing=west": {
+      "model": "mekanismelements:block/seawater_pump",
+      "y": 270
+    }
+  }
+}

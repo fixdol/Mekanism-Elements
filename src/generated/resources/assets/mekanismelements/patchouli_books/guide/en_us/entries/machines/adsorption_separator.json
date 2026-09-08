@@ -1,0 +1,17 @@
+{
+  "category": "mekanismelements:machines",
+  "icon": "mekanismelements:adsorption_separator",
+  "name": "book.mekanismelements.entry.adsorption_separator",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "description.mekanismelements.adsorption_separator"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "mekanismelements:adsorption_separator",
+      "title": "book.mekanismelements.page.crafting"
+    }
+  ],
+  "sortnum": 0
+}

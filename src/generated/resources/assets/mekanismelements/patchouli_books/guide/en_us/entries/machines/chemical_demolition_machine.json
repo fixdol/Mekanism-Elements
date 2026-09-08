@@ -1,0 +1,17 @@
+{
+  "category": "mekanismelements:machines",
+  "icon": "mekanismelements:chemical_demolition_machine",
+  "name": "book.mekanismelements.entry.chemical_demolition_machine",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "description.mekanismelements.chemical_demolition_machine"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "mekanismelements:chemical_demolition_machine",
+      "title": "book.mekanismelements.page.crafting"
+    }
+  ],
+  "sortnum": 4
+}

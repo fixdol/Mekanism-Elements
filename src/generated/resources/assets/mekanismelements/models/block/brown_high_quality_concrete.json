@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "mekanismelements:block/brown_high_quality_concrete"
+  }
+}

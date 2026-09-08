@@ -1,0 +1,23 @@
+{
+  "values": [
+    "mekanismelements:ammonia",
+    "mekanismelements:ammonium_nitrate",
+    "mekanismelements:bromine",
+    "mekanismelements:beryllium",
+    "mekanismelements:compressed_air",
+    "mekanismelements:seawater",
+    "mekanismelements:iodine",
+    "mekanismelements:potassium_hydroxide",
+    "mekanismelements:potassium_iodide",
+    "mekanismelements:potassium_chloride",
+    "mekanismelements:nitrogen",
+    "mekanismelements:nitric_oxide",
+    "mekanismelements:nitrogen_dioxide",
+    "mekanismelements:nitric_acid",
+    "mekanismelements:xenon",
+    "mekanismelements:helium",
+    "mekanismelements:superheated_helium",
+    "mekanismelements:strontium",
+    "mekanismelements:yttrium"
+  ]
+}
