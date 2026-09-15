@@ -17,9 +17,6 @@ public class ChemicalInfusingRecipeProvider {
     public static void buildRecipes(Consumer<FinishedRecipe> output) {
         String base = "chemical_infusing/";
 
-        // ammonium_nitrate (10) + water_vapor (1) -> ammonium_nitrate_solution (10)
-        // Same 1:10 water-to-nitrate ratio the washing recipe used in 1.21; the Chemical Washer
-        // only accepts slurries in 10.4, so this runs in the Chemical Infuser instead.
         ChemicalChemicalToChemicalRecipeBuilder.chemicalInfusing(
                 IngredientCreatorAccess.gas().from(MSGases.AMMONIUM_NITRATE.get(), 10),
                 IngredientCreatorAccess.gas().from(MekanismGases.WATER_VAPOR.get(), 1),

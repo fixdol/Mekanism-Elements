@@ -60,7 +60,7 @@ public class MSBlockTypes {
             //.createMSMachine(() -> MSTileEntityTypes.ORGANIC_LIQUID_EXTRACTOR, MSLang.DESCRIPTION_ORGANIC_LIQUID_EXTRACTOR)
             //.withGui(() -> MSContainerTypes.ORGANIC_LIQUID_EXTRACTOR)
             //.withEnergyConfig(MSConfig.usageConfig.organicLiquidExtractor, MSConfig.storageConfig.organicLiquidExtractor)
-            //.withSupportedUpgrades(java.util.EnumSet.of(EnumSet.of(Upgrade.SPEED, Upgrade.ENERGY)))
+            //.withSupportedUpgrades(EnumSet.of(Upgrade.SPEED, Upgrade.ENERGY))
             //.withComputerSupport("organicLiquidExtractor")
             //.replace(Attributes.ACTIVE)
             //.build();

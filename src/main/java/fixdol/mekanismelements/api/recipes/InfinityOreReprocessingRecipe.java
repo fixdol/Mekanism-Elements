@@ -27,8 +27,8 @@ public abstract class InfinityOreReprocessingRecipe extends MekanismRecipe imple
 
     /**
      * @param id            Recipe id.
-     * @param itemInput     Input de item (la mena "sucia" que se coloca en la maquina).
-     * @param chemicalInput Input quimico.
+     * @param itemInput     Input de ítem (la mena "sucia" que se coloca en la máquina).
+     * @param chemicalInput Input químico.
      * @param output        Output.
      */
     public InfinityOreReprocessingRecipe(ResourceLocation id, ItemStackIngredient itemInput, ChemicalStackIngredient.GasStackIngredient chemicalInput, ItemStack output) {

@@ -82,10 +82,6 @@ public class MSGases {
     }
 
     
-    /**
-     * Coolant attributes. The paired gas is referenced through a lambda so it is resolved lazily,
-     * otherwise the field of whichever gas registers second would still be null here.
-     */
     public static class Coolants {
 
         public static final GasAttributes.CooledCoolant HELIUM_COOLANT =

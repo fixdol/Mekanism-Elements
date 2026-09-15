@@ -61,7 +61,7 @@ public class MSRecipeCacheLookupMonitor<RECIPE extends MekanismRecipe> implement
             //Update amount of energy that actually got used, as if we are "near" full we may not have performed our max number of operations
             return prev.subtract(energyContainer.getEnergy());
         }
-        //If we do not have a cached recipe so did not process anything at all just return zero
+        //If we don't have a cached recipe so didn't process anything at all just return zero
         return FloatingLong.ZERO;
     }
 
