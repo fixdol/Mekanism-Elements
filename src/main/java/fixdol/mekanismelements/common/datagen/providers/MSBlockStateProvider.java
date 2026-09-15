@@ -1,24 +1,26 @@
 package fixdol.mekanismelements.common.datagen.providers;
 
-import fixdol.mekanismelements.common.MekanismElements;
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import fixdol.mekanismelements.common.datagen.providers.MSBlockStateProvider;
 import fixdol.mekanismelements.common.registries.MSBlocks;
 import fixdol.mekanismelements.common.registries.MSFluids;
+import fixdol.mekanismelements.common.MekanismElements;
+import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
+
 import mekanism.common.block.attribute.Attribute;
 import mekanism.common.block.states.BlockStateHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
-import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
-import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelFile;
 
 public class MSBlockStateProvider extends BlockStateProvider {
 
-    private static final ResourceLocation LIQUID_PARTICLE = ResourceLocation.fromNamespaceAndPath("mekanism", "liquid/liquid");
+    private static final ResourceLocation LIQUID_PARTICLE = new ResourceLocation("mekanism", "liquid/liquid");
 
     public MSBlockStateProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, MekanismElements.MODID, existingFileHelper);
@@ -26,38 +28,34 @@ public class MSBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        machine(MSBlocks.ADSORPTION_SEPARATOR.get(), MSMachineModels.adsorptionSeparator(models()), null);
-        machine(MSBlocks.AIR_COMPRESSOR.get(), MSMachineModels.airCompressor(models()), MSMachineModels.airCompressorActive(models()));
-        machine(MSBlocks.CHEMICAL_DEMOLITION_MACHINE.get(), MSMachineModels.chemicalDemolitionMachine(models()), null);
-        machine(MSBlocks.RADIATION_IRRADIATOR.get(), MSMachineModels.radiationIrradiator(models()), MSMachineModels.radiationIrradiatorActive(models()));
-        machine(MSBlocks.SEAWATER_PUMP.get(), MSMachineModels.seawaterPump(models()), null);
-        cubeMachine(MSBlocks.INFINITY_ORE_REPROCESSING.get());
+        machine(MSBlocks.ADSORPTION_SEPARATOR.getBlock(), MSMachineModels.adsorptionSeparator(models()), null);
+        machine(MSBlocks.AIR_COMPRESSOR.getBlock(), MSMachineModels.airCompressor(models()), MSMachineModels.airCompressorActive(models()));
+        machine(MSBlocks.CHEMICAL_DEMOLITION_MACHINE.getBlock(), MSMachineModels.chemicalDemolitionMachine(models()), null);
+        machine(MSBlocks.RADIATION_IRRADIATOR.getBlock(), MSMachineModels.radiationIrradiator(models()), MSMachineModels.radiationIrradiatorActive(models()));
+        machine(MSBlocks.SEAWATER_PUMP.getBlock(), MSMachineModels.seawaterPump(models()), null);
+        cubeMachine(MSBlocks.INFINITY_ORE_REPROCESSING.getBlock());
 
-        fluidBlock(MSFluids.BERYLLIUM.getBlock());
-        fluidBlock(MSFluids.HELIUM.getBlock());
-        fluidBlock(MSFluids.SUPERHEATED_HELIUM.getBlock());
-        fluidBlock(MSFluids.STRONTIUM.getBlock());
-        fluidBlock(MSFluids.YTTRIUM.getBlock());
+        MSFluids.FLUIDS.getAllFluids().forEach(fluid -> fluidBlock(fluid.getBlock()));
 
-        concrete(MSBlocks.HIGH_QUALITY_CONCRETE.get(), MSBlocks.HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.AQUA_HIGH_QUALITY_CONCRETE.get(), MSBlocks.AQUA_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.AQUA_HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.BLACK_HIGH_QUALITY_CONCRETE.get(), MSBlocks.BLACK_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.BLACK_HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.BLUE_HIGH_QUALITY_CONCRETE.get(), MSBlocks.BLUE_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.BLUE_HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.BROWN_HIGH_QUALITY_CONCRETE.get(), MSBlocks.BROWN_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.BROWN_HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.CYAN_HIGH_QUALITY_CONCRETE.get(), MSBlocks.CYAN_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.CYAN_HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.DARK_RED_HIGH_QUALITY_CONCRETE.get(), MSBlocks.DARK_RED_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.DARK_RED_HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.GRAY_HIGH_QUALITY_CONCRETE.get(), MSBlocks.GRAY_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.GRAY_HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.GREEN_HIGH_QUALITY_CONCRETE.get(), MSBlocks.GREEN_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.GREEN_HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.LIGHT_BLUE_HIGH_QUALITY_CONCRETE.get(), MSBlocks.LIGHT_BLUE_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.LIGHT_BLUE_HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.LIGHT_GRAY_HIGH_QUALITY_CONCRETE.get(), MSBlocks.LIGHT_GRAY_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.LIGHT_GRAY_HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.LIME_HIGH_QUALITY_CONCRETE.get(), MSBlocks.LIME_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.LIME_HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.MAGENTA_HIGH_QUALITY_CONCRETE.get(), MSBlocks.MAGENTA_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.MAGENTA_HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.ORANGE_HIGH_QUALITY_CONCRETE.get(), MSBlocks.ORANGE_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.ORANGE_HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.PINK_HIGH_QUALITY_CONCRETE.get(), MSBlocks.PINK_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.PINK_HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.PURPLE_HIGH_QUALITY_CONCRETE.get(), MSBlocks.PURPLE_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.PURPLE_HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.RED_HIGH_QUALITY_CONCRETE.get(), MSBlocks.RED_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.RED_HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.WHITE_HIGH_QUALITY_CONCRETE.get(), MSBlocks.WHITE_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.WHITE_HIGH_QUALITY_CONCRETE_STAIRS.get());
-        concrete(MSBlocks.YELLOW_HIGH_QUALITY_CONCRETE.get(), MSBlocks.YELLOW_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.YELLOW_HIGH_QUALITY_CONCRETE_STAIRS.get());
+        concrete(MSBlocks.HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.AQUA_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.AQUA_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.AQUA_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.BLACK_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.BLACK_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.BLACK_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.BLUE_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.BLUE_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.BLUE_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.BROWN_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.BROWN_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.BROWN_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.CYAN_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.CYAN_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.CYAN_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.DARK_RED_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.DARK_RED_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.DARK_RED_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.GRAY_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.GRAY_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.GRAY_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.GREEN_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.GREEN_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.GREEN_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.LIGHT_BLUE_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.LIGHT_BLUE_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.LIGHT_BLUE_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.LIGHT_GRAY_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.LIGHT_GRAY_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.LIGHT_GRAY_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.LIME_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.LIME_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.LIME_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.MAGENTA_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.MAGENTA_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.MAGENTA_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.ORANGE_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.ORANGE_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.ORANGE_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.PINK_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.PINK_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.PINK_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.PURPLE_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.PURPLE_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.PURPLE_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.RED_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.RED_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.RED_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.WHITE_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.WHITE_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.WHITE_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
+        concrete(MSBlocks.YELLOW_HIGH_QUALITY_CONCRETE.getBlock(), MSBlocks.YELLOW_HIGH_QUALITY_CONCRETE_SLABS.getBlock(), MSBlocks.YELLOW_HIGH_QUALITY_CONCRETE_STAIRS.getBlock());
     }
 
     private void machine(Block block, ModelFile inactiveModel, ModelFile activeModel) {

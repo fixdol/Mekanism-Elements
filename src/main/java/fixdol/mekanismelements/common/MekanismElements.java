@@ -1,24 +1,28 @@
 package fixdol.mekanismelements.common;
 
-import fixdol.mekanismelements.common.config.MSConfig;
+import fixdol.mekanismelements.common.registries.MSBlocks;
+import fixdol.mekanismelements.common.registries.MSContainerTypes;
+import fixdol.mekanismelements.common.registries.MSEffects;
+import fixdol.mekanismelements.common.registries.MSFluids;
+import fixdol.mekanismelements.common.registries.MSGases;
+import fixdol.mekanismelements.common.registries.MSItems;
+import fixdol.mekanismelements.common.registries.MSRecipeSerializers;
 import fixdol.mekanismelements.common.recipe.MSRecipeType;
+import fixdol.mekanismelements.common.MekanismElements;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraft.resources.ResourceLocation;
+import static fixdol.mekanismelements.common.MekanismElements.rl;
+
+import fixdol.mekanismelements.common.config.MSConfig;
 import fixdol.mekanismelements.common.registries.*;
 import mekanism.api.MekanismAPI;
-import mekanism.api.chemical.Chemical;
-import mekanism.api.chemical.ChemicalStack;
-import mekanism.api.datamaps.IMekanismDataMapTypes;
-import mekanism.api.datamaps.chemical.attribute.ChemicalFuel;
 import mekanism.common.lib.Version;
-import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
-import net.neoforged.neoforge.registries.datamaps.DataMapsUpdatedEvent;
-import net.neoforged.bus.api.EventPriority;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import static mekanism.api.MekanismAPI.logger;
 
@@ -33,9 +37,8 @@ public class MekanismElements
 
     public MekanismElements()
     {
-        NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::addReloadListenersLowest);
-        NeoForge.EVENT_BUS.addListener(this::onDataMapsUpdated);
-        IEventBus modEventBus = ModLoadingContext.get().getActiveContainer().getEventBus();
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::addReloadListenersLowest);
+        IEventBus modEventBus = net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().getModEventBus();
         MSConfig.registerConfigs(ModLoadingContext.get());
         modEventBus.addListener(this::commonSetup);
         MSCreativeTab.CREATIVE_TABS.register(modEventBus);
@@ -58,7 +61,7 @@ public class MekanismElements
     }
 
     public static ResourceLocation rl(String path){
-        return ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, path);
+        return new ResourceLocation(MekanismElements.MODID, path);
     }
 
     private void setRecipeCacheManager(MSReloadListener manager) {
@@ -89,138 +92,4 @@ public class MekanismElements
         });
     }
 
-    private void onDataMapsUpdated(DataMapsUpdatedEvent event) {
-        logger.info("=== DATA MAPS UPDATED EVENT START ===");
-        // Ensure datamaps are processed for our chemicals
-        event.ifRegistry(MekanismAPI.CHEMICAL_REGISTRY_NAME, registry -> {
-            logger.info("Processing chemical registry, total holders: {}", registry.holders().count());
-            
-            // Test hydrogen and ethene for comparison
-            var hydrogenHolder = registry.getHolder(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("mekanism", "hydrogen"));
-            if (hydrogenHolder.isPresent()) {
-                var h = hydrogenHolder.get();
-                var hFuel = h.getData(IMekanismDataMapTypes.INSTANCE.chemicalFuel());
-                logger.info("HYDROGEN TEST: Holder found={}, Fuel from holder={}, Fuel from ChemicalStack={}", 
-                    true, hFuel != null, 
-                    new ChemicalStack(h.value(), 1000).getData(IMekanismDataMapTypes.INSTANCE.chemicalFuel()) != null);
-                if (hFuel != null) {
-                    logger.info("HYDROGEN FUEL VALUES: burn_time={}, energy={}, energyPerTick={}", 
-                        hFuel.burnTicks(), hFuel.energyDensity(), hFuel.energyPerTick());
-                }
-            } else {
-                logger.warn("HYDROGEN TEST: Holder not found!");
-            }
-            
-            registry.holders().forEach(holder -> {
-                if (holder.value().getRegistryName() != null && 
-                    holder.value().getRegistryName().getNamespace().equals(MODID)) {
-                    String chemicalName = holder.value().getRegistryName().getPath();
-                    logger.info("Processing chemical: {}", chemicalName);
-                    holder.value().updateFromDataMap(holder);
-                    
-                    // Programmatically
-                    if (chemicalName.equals("ammonia")) {
-                        logger.info("=== AMMONIA FUEL DATAMAP PROCESSING START ===");
-                        ChemicalFuel fuel = holder.getData(IMekanismDataMapTypes.INSTANCE.chemicalFuel());
-                        logger.info("AMMONIA: Initial fuel from holder.getData(): {}", fuel != null ? 
-                            String.format("burn_time=%d, energy=%d", fuel.burnTicks(), fuel.energyPerTick()) : "null");
-                        
-                        if (fuel == null) {
-                            logger.info("AMMONIA: Fuel datamap not found, adding programmatically...");
-                            try {
-                                ChemicalFuel ammoniaFuel = new ChemicalFuel(100, 6000L);
-                                logger.info("AMMONIA: Creating fuel object: burn_time={}, energy={}, energyPerTick={}, energyDensity={}", 
-                                    ammoniaFuel.burnTicks(), ammoniaFuel.energyPerTick(), ammoniaFuel.energyPerTick(), ammoniaFuel.energyDensity());
-                                
-                                registry.getDataMap(IMekanismDataMapTypes.INSTANCE.chemicalFuel())
-                                    .put(holder.key(), ammoniaFuel);
-                                logger.info("AMMONIA: Fuel datamap added to registry");
-                                
-                                // Force update the chemical from the datamap
-                                holder.value().updateFromDataMap(holder);
-                                logger.info("AMMONIA: Chemical updated from datamap");
-                                
-                                // Verify it was added
-                                ChemicalFuel verifyFuel = holder.getData(IMekanismDataMapTypes.INSTANCE.chemicalFuel());
-                                logger.info("AMMONIA: Verification - fuel from holder.getData(): {}", verifyFuel != null ? 
-                                    String.format("burn_time=%d, energy=%d", verifyFuel.burnTicks(), verifyFuel.energyPerTick()) : "null");
-                                
-                                if (verifyFuel != null) {
-                                    logger.info("AMMONIA: Fuel datamap added programmatically: burn_time={}, energy={}, total={} FE/mB", 
-                                        verifyFuel.burnTicks(), verifyFuel.energyPerTick(), verifyFuel.energyDensity());
-                                    
-                                    // Test with multiple ChemicalStack instances
-                                    for (long amount : new long[]{1, 100, 1000, 10000}) {
-                                        ChemicalStack testStack = new ChemicalStack(holder.value(), amount);
-                                        ChemicalFuel stackFuel = testStack.getData(IMekanismDataMapTypes.INSTANCE.chemicalFuel());
-                                        boolean hasFuel = mekanism.generators.common.tile.TileEntityGasGenerator.HAS_FUEL.test(testStack);
-                                        logger.info("AMMONIA: ChemicalStack test (amount={}): getData()={}, HAS_FUEL={}, fuel values={}", 
-                                            amount, stackFuel != null, hasFuel,
-                                            stackFuel != null ? String.format("burn_time=%d, energy=%d", stackFuel.burnTicks(), stackFuel.energyPerTick()) : "null");
-                                        
-                                        if (stackFuel != null) {
-                                            logger.info("AMMONIA: ChemicalStack fuel details: burnTicks()={}, energyPerTick()={}, energyDensity()={}", 
-                                                stackFuel.burnTicks(), stackFuel.energyPerTick(), stackFuel.energyDensity());
-                                        }
-                                    }
-                                    
-                                    // Compare with hydrogen and ethene
-                                    var hHolder = registry.getHolder(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("mekanism", "hydrogen"));
-                                    if (hHolder.isPresent()) {
-                                        ChemicalStack hStack = new ChemicalStack(hHolder.get().value(), 1000);
-                                        ChemicalFuel hFuel = hStack.getData(IMekanismDataMapTypes.INSTANCE.chemicalFuel());
-                                        boolean hHasFuel = mekanism.generators.common.tile.TileEntityGasGenerator.HAS_FUEL.test(hStack);
-                                        logger.info("HYDROGEN COMPARISON: ChemicalStack (amount=1000): getData()={}, HAS_FUEL={}, fuel values={}", 
-                                            hFuel != null, hHasFuel,
-                                            hFuel != null ? String.format("burn_time=%d, energy=%d", hFuel.burnTicks(), hFuel.energyPerTick()) : "null");
-                                    }
-                                    
-                                    var eHolder = registry.getHolder(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("mekanism", "ethene"));
-                                    if (eHolder.isPresent()) {
-                                        ChemicalStack eStack = new ChemicalStack(eHolder.get().value(), 1000);
-                                        ChemicalFuel eFuel = eStack.getData(IMekanismDataMapTypes.INSTANCE.chemicalFuel());
-                                        boolean eHasFuel = mekanism.generators.common.tile.TileEntityGasGenerator.HAS_FUEL.test(eStack);
-                                        logger.info("ETHENE COMPARISON: ChemicalStack (amount=1000): getData()={}, HAS_FUEL={}, fuel values={}", 
-                                            eFuel != null, eHasFuel,
-                                            eFuel != null ? String.format("burn_time=%d, energy=%d", eFuel.burnTicks(), eFuel.energyPerTick()) : "null");
-                                    }
-                                    
-                                    // Simulate what the generator 
-                                    logger.info("=== SIMULATING GENERATOR FUEL CHECK ===");
-                                    ChemicalStack ammoniaStack = new ChemicalStack(holder.value(), 1000);
-                                    ChemicalFuel ammoniaFuelFromStack = ammoniaStack.getData(IMekanismDataMapTypes.INSTANCE.chemicalFuel());
-                                    logger.info("AMMONIA SIMULATION: Stack amount={}, getData()={}, fuel={}", 
-                                        ammoniaStack.getAmount(), ammoniaFuelFromStack != null,
-                                        ammoniaFuelFromStack != null ? String.format("burnTicks=%d, energyPerTick=%d", 
-                                            ammoniaFuelFromStack.burnTicks(), ammoniaFuelFromStack.energyPerTick()) : "null");
-                                    
-                                    if (hHolder.isPresent()) {
-                                        ChemicalStack hStack = new ChemicalStack(hHolder.get().value(), 1000);
-                                        ChemicalFuel hFuelFromStack = hStack.getData(IMekanismDataMapTypes.INSTANCE.chemicalFuel());
-                                        logger.info("HYDROGEN SIMULATION: Stack amount={}, getData()={}, fuel={}", 
-                                            hStack.getAmount(), hFuelFromStack != null,
-                                            hFuelFromStack != null ? String.format("burnTicks=%d, energyPerTick=%d", 
-                                                hFuelFromStack.burnTicks(), hFuelFromStack.energyPerTick()) : "null");
-                                    }
-                                    
-                                    if (!mekanism.generators.common.tile.TileEntityGasGenerator.HAS_FUEL.test(new ChemicalStack(holder.value(), 1000))) {
-                                        logger.error("AMMONIA CRITICAL: HAS_FUEL predicate returns false even though fuel datamap exists!");
-                                    }
-                                } else {
-                                    logger.error("AMMONIA: Fuel datamap was added but verification failed!");
-                                }
-                            } catch (Exception e) {
-                                logger.error("AMMONIA: Failed to add fuel datamap programmatically", e);
-                            }
-                        } else {
-                            logger.info("AMMONIA: Fuel datamap loaded from file: burn_time={}, energy={}, total={} FE/mB", 
-                                fuel.burnTicks(), fuel.energyPerTick(), fuel.energyDensity());
-                        }
-                        logger.info("=== AMMONIA FUEL DATAMAP PROCESSING END ===");
-                    }
-                }
-            });
-        });
-        logger.info("=== DATA MAPS UPDATED EVENT END ===");
-    }
 }

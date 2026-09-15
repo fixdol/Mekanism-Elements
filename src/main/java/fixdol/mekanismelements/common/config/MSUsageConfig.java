@@ -1,39 +1,42 @@
 package fixdol.mekanismelements.common.config;
 
+import mekanism.api.chemical.gas.Gas;
+
 import mekanism.common.config.BaseMekanismConfig;
-import mekanism.common.config.IConfigTranslation;
+import mekanism.common.config.value.CachedFloatingLongValue;
+import mekanism.api.math.FloatingLong;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.config.ModConfig;
+
 import mekanism.common.config.value.CachedBooleanValue;
-import mekanism.common.config.value.CachedLongValue;
-import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.fml.config.ModConfig;
 
 public class MSUsageConfig extends BaseMekanismConfig {
 
     public final CachedBooleanValue gasGeneratorDebug;
-    public final CachedLongValue airCompressor;
-    public final CachedLongValue radiationIrradiator;
-    public final CachedLongValue adsorptionSeparator;
-    public final CachedLongValue seawaterPump;
-    public final CachedLongValue organicLiquidExtractor;
-    public final CachedLongValue infinityOreReprocessing;
+    public final CachedFloatingLongValue airCompressor;
+    public final CachedFloatingLongValue radiationIrradiator;
+    public final CachedFloatingLongValue adsorptionSeparator;
+    public final CachedFloatingLongValue seawaterPump;
+    public final CachedFloatingLongValue organicLiquidExtractor;
+    public final CachedFloatingLongValue infinityOreReprocessing;
 
-    private final ModConfigSpec configSpec;
+    private final ForgeConfigSpec configSpec;
 
     MSUsageConfig() {
-        ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
-        builder.comment("MS Energy Usage Config. This config is synced from server to client.").push("storage");
+        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        builder.comment("MS Energy Usage Config. This config is synced from server to client.").push("usage");
 
         gasGeneratorDebug = CachedBooleanValue.wrap(this, builder.comment(
                 "Enable debug logging for the Gas Generator mixin.",
                 "Logs fuel/burn/energy info every server tick. Disable in production.")
                 .define("gasGeneratorDebug", false));
 
-        airCompressor = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.airCompressor", "Air Compressor", "Energy usage per tick (Joules)."), "airCompressor", 100L, 0L, Long.MAX_VALUE);
-        radiationIrradiator = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.radiationIrradiator", "Radiation Irradiator", "Energy usage per tick (Joules)."), "radiationIrradiator", 1_000L, 0L, Long.MAX_VALUE);
-        adsorptionSeparator = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.adsorptionSeparator", "Adsorption Separator", "Energy usage per tick (Joules)."), "adsorptionSeparator", 500L, 0L, Long.MAX_VALUE);
-        organicLiquidExtractor = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.organicLiquidExtractor", "Organic Liquid Extractor", "Energy usage per tick (Joules)."), "organicLiquidExtractor", 100L, 0L, Long.MAX_VALUE);
-        seawaterPump = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.seawaterPump", "Seawater Pump", "Energy usage per tick (Joules)."), "seawaterPump", 100L, 0L, Long.MAX_VALUE);
-        infinityOreReprocessing = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.infinityOreReprocessing", "Infinity Ore Reprocessing", "Energy usage per tick (Joules)."), "infinityOreReprocessing", 500L, 0L, Long.MAX_VALUE);
+        airCompressor = CachedFloatingLongValue.define(this, builder, "Energy usage per tick (Joules).", "airCompressor", FloatingLong.createConst(100));
+        radiationIrradiator = CachedFloatingLongValue.define(this, builder, "Energy usage per tick (Joules).", "radiationIrradiator", FloatingLong.createConst(1_000));
+        adsorptionSeparator = CachedFloatingLongValue.define(this, builder, "Energy usage per tick (Joules).", "adsorptionSeparator", FloatingLong.createConst(500));
+        organicLiquidExtractor = CachedFloatingLongValue.define(this, builder, "Energy usage per tick (Joules).", "organicLiquidExtractor", FloatingLong.createConst(100));
+        seawaterPump = CachedFloatingLongValue.define(this, builder, "Energy usage per tick (Joules).", "seawaterPump", FloatingLong.createConst(100));
+        infinityOreReprocessing = CachedFloatingLongValue.define(this, builder, "Energy usage per tick (Joules).", "infinityOreReprocessing", FloatingLong.createConst(500));
 
         builder.pop();
         configSpec = builder.build();
@@ -45,17 +48,12 @@ public class MSUsageConfig extends BaseMekanismConfig {
     }
 
     @Override
-    public ModConfigSpec getConfigSpec() {
+    public ForgeConfigSpec getConfigSpec() {
         return configSpec;
     }
 
     @Override
     public ModConfig.Type getConfigType() {
         return ModConfig.Type.SERVER;
-    }
-
-    @Override
-    public String getTranslation() {
-        return "config.mekanismelements.usage";
     }
 }

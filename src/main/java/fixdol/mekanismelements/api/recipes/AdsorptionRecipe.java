@@ -1,53 +1,50 @@
 package fixdol.mekanismelements.api.recipes;
 
+import fixdol.mekanismelements.api.recipes.AdsorptionRecipe;
+import mekanism.api.chemical.Chemical;
+import net.minecraft.world.item.Item;
+import mekanism.common.Mekanism;
+import org.jetbrains.annotations.NotNull;
+
 import mekanism.api.chemical.ChemicalStack;
+import mekanism.api.chemical.merged.BoxedChemicalStack;
 import mekanism.api.recipes.MekanismRecipe;
-import mekanism.api.recipes.vanilla_input.FluidRecipeInput;
 import mekanism.api.recipes.ingredients.FluidStackIngredient;
 import mekanism.api.recipes.ingredients.ItemStackIngredient;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiPredicate;
 
-public abstract class AdsorptionRecipe extends MekanismRecipe<FluidRecipeInput> implements BiPredicate<@NotNull ItemStack, @NotNull FluidStack> {
+public abstract class AdsorptionRecipe extends MekanismRecipe implements BiPredicate<@NotNull ItemStack, @NotNull FluidStack> {
     private final ItemStackIngredient itemInput;
     private final FluidStackIngredient fluidInput;
-    private final ChemicalStack output;
+    private final BoxedChemicalStack output;
 
     /**
      * @param itemInput Item input.
      * @param fluidInput  Chemical input.
      * @param output    Output.
      */
-    public AdsorptionRecipe(ItemStackIngredient itemInput, FluidStackIngredient fluidInput, ChemicalStack output) {
-        super();
+    public AdsorptionRecipe(ResourceLocation id, ItemStackIngredient itemInput, FluidStackIngredient fluidInput, ChemicalStack<?> output) {
+        super(id);
         this.itemInput = Objects.requireNonNull(itemInput, "Item input cannot be null.");
         this.fluidInput = Objects.requireNonNull(fluidInput, "Fluid input cannot be null.");
         Objects.requireNonNull(output, "Output cannot be null.");
         if (output.isEmpty()) {
             throw new IllegalArgumentException("Output cannot be empty.");
         }
-        this.output = output.copy();
+        this.output = BoxedChemicalStack.box(output.copy());
     }
 
-    private ResourceLocation id;
 
-    public void setId(ResourceLocation id) {
-        this.id = id;
-    }
 
-    public ResourceLocation getId() {
-        return id;
-    }
 
     /**
      * Gets the input item ingredient.
@@ -74,7 +71,7 @@ public abstract class AdsorptionRecipe extends MekanismRecipe<FluidRecipeInput> 
      * @implNote The passed in inputs should <strong>NOT</strong> be modified.
      */
     @Contract(value = "_, _ -> new", pure = true)
-    public ChemicalStack getOutput(ItemStack inputItem, FluidStack inputGas) {
+    public BoxedChemicalStack getOutput(ItemStack inputItem, FluidStack inputGas) {
         return output.copy();
     }
 
@@ -88,7 +85,7 @@ public abstract class AdsorptionRecipe extends MekanismRecipe<FluidRecipeInput> 
      *
      * @return Representation of the output, <strong>MUST NOT</strong> be modified.
      */
-    public List<ChemicalStack> getOutputDefinition() {
+    public List<BoxedChemicalStack> getOutputDefinition() {
         return Collections.singletonList(output);
     }
 
@@ -97,10 +94,12 @@ public abstract class AdsorptionRecipe extends MekanismRecipe<FluidRecipeInput> 
         return itemInput.hasNoMatchingInstances() || fluidInput.hasNoMatchingInstances();
     }
 
-    public void write(RegistryFriendlyByteBuf buffer) {
-        ItemStackIngredient.STREAM_CODEC.encode(buffer, itemInput);
-        FluidStackIngredient.STREAM_CODEC.encode(buffer, fluidInput);
-        ChemicalStack.STREAM_CODEC.encode(buffer, output);
+    @Override
+    public void write(FriendlyByteBuf buffer) {
+        itemInput.write(buffer);
+        fluidInput.write(buffer);
+        buffer.writeEnum(output.getChemicalType());
+        output.getChemicalStack().writeToPacket(buffer);
     }
 }
 

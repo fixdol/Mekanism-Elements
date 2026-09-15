@@ -1,0 +1,16 @@
+{
+  "type": "mekanismelements:radiation_irradiating",
+  "chemicalInput": {
+    "amount": 4,
+    "gas": "mekanism:plutonium"
+  },
+  "itemInput": {
+    "ingredient": {
+      "item": "mekanismelements:pellet_neutron_source"
+    }
+  },
+  "output": {
+    "amount": 500,
+    "gas": "mekanismelements:americium"
+  }
+}

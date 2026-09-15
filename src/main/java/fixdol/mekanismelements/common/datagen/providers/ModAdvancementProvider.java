@@ -1,89 +1,90 @@
 package fixdol.mekanismelements.common.datagen.providers;
 
-import fixdol.mekanismelements.common.MekanismElements;
-import fixdol.mekanismelements.common.registries.MSBlocks;
-import fixdol.mekanismelements.common.registries.MSItems;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementHolder;
-import net.minecraft.advancements.AdvancementType;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import fixdol.mekanismelements.common.registries.MSItems;
+import fixdol.mekanismelements.common.MekanismElements;
+import fixdol.mekanismelements.common.datagen.providers.ModAdvancementProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.common.data.AdvancementProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+
+import fixdol.mekanismelements.common.registries.MSBlocks;
+import net.minecraft.advancements.FrameType;
+import net.minecraftforge.common.data.ForgeAdvancementProvider;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.function.Consumer;
 
-public class ModAdvancementProvider implements AdvancementProvider.AdvancementGenerator {
+public class ModAdvancementProvider implements ForgeAdvancementProvider.AdvancementGenerator {
 
     @Override
-    public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
+    public void generate(HolderLookup.Provider registries, Consumer<Advancement> saver, ExistingFileHelper existingFileHelper) {
 
         // neutron_source.json -> parent: mekanism:plutonium
-        AdvancementHolder neutronSource = Advancement.Builder.advancement()
-                .parent(ResourceLocation.fromNamespaceAndPath("mekanism", "plutonium"))
+        Advancement neutronSource = Advancement.Builder.advancement()
+                .parent(new ResourceLocation("mekanism", "plutonium"))
                 .display(
                         MSItems.NEUTRON_SOURCE_PELLET.get(),
                         Component.translatable("advancements.mekanismelements.neutron_source.title"),
                         Component.translatable("advancements.mekanismelements.neutron_source.description"),
                         null,
-                        AdvancementType.TASK,
+                        FrameType.TASK,
                         true,
                         true,
                         false
                 )
                 .addCriterion("pellet_neutron_source", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.NEUTRON_SOURCE_PELLET.get()))
-                .save(saver, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "neutron_source").toString());
+                .save(saver, new ResourceLocation(MekanismElements.MODID, "neutron_source"), existingFileHelper);
 
         // californium.json -> parent: mekanism:plutonium
         /*
-        AdvancementHolder californium = Advancement.Builder.advancement()
-                .parent(ResourceLocation.fromNamespaceAndPath("mekanism", "plutonium"))
+        Advancement californium = Advancement.Builder.advancement()
+                .parent(new ResourceLocation("mekanism", "plutonium"))
                 .display(
                         MSItems.REFINED_CALIFORNIUM_INGOT.get(),
                         Component.translatable("advancements.mekanismelements.californium.title"),
                         Component.translatable("advancements.mekanismelements.californium.description"),
                         null,
-                        AdvancementType.TASK,
+                        FrameType.TASK,
                         true,
                         true,
                         false
                 )
                 .addCriterion("pellet_neutron_source", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.REFINED_CALIFORNIUM_INGOT.get()))
-                .save(saver, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "californium").toString());
+                .save(saver, new ResourceLocation(MekanismElements.MODID, "californium"), existingFileHelper);
         */
 
         // radiation_irradiator.json -> parent: mekanismelements:neutron_source
         Advancement.Builder.advancement()
                 .parent(neutronSource)
                 .display(
-                        MSBlocks.RADIATION_IRRADIATOR.get(),
+                        MSBlocks.RADIATION_IRRADIATOR.getBlock(),
                         Component.translatable("advancements.mekanismelements.radiation_irradiator.title"),
                         Component.translatable("advancements.mekanismelements.radiation_irradiator.description"),
                         null,
-                        AdvancementType.TASK,
+                        FrameType.TASK,
                         true,
                         true,
                         false
                 )
-                .addCriterion("pellet_neutron_source", InventoryChangeTrigger.TriggerInstance.hasItems(MSBlocks.RADIATION_IRRADIATOR.get()))
-                .save(saver, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "radiation_irradiator").toString());
+                .addCriterion("pellet_neutron_source", InventoryChangeTrigger.TriggerInstance.hasItems(MSBlocks.RADIATION_IRRADIATOR.getBlock()))
+                .save(saver, new ResourceLocation(MekanismElements.MODID, "radiation_irradiator"), existingFileHelper);
 
         // seawater_pump.json -> parent: mekanism:pump
         Advancement.Builder.advancement()
-                .parent(ResourceLocation.fromNamespaceAndPath("mekanism", "pump"))
+                .parent(new ResourceLocation("mekanism", "pump"))
                 .display(
-                        MSBlocks.SEAWATER_PUMP.get(),
+                        MSBlocks.SEAWATER_PUMP.getBlock(),
                         Component.translatable("advancements.mekanismelements.seawater_pump.title"),
                         Component.translatable("advancements.mekanismelements.seawater_pump.description"),
                         null,
-                        AdvancementType.TASK,
+                        FrameType.TASK,
                         true,
                         true,
                         false
                 )
-                .addCriterion("electric_pump", InventoryChangeTrigger.TriggerInstance.hasItems(MSBlocks.SEAWATER_PUMP.get()))
-                .save(saver, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "seawater_pump").toString());
+                .addCriterion("electric_pump", InventoryChangeTrigger.TriggerInstance.hasItems(MSBlocks.SEAWATER_PUMP.getBlock()))
+                .save(saver, new ResourceLocation(MekanismElements.MODID, "seawater_pump"), existingFileHelper);
     }
 }

@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_clump": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mekanismelements:powder_high_quality_concrete"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "mekanismelements:powder_high_quality_concrete_orange"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_clump",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mekanismelements:powder_high_quality_concrete_orange"
+    ]
+  },
+  "sends_telemetry_event": false
+}

@@ -1,67 +1,64 @@
-package fixdol.mekanismelements.datagen.machines;
+package fixdol.mekanismelements.common.datagen.machines;
 
-import fixdol.mekanismelements.common.MekanismElements;
+import mekanism.api.recipes.ingredients.ChemicalStackIngredient;
+import java.util.function.Consumer;
+import net.minecraft.data.recipes.FinishedRecipe;
+import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import mekanism.api.recipes.ingredients.ItemStackIngredient;
+import net.minecraft.world.item.Items;
 import fixdol.mekanismelements.common.registries.MSGases;
 import fixdol.mekanismelements.common.registries.MSItems;
 import mekanism.api.MekanismAPI;
-import mekanism.api.datagen.recipe.builder.ItemStackChemicalToItemStackRecipeBuilder;
-import mekanism.api.recipes.basic.BasicInjectingRecipe;
-import mekanism.api.recipes.ingredients.ChemicalStackIngredient;
-import mekanism.api.recipes.ingredients.ItemStackIngredient;
-import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
-import mekanism.common.registries.MekanismChemicals;
-import net.minecraft.data.recipes.RecipeOutput;
+import fixdol.mekanismelements.common.MekanismElements;
+import mekanism.common.registries.MekanismGases;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+
+
+import mekanism.api.datagen.recipe.builder.ItemStackChemicalToItemStackRecipeBuilder;
 import net.minecraft.world.item.crafting.Ingredient;
 
 public class InjectingRecipeProvider {
 
-    public static void buildRecipes(RecipeOutput recipeOutput) {
+    public static void buildRecipes(Consumer<FinishedRecipe> recipeOutput) {
         String basePath = "injecting/";
 
         // Syringe -> Anesthetic Syringe (Xenon)
         ItemStackChemicalToItemStackRecipeBuilder.injecting(
                 IngredientCreatorAccess.item().from(Ingredient.of(MSItems.SYRINGE.get())),
-                IngredientCreatorAccess.chemicalStack().from(MSGases.XENON.get(), 1),
-                new ItemStack(MSItems.ANESTHETIC_SYRINGE.get()),
-                false
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "syringe_anesthetic"));
+                IngredientCreatorAccess.gas().from(MSGases.XENON.get(), 1),
+                new ItemStack(MSItems.ANESTHETIC_SYRINGE.get())
+        ).build(recipeOutput, new ResourceLocation(MekanismElements.MODID, basePath + "syringe_anesthetic"));
 
         // Syringe -> Flame Retardant Syringe (Bromine)
         ItemStackChemicalToItemStackRecipeBuilder.injecting(
                 IngredientCreatorAccess.item().from(Ingredient.of(MSItems.SYRINGE.get())),
-                IngredientCreatorAccess.chemicalStack().from(MSGases.BROMINE.get(), 1),
-                new ItemStack(MSItems.FLAME_RETARDANT_SYRINGE.get()),
-                false
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "syringe_flame_retardant"));
+                IngredientCreatorAccess.gas().from(MSGases.BROMINE.get(), 1),
+                new ItemStack(MSItems.FLAME_RETARDANT_SYRINGE.get())
+        ).build(recipeOutput, new ResourceLocation(MekanismElements.MODID, basePath + "syringe_flame_retardant"));
 
         // Syringe -> Levitation Syringe (Helium)
         ItemStackChemicalToItemStackRecipeBuilder.injecting(
                 IngredientCreatorAccess.item().from(Ingredient.of(MSItems.SYRINGE.get())),
-                IngredientCreatorAccess.chemicalStack().from(MSGases.HELIUM.get(), 1),
-                new ItemStack(MSItems.LEVITATION_SYRINGE.get()),
-                false
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "syringe_levitation"));
+                IngredientCreatorAccess.gas().from(MSGases.HELIUM.get(), 1),
+                new ItemStack(MSItems.LEVITATION_SYRINGE.get())
+        ).build(recipeOutput, new ResourceLocation(MekanismElements.MODID, basePath + "syringe_levitation"));
 
         // TNT -> TNT x8 (Ammonium Nitrate)
         ItemStackChemicalToItemStackRecipeBuilder.injecting(
                 IngredientCreatorAccess.item().from(Ingredient.of(Items.TNT)),
-                IngredientCreatorAccess.chemicalStack().from(MSGases.AMMONIUM_NITRATE.get(), 5),
-                new ItemStack(Items.TNT, 8),
-                false
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "tnt"));
+                IngredientCreatorAccess.gas().from(MSGases.AMMONIUM_NITRATE.get(), 5),
+                new ItemStack(Items.TNT, 8)
+        ).build(recipeOutput, new ResourceLocation(MekanismElements.MODID, basePath + "tnt"));
 
         // Firework Rocket -> Firework Rocket x8 (Ammonium Nitrate)
         ItemStackChemicalToItemStackRecipeBuilder.injecting(
                 IngredientCreatorAccess.item().from(Ingredient.of(Items.FIREWORK_ROCKET)),
-                IngredientCreatorAccess.chemicalStack().from(MSGases.AMMONIUM_NITRATE.get(), 5),
-                new ItemStack(Items.FIREWORK_ROCKET, 8),
-                false
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "firework_rocket"));
+                IngredientCreatorAccess.gas().from(MSGases.AMMONIUM_NITRATE.get(), 5),
+                new ItemStack(Items.FIREWORK_ROCKET, 8)
+        ).build(recipeOutput, new ResourceLocation(MekanismElements.MODID, basePath + "firework_rocket"));
 
         // High Quality Concrete: Powder -> Clump (Water Vapor)
         buildHighQualityConcreteRecipes(recipeOutput);
@@ -71,7 +68,7 @@ public class InjectingRecipeProvider {
     * High Quality Concrete: Powder -> Clump (Water Vapor)
     * location: injecting/high_quality_concrete/[color].json
     */ 
-    private static void buildHighQualityConcreteRecipes(RecipeOutput recipeOutput) {
+    private static void buildHighQualityConcreteRecipes(Consumer<FinishedRecipe> recipeOutput) {
         String basePath = "injecting/high_quality_concrete/";
 
         hqcByChemical(recipeOutput, basePath, "high_quality_concrete",
@@ -128,35 +125,16 @@ public class InjectingRecipeProvider {
         hqcByChemical(recipeOutput, basePath, "high_quality_concrete_yellow",
                 MSItems.HIGH_QUALITY_CONCRETE_POWDER_YELLOW.get(), MSItems.HIGH_QUALITY_CONCRETE_CLUMP_YELLOW.get());
 
-        // Magenta
-        ItemStackIngredient magentaItemInput = IngredientCreatorAccess.item().from(
-                Ingredient.of(MSItems.HIGH_QUALITY_CONCRETE_POWDER_MAGENTA.get()));
-        ChemicalStackIngredient magentaChemicalInput = IngredientCreatorAccess.chemicalStack().from(
-                TagKey.create(MekanismAPI.CHEMICAL_REGISTRY_NAME, ResourceLocation.fromNamespaceAndPath("mekanism", "water_vapor")), 1);
-        BasicInjectingRecipe magentaRecipe = new BasicInjectingRecipe(
-                magentaItemInput,
-                magentaChemicalInput,
-                new ItemStack(MSItems.HIGH_QUALITY_CONCRETE_CLUMP_MAGENTA.get()),
-                true // per_tick_usage
-        );
-        recipeOutput.accept(
-                ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "high_quality_concrete_magenta"),
-                magentaRecipe,
-                null
-        );
-
-        // Alt
-        hqcByChemical(recipeOutput, basePath, "high_quality_concrete_magenta_alt",
+        hqcByChemical(recipeOutput, basePath, "high_quality_concrete_magenta",
                 MSItems.HIGH_QUALITY_CONCRETE_POWDER_MAGENTA.get(), MSItems.HIGH_QUALITY_CONCRETE_CLUMP_MAGENTA.get());
     }
 
     /** Receta estándar powder -> clump, 1x mekanism:water_vapor (chemical directo), per_tick_usage false. */
-    private static void hqcByChemical(RecipeOutput recipeOutput, String basePath, String name, Item input, Item output) {
+    private static void hqcByChemical(Consumer<FinishedRecipe> recipeOutput, String basePath, String name, Item input, Item output) {
         ItemStackChemicalToItemStackRecipeBuilder.injecting(
                 IngredientCreatorAccess.item().from(Ingredient.of(input)),
-                IngredientCreatorAccess.chemicalStack().from(MekanismChemicals.WATER_VAPOR.get(), 1),
-                new ItemStack(output),
-                false
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + name));
+                IngredientCreatorAccess.gas().from(MekanismGases.WATER_VAPOR.get(), 1),
+                new ItemStack(output)
+        ).build(recipeOutput, new ResourceLocation(MekanismElements.MODID, basePath + name));
     }
 }

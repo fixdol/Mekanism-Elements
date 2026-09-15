@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.7,
+  "group": "beryllium_ingot",
+  "ingredient": {
+    "item": "mekanismelements:dust_beryllium"
+  },
+  "result": "mekanismelements:ingot_beryllium"
+}

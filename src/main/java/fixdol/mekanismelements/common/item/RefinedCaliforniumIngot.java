@@ -1,10 +1,11 @@
 package fixdol.mekanismelements.common.item;
 
-import mekanism.api.text.EnumColor;
-import mekanism.api.text.TextComponentUtil;
 import net.minecraft.network.chat.Component;
+import mekanism.api.text.EnumColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import mekanism.api.text.TextComponentUtil;
+
 
 public class RefinedCaliforniumIngot extends Item {
     protected EnumColor color;

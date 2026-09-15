@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_high_performance_adsorbent": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mekanismelements:high_performance_adsorbent"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "mekanismelements:high_performance_adsorbent_iron"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_high_performance_adsorbent",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mekanismelements:high_performance_adsorbent_iron"
+    ]
+  },
+  "sends_telemetry_event": false
+}

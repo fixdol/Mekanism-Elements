@@ -2,31 +2,35 @@ package fixdol.mekanismelements.common.recipe;
 
 import fixdol.mekanismelements.api.recipes.AdsorptionRecipe;
 import fixdol.mekanismelements.api.recipes.ChemicalDemolitionRecipe;
+import java.util.Collections;
+import java.util.function.Function;
+import mekanism.common.recipe.lookup.cache.IInputRecipeCache;
+import fixdol.mekanismelements.common.recipe.IMSRecipeTypeProvider;
 import fixdol.mekanismelements.api.recipes.InfinityOreReprocessingRecipe;
-import fixdol.mekanismelements.api.recipes.RadiationIrradiatingRecipe;
-import fixdol.mekanismelements.common.MekanismElements;
+import net.minecraft.world.level.Level;
+import java.util.List;
 import fixdol.mekanismelements.common.recipe.lookup.cache.MSInputRecipeCache;
+import fixdol.mekanismelements.common.recipe.MSRecipeType;
+import mekanism.client.MekanismClient;
+import fixdol.mekanismelements.common.MekanismElements;
+import mekanism.api.recipes.MekanismRecipe;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import fixdol.mekanismelements.api.recipes.RadiationIrradiatingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.resources.ResourceLocation;
+
 import fixdol.mekanismelements.common.registration.impl.MSRecipeTypeDeferredRegister;
 import fixdol.mekanismelements.common.registration.impl.MSRecipeTypeRegistryObject;
 import mekanism.api.recipes.FluidToFluidRecipe;
-import mekanism.api.recipes.MekanismRecipe;
-import mekanism.client.MekanismClient;
-import mekanism.common.recipe.lookup.cache.IInputRecipeCache;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.*;
-import net.minecraft.world.level.Level;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
-public class MSRecipeType<RECIPE extends MekanismRecipe<?>, INPUT_CACHE extends IInputRecipeCache> implements RecipeType<RECIPE>,
+public class MSRecipeType<RECIPE extends MekanismRecipe, INPUT_CACHE extends IInputRecipeCache> implements RecipeType<RECIPE>,
         IMSRecipeTypeProvider<RECIPE, INPUT_CACHE> {
     public static final MSRecipeTypeDeferredRegister RECIPE_TYPES = new MSRecipeTypeDeferredRegister(MekanismElements.MODID);
 
@@ -41,7 +45,7 @@ public class MSRecipeType<RECIPE extends MekanismRecipe<?>, INPUT_CACHE extends 
     public static final MSRecipeTypeRegistryObject<InfinityOreReprocessingRecipe, MSInputRecipeCache.ItemChemical<InfinityOreReprocessingRecipe>> INFINITY_ORE_REPROCESSING =
         register("infinity_ore_reprocessing", recipeType -> new MSInputRecipeCache.ItemChemical<>(recipeType, InfinityOreReprocessingRecipe::getItemInput, InfinityOreReprocessingRecipe::getChemicalInput));
 
-   public static <RECIPE extends MekanismRecipe<?>, INPUT_CACHE extends IInputRecipeCache> MSRecipeTypeRegistryObject<RECIPE, INPUT_CACHE> register(String name,
+   public static <RECIPE extends MekanismRecipe, INPUT_CACHE extends IInputRecipeCache> MSRecipeTypeRegistryObject<RECIPE, INPUT_CACHE> register(String name,
                                                                                                                                                    Function<MSRecipeType<RECIPE, INPUT_CACHE>, INPUT_CACHE> inputCacheCreator) {
         return RECIPE_TYPES.registerRecipeType(name, () -> new MSRecipeType<>(name, inputCacheCreator));
     }
@@ -110,23 +114,8 @@ public class MSRecipeType<RECIPE extends MekanismRecipe<?>, INPUT_CACHE extends 
     public List<RECIPE> getRecipes(RecipeManager recipeManager) {
         if (cachedRecipes.isEmpty()) {
             @SuppressWarnings({"unchecked", "rawtypes"})
-            List<RecipeHolder<RECIPE>> recipeHolders = (List) recipeManager.getAllRecipesFor((RecipeType) this);
-
-            cachedRecipes = recipeHolders.stream()
-                    .map(holder -> {
-                        RECIPE recipe = holder.value();
-                        if (recipe instanceof AdsorptionRecipe r) {
-                            r.setId(holder.id());
-                        } else if (recipe instanceof RadiationIrradiatingRecipe r) {
-                            r.setId(holder.id());
-                        } else if (recipe instanceof ChemicalDemolitionRecipe r) {
-                            r.setId(holder.id());
-                        } else if (recipe instanceof InfinityOreReprocessingRecipe r) {
-                            r.setId(holder.id());
-                        }
-                        return recipe;
-                    })
-                    .toList();
+            List<RECIPE> recipes = (List) recipeManager.getAllRecipesFor((RecipeType) this);
+            cachedRecipes = List.copyOf(recipes);
         }
         return cachedRecipes;
     }
@@ -134,9 +123,8 @@ public class MSRecipeType<RECIPE extends MekanismRecipe<?>, INPUT_CACHE extends 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static <RECIPE_TYPE extends Recipe<?>> Optional<RECIPE_TYPE> getRecipeFor(RecipeType<RECIPE_TYPE> recipeType, Container inventory, Level level) {
         RecipeManager recipeManager = level.getRecipeManager();
-        List<RecipeHolder<RECIPE_TYPE>> recipes = (List) recipeManager.getAllRecipesFor((RecipeType) recipeType);
+        List<RECIPE_TYPE> recipes = (List) recipeManager.getAllRecipesFor((RecipeType) recipeType);
         return recipes.stream()
-                .map(RecipeHolder::value)
                 .filter(recipe -> !recipe.isIncomplete())
                 .findFirst();
     }
@@ -146,7 +134,6 @@ public class MSRecipeType<RECIPE extends MekanismRecipe<?>, INPUT_CACHE extends 
      */
     public static Optional<? extends Recipe<?>> byKey(Level level, ResourceLocation id) {
         return level.getRecipeManager().byKey(id)
-                .map(RecipeHolder::value)
                 .filter(recipe -> recipe.isSpecial() || !recipe.isIncomplete());
     }
 }

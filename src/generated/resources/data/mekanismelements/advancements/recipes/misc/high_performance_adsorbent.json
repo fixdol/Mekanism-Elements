@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_pellet_antimatter": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mekanism:pellet_antimatter"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "mekanismelements:high_performance_adsorbent"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_pellet_antimatter",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mekanismelements:high_performance_adsorbent"
+    ]
+  },
+  "sends_telemetry_event": false
+}

@@ -1,62 +1,61 @@
 package fixdol.mekanismelements.common.tile.machine;
 
-import fixdol.mekanismelements.common.registries.MSBlocks;
-import fixdol.mekanismelements.common.registries.MSGases;
-import mekanism.api.Action;
+import mekanism.common.tile.component.TileComponentConfig;
+
+import mekanism.api.math.FloatingLong;
+
 import mekanism.api.AutomationType;
-import mekanism.api.IContentsListener;
-import mekanism.api.Upgrade;
-import mekanism.api.chemical.Chemical;
-import mekanism.api.chemical.ChemicalStack;
-import mekanism.api.chemical.IChemicalTank;
-import mekanism.api.chemical.BasicChemicalTank;
-import mekanism.common.capabilities.Capabilities;
-import mekanism.common.capabilities.energy.MachineEnergyContainer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import mekanism.api.chemical.ChemicalTankBuilder;
 import mekanism.common.capabilities.holder.chemical.ChemicalTankHelper;
-import mekanism.common.capabilities.holder.chemical.IChemicalTankHolder;
+import mekanism.common.util.ChemicalUtil;
+import net.minecraft.network.chat.Component;
+import net.minecraft.nbt.CompoundTag;
+import mekanism.common.tile.component.config.ConfigInfo;
+import mekanism.common.inventory.container.slot.ContainerSlotType;
+import mekanism.common.tile.component.config.DataType;
+import net.minecraft.core.Direction;
 import mekanism.common.capabilities.holder.energy.EnergyContainerHelper;
+import mekanism.common.inventory.slot.EnergyInventorySlot;
+import mekanism.api.chemical.gas.Gas;
+import mekanism.common.inventory.slot.chemical.GasInventorySlot;
+import mekanism.api.chemical.gas.GasStack;
+import mekanism.common.capabilities.holder.chemical.IChemicalTankHolder;
+import mekanism.api.IContentsListener;
 import mekanism.common.capabilities.holder.energy.IEnergyContainerHolder;
+import mekanism.api.chemical.gas.IGasTank;
 import mekanism.common.capabilities.holder.slot.IInventorySlotHolder;
 import mekanism.common.capabilities.holder.slot.InventorySlotHelper;
-import mekanism.api.chemical.IChemicalHandler;
-import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
-import mekanism.common.integration.computer.SpecialComputerMethodWrapper;
-import mekanism.common.integration.computer.annotation.WrappingComputerMethod;
-import mekanism.common.inventory.container.slot.ContainerSlotType;
-import mekanism.common.inventory.container.slot.SlotOverlay;
-import mekanism.common.inventory.slot.EnergyInventorySlot;
-import mekanism.common.inventory.slot.chemical.ChemicalInventorySlot;
-import mekanism.api.RelativeSide;
-import mekanism.common.lib.transmitter.TransmissionType;
-import mekanism.common.tile.component.TileComponentConfig;
-import mekanism.common.tile.component.TileComponentEjector;
-import mekanism.common.tile.component.config.ConfigInfo;
-import mekanism.common.tile.component.config.DataType;
-import mekanism.common.tile.prefab.TileEntityConfigurableMachine;
-import mekanism.common.util.ChemicalUtil;
-import mekanism.common.util.MekanismUtils;
-import mekanism.common.util.UpgradeUtils;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
-
-import javax.annotation.Nonnull;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import fixdol.mekanismelements.common.registries.MSBlocks;
+import fixdol.mekanismelements.common.registries.MSGases;
+import mekanism.common.capabilities.energy.MachineEnergyContainer;
+import mekanism.common.util.MekanismUtils;
+import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.entity.player.Player;
+import mekanism.common.inventory.container.slot.SlotOverlay;
+import mekanism.common.integration.computer.SpecialComputerMethodWrapper;
+import mekanism.common.tile.component.TileComponentEjector;
+import fixdol.mekanismelements.common.tile.machine.TileEntityAirCompressor;
+import mekanism.common.lib.transmitter.TransmissionType;
+import mekanism.api.Upgrade;
+import mekanism.common.integration.computer.annotation.WrappingComputerMethod;
+
+import mekanism.api.Action;
+import mekanism.api.chemical.gas.IGasHandler;
+import mekanism.common.tile.prefab.TileEntityConfigurableMachine;
+import mekanism.common.util.UpgradeUtils;
+import net.minecraft.world.InteractionResult;
+
 
 public class TileEntityAirCompressor extends TileEntityConfigurableMachine {
     private static final int BASE_TICKS_REQUIRED = 19;
-    public static final ChemicalStack COMPRESSED_AIR_STACK = new ChemicalStack((Chemical) MSGases.COMPRESSED_AIR.get(), 200);
+    public static final GasStack COMPRESSED_AIR_STACK = new GasStack((Gas) MSGases.COMPRESSED_AIR.get(), 200);
 
     @WrappingComputerMethod(wrapper = SpecialComputerMethodWrapper.ComputerChemicalTankWrapper.class, methodNames = {"getGas", "getGasCapacity", "getGasNeeded", "getGasFilledPercentage"}, docPlaceholder = "buffer tank")
-    public IChemicalTank chemicalTank;
+    public IGasTank chemicalTank;
     public int ticksRequired = BASE_TICKS_REQUIRED;
 
     public int operatingTicks;
@@ -64,10 +63,10 @@ public class TileEntityAirCompressor extends TileEntityConfigurableMachine {
     private MachineEnergyContainer<TileEntityAirCompressor> energyContainer;
 
     @WrappingComputerMethod(wrapper = SpecialComputerMethodWrapper.ComputerIInventorySlotWrapper.class, methodNames = "getInputItem", docPlaceholder = "")
-    ChemicalInventorySlot inputSlot;
+    GasInventorySlot inputSlot;
 
     @WrappingComputerMethod(wrapper = SpecialComputerMethodWrapper.ComputerIInventorySlotWrapper.class, methodNames = "getOutputItem", docPlaceholder = "")
-    ChemicalInventorySlot outputSlot;
+    GasInventorySlot outputSlot;
 
     @WrappingComputerMethod(wrapper = SpecialComputerMethodWrapper.ComputerIInventorySlotWrapper.class, methodNames = "getEnergyItem", docPlaceholder = "")
     private EnergyInventorySlot energySlot;
@@ -75,12 +74,13 @@ public class TileEntityAirCompressor extends TileEntityConfigurableMachine {
 
     public TileEntityAirCompressor(BlockPos pos, BlockState state) {
         super(MSBlocks.AIR_COMPRESSOR, pos, state);
+        configComponent = new TileComponentConfig(this, mekanism.common.lib.transmitter.TransmissionType.ITEM, mekanism.common.lib.transmitter.TransmissionType.GAS, mekanism.common.lib.transmitter.TransmissionType.ENERGY);
         // Config is created from block attributes in parent constructor
         // Capabilities are added via tile entity type builder
         getConfig().setupItemIOConfig(List.of(inputSlot),List.of(outputSlot),energySlot,true);
         
         // Chemical Output Config - TOP/RIGHT/FRONT sides
-        ConfigInfo chemicalConfig = getConfig().setupOutputConfig(TransmissionType.CHEMICAL , chemicalTank);
+        ConfigInfo chemicalConfig = getConfig().setupOutputConfig(TransmissionType.GAS , chemicalTank);
         if (chemicalConfig != null) {
             chemicalConfig.setDataType(DataType.OUTPUT, mekanism.api.RelativeSide.TOP);
             chemicalConfig.setDataType(DataType.OUTPUT, mekanism.api.RelativeSide.RIGHT);
@@ -97,21 +97,21 @@ public class TileEntityAirCompressor extends TileEntityConfigurableMachine {
 
         ejectorComponent = new TileComponentEjector(this);
         ejectorComponent.setOutputData(getConfig(),TransmissionType.ITEM)
-                .setCanEject(type -> canFunction());
-        ejectorComponent.setOutputData(getConfig(),TransmissionType.CHEMICAL)
-                .setCanEject(type -> canFunction());
+                .setCanEject(type -> MekanismUtils.canFunction(this));
+        ejectorComponent.setOutputData(getConfig(),TransmissionType.GAS)
+                .setCanEject(type -> MekanismUtils.canFunction(this));
     }
 
     @Override
     protected void presetVariables() {
         super.presetVariables();
-        chemicalTank = BasicChemicalTank.output(10_000, this::markForSave);
+        chemicalTank = ChemicalTankBuilder.GAS.output(10_000, this::markForSave);
         energyContainer = MachineEnergyContainer.input(this, this::markForSave);
     }
 
     @Nonnull
     @Override
-    public IChemicalTankHolder getInitialChemicalTanks(IContentsListener listener) {
+    public IChemicalTankHolder<Gas, GasStack, IGasTank> getInitialGasTanks(IContentsListener listener) {
         ChemicalTankHelper builder = ChemicalTankHelper.forSide(this::getDirection);
         builder.addTank(chemicalTank);
         return builder.build();
@@ -135,8 +135,8 @@ public class TileEntityAirCompressor extends TileEntityConfigurableMachine {
     @Override
     protected IInventorySlotHolder getInitialInventory(IContentsListener listener) {
         InventorySlotHelper builder = InventorySlotHelper.forSide(this::getDirection);
-        builder.addSlot(inputSlot = ChemicalInventorySlot.drain(chemicalTank, listener, 28, 20));
-        builder.addSlot(outputSlot = ChemicalInventorySlot.drain(chemicalTank, listener, 28, 51));
+        builder.addSlot(inputSlot = GasInventorySlot.drain(chemicalTank, listener, 28, 20));
+        builder.addSlot(outputSlot = GasInventorySlot.drain(chemicalTank, listener, 28, 51));
         builder.addSlot(energySlot = EnergyInventorySlot.fillOrConvert(energyContainer, this::getLevel, listener, 143, 35));
         outputSlot.setSlotType(ContainerSlotType.OUTPUT);
         inputSlot.setSlotOverlay(SlotOverlay.MINUS);
@@ -145,8 +145,8 @@ public class TileEntityAirCompressor extends TileEntityConfigurableMachine {
     }
 
     @Override
-    protected boolean onUpdateServer() {
-        boolean needsUpdate = super.onUpdateServer();
+    protected void onUpdateServer() {
+        super.onUpdateServer();
         energySlot.fillContainerOrConvert();
         outputSlot.drainTank();
 
@@ -156,9 +156,9 @@ public class TileEntityAirCompressor extends TileEntityConfigurableMachine {
         BlockPos frontPos = getBlockPos().relative(frontDirection);
         boolean isBlocked = !level.isEmptyBlock(frontPos);
 
-        if (!isBlocked && canFunction() && COMPRESSED_AIR_STACK.getAmount() <= chemicalTank.getNeeded()) {
-            long energyPerTick = energyContainer.getEnergyPerTick();
-            if (energyContainer.extract(energyPerTick, Action.SIMULATE, AutomationType.INTERNAL) == energyPerTick) {
+        if (!isBlocked && MekanismUtils.canFunction(this) && COMPRESSED_AIR_STACK.getAmount() <= chemicalTank.getNeeded()) {
+            FloatingLong energyPerTick = energyContainer.getEnergyPerTick();
+            if (energyContainer.extract(energyPerTick, Action.SIMULATE, AutomationType.INTERNAL).equals(energyPerTick)) {
                 // Extract energy every tick
                 energyContainer.extract(energyPerTick, Action.EXECUTE, AutomationType.INTERNAL);
                 operatingTicks++;
@@ -178,26 +178,21 @@ public class TileEntityAirCompressor extends TileEntityConfigurableMachine {
 
         if (!chemicalTank.isEmpty()) {
             long emitRate = 256L * (1 + upgradeComponent.getUpgrades(Upgrade.SPEED));
-            if (level instanceof net.minecraft.server.level.ServerLevel serverLevel) {
-                BlockCapabilityCache<IChemicalHandler, net.minecraft.core.Direction> cache = 
-                    Capabilities.CHEMICAL.createCache(serverLevel, getBlockPos().relative(Direction.UP), Direction.DOWN);
-                ChemicalUtil.emit(Collections.singletonList(cache), chemicalTank, emitRate);
-            }
+            ChemicalUtil.emit(java.util.Collections.singleton(Direction.UP), chemicalTank, this, emitRate);
         }
 
-        setActive(!isBlocked && canFunction() && COMPRESSED_AIR_STACK.getAmount() <= chemicalTank.getNeeded() && energyContainer.getEnergy() >= energyContainer.getEnergyPerTick());
-        return needsUpdate;
+        setActive(!isBlocked && MekanismUtils.canFunction(this) && COMPRESSED_AIR_STACK.getAmount() <= chemicalTank.getNeeded() && !energyContainer.getEnergy().smallerThan(energyContainer.getEnergyPerTick()));
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundTag nbtTags, @Nonnull HolderLookup.Provider provider) {
-        super.saveAdditional(nbtTags, provider);
+    public void saveAdditional(@Nonnull CompoundTag nbtTags) {
+        super.saveAdditional(nbtTags);
         nbtTags.putInt("progress", operatingTicks);
     }
 
     @Override
-    public void loadAdditional(@Nonnull CompoundTag nbt, @Nonnull HolderLookup.Provider provider) {
-        super.loadAdditional(nbt, provider);
+    public void load(@Nonnull CompoundTag nbt) {
+        super.load(nbt);
         operatingTicks = nbt.getInt("progress");
     }
 
@@ -226,7 +221,7 @@ public class TileEntityAirCompressor extends TileEntityConfigurableMachine {
     }
 
     protected boolean makesComparatorDirty(@Nullable TransmissionType type) {
-        return type == TransmissionType.CHEMICAL;
+        return type == TransmissionType.GAS;
     }
 
     public List<Component> getInfo(Upgrade upgrade) {

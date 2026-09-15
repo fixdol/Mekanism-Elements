@@ -1,8 +1,10 @@
 package fixdol.mekanismelements.common.item.syringe;
 
+import fixdol.mekanismelements.common.item.syringe.FlameRetardantSyringe;
 import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
+
 
 public class FlameRetardantSyringe extends DrugSyringe{
     public FlameRetardantSyringe(Properties properties) {
@@ -10,7 +12,7 @@ public class FlameRetardantSyringe extends DrugSyringe{
     }
 
     @Override
-    protected Holder<MobEffect> getEffectType() {
+    protected MobEffect getEffectType() {
         return MobEffects.FIRE_RESISTANCE;
     }
 

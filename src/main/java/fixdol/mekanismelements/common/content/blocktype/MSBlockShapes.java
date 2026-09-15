@@ -1,5 +1,7 @@
 package fixdol.mekanismelements.common.content.blocktype;
 
+import fixdol.mekanismelements.common.content.blocktype.MSBlockShapes;
+
 import mekanism.common.util.EnumUtils;
 import mekanism.common.util.VoxelShapeUtils;
 import net.minecraft.world.level.block.Block;

@@ -1,5 +1,7 @@
 package fixdol.mekanismelements.common.content.blocktype;
 
+import fixdol.mekanismelements.common.content.blocktype.MSMachine;
+
 import mekanism.api.text.ILangEntry;
 import mekanism.common.block.attribute.AttributeParticleFX;
 import mekanism.common.block.attribute.AttributeStateFacing;

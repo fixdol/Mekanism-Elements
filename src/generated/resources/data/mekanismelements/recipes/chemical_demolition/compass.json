@@ -1,0 +1,19 @@
+{
+  "type": "mekanismelements:chemical_demolition",
+  "chemicalInput": {
+    "amount": 1,
+    "gas": "mekanismelements:seawater"
+  },
+  "itemInput": {
+    "ingredient": {
+      "item": "minecraft:compass"
+    }
+  },
+  "mainOutput": {
+    "count": 4,
+    "item": "minecraft:iron_ingot"
+  },
+  "secondaryOutput": {
+    "item": "minecraft:redstone"
+  }
+}

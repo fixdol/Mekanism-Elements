@@ -1,9 +1,11 @@
 package fixdol.mekanismelements.common.config;
 
+import fixdol.mekanismelements.common.config.MSConfig;
+
 import mekanism.common.config.IMekanismConfig;
 import mekanism.common.config.MekanismConfigHelper;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModLoadingContext;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModLoadingContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,8 +19,8 @@ public class MSConfig {
 
     public static void registerConfigs(ModLoadingContext modLoadingContext) {
         ModContainer modContainer = modLoadingContext.getActiveContainer();
-        Map<net.neoforged.fml.config.IConfigSpec, IMekanismConfig> configs = new HashMap<>();
-        MekanismConfigHelper.registerConfig(configs, modContainer, storageConfig);
-        MekanismConfigHelper.registerConfig(configs, modContainer, usageConfig);
+        Map<net.minecraftforge.fml.config.IConfigSpec, IMekanismConfig> configs = new HashMap<>();
+        MekanismConfigHelper.registerConfig(modContainer, storageConfig);
+        MekanismConfigHelper.registerConfig(modContainer, usageConfig);
     }
 }

@@ -1,11 +1,18 @@
 package fixdol.mekanismelements.common.registries;
 
-import fixdol.mekanismelements.common.MekanismElements;
-import fixdol.mekanismelements.common.tile.machine.*;
-import mekanism.common.registration.impl.TileEntityTypeDeferredRegister;
-import mekanism.common.registration.impl.TileEntityTypeRegistryObject;
-import mekanism.common.tile.base.TileEntityMekanism;
 import mekanism.common.capabilities.Capabilities;
+import fixdol.mekanismelements.common.registries.MSBlocks;
+import fixdol.mekanismelements.common.MekanismElements;
+import fixdol.mekanismelements.common.tile.machine.TileEntityAdsorptionSeparator;
+import fixdol.mekanismelements.common.tile.machine.TileEntityAirCompressor;
+import fixdol.mekanismelements.common.tile.machine.TileEntityChemicalDemolitionMachine;
+import fixdol.mekanismelements.common.tile.machine.TileEntityInfinityOreReprocessing;
+import mekanism.common.tile.base.TileEntityMekanism;
+import fixdol.mekanismelements.common.tile.machine.TileEntityRadiationIrradiator;
+import fixdol.mekanismelements.common.tile.machine.TileEntitySeawaterPump;
+import mekanism.common.registration.impl.TileEntityTypeRegistryObject;
+
+import mekanism.common.registration.impl.TileEntityTypeDeferredRegister;
 
 public class MSTileEntityTypes {
     public static final TileEntityTypeDeferredRegister TILE_ENTITY_TYPES = new TileEntityTypeDeferredRegister(MekanismElements.MODID);
@@ -23,41 +30,29 @@ public class MSTileEntityTypes {
     //public static final TileEntityTypeRegistryObject<TileEntitySeawaterPump> SEAWATER_PUMP = TILE_ENTITY_TYPES.register(null, TileEntitySeawaterPump::new);
 
     static {
-        ADSORPTION_SEPARATOR = TILE_ENTITY_TYPES.mekBuilder(MSBlocks.ADSORPTION_SEPARATOR, TileEntityAdsorptionSeparator::new)
+        ADSORPTION_SEPARATOR = TILE_ENTITY_TYPES.builder(MSBlocks.ADSORPTION_SEPARATOR, TileEntityAdsorptionSeparator::new)
             .clientTicker(TileEntityMekanism::tickClient)
             .serverTicker(TileEntityMekanism::tickServer)
-            .withSimple(Capabilities.CONFIG_CARD)
-            .withSimple(Capabilities.CONFIGURABLE)
             .build();
-        AIR_COMPRESSOR = TILE_ENTITY_TYPES.mekBuilder(MSBlocks.AIR_COMPRESSOR, TileEntityAirCompressor::new)
+        AIR_COMPRESSOR = TILE_ENTITY_TYPES.builder(MSBlocks.AIR_COMPRESSOR, TileEntityAirCompressor::new)
             .clientTicker(TileEntityMekanism::tickClient)
             .serverTicker(TileEntityMekanism::tickServer)
-            .withSimple(Capabilities.CONFIG_CARD)
-            .withSimple(Capabilities.CONFIGURABLE)
             .build();
-        CHEMICAL_DEMOLITION_MACHINE = TILE_ENTITY_TYPES.mekBuilder(MSBlocks.CHEMICAL_DEMOLITION_MACHINE, TileEntityChemicalDemolitionMachine::new)
+        CHEMICAL_DEMOLITION_MACHINE = TILE_ENTITY_TYPES.builder(MSBlocks.CHEMICAL_DEMOLITION_MACHINE, TileEntityChemicalDemolitionMachine::new)
             .clientTicker(TileEntityMekanism::tickClient)
             .serverTicker(TileEntityMekanism::tickServer)
-            .withSimple(Capabilities.CONFIG_CARD)
-            .withSimple(Capabilities.CONFIGURABLE)
             .build();
-        RADIATION_IRRADIATOR = TILE_ENTITY_TYPES.mekBuilder(MSBlocks.RADIATION_IRRADIATOR, TileEntityRadiationIrradiator::new)
+        RADIATION_IRRADIATOR = TILE_ENTITY_TYPES.builder(MSBlocks.RADIATION_IRRADIATOR, TileEntityRadiationIrradiator::new)
             .clientTicker(TileEntityMekanism::tickClient)
             .serverTicker(TileEntityMekanism::tickServer)
-            .withSimple(Capabilities.CONFIG_CARD)
-            .withSimple(Capabilities.CONFIGURABLE)
             .build();
-        SEAWATER_PUMP = TILE_ENTITY_TYPES.mekBuilder(MSBlocks.SEAWATER_PUMP, TileEntitySeawaterPump::new)
+        SEAWATER_PUMP = TILE_ENTITY_TYPES.builder(MSBlocks.SEAWATER_PUMP, TileEntitySeawaterPump::new)
             .clientTicker(TileEntityMekanism::tickClient)
             .serverTicker(TileEntityMekanism::tickServer)
-            .withSimple(Capabilities.CONFIG_CARD)
-            .withSimple(Capabilities.CONFIGURABLE)
             .build();
-        INFINITY_ORE_REPROCESSING = TILE_ENTITY_TYPES.mekBuilder(MSBlocks.INFINITY_ORE_REPROCESSING, TileEntityInfinityOreReprocessing::new)
+        INFINITY_ORE_REPROCESSING = TILE_ENTITY_TYPES.builder(MSBlocks.INFINITY_ORE_REPROCESSING, TileEntityInfinityOreReprocessing::new)
             .clientTicker(TileEntityMekanism::tickClient)
             .serverTicker(TileEntityMekanism::tickServer)
-            .withSimple(Capabilities.CONFIG_CARD)
-            .withSimple(Capabilities.CONFIGURABLE)
             .build();
     }
 

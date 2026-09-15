@@ -1,20 +1,21 @@
 package fixdol.mekanismelements.common.recipe.lookup.cache;
 
+import mekanism.common.recipe.lookup.cache.IInputRecipeCache;
+import net.minecraft.world.level.Level;
+import java.util.List;
 import fixdol.mekanismelements.common.recipe.MSRecipeType;
 import mekanism.api.recipes.MekanismRecipe;
-import mekanism.api.recipes.ingredients.InputIngredient;
-import mekanism.common.recipe.lookup.cache.IInputRecipeCache;
-import mekanism.common.recipe.lookup.cache.type.IInputCache;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import java.util.function.Predicate;
+import java.util.Set;
+
+import mekanism.api.recipes.ingredients.InputIngredient;
+import mekanism.common.recipe.lookup.cache.type.IInputCache;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
-public abstract class MSAbstractInputRecipeCache<RECIPE extends MekanismRecipe<?>> implements IInputRecipeCache {
+public abstract class MSAbstractInputRecipeCache<RECIPE extends MekanismRecipe> implements IInputRecipeCache {
     protected final MSRecipeType<RECIPE, ?> recipeType;
     protected boolean initialized;
 

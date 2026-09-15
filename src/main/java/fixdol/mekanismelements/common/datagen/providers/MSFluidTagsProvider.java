@@ -1,18 +1,20 @@
 package fixdol.mekanismelements.common.datagen.providers;
 
-import fixdol.mekanismelements.common.MekanismElements;
-import fixdol.mekanismelements.common.registries.MSFluids;
-import mekanism.common.registration.impl.FluidRegistryObject;
+import java.util.concurrent.CompletableFuture;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
+import fixdol.mekanismelements.common.datagen.providers.MSFluidTagsProvider;
+import fixdol.mekanismelements.common.registries.MSFluids;
+import fixdol.mekanismelements.common.MekanismElements;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.FluidTagsProvider;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.material.Fluid;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
-import java.util.concurrent.CompletableFuture;
+import mekanism.common.registration.impl.FluidRegistryObject;
+import net.minecraft.data.tags.FluidTagsProvider;
+import net.minecraft.world.level.material.Fluid;
+
 
 public class MSFluidTagsProvider extends FluidTagsProvider {
 
@@ -41,33 +43,33 @@ public class MSFluidTagsProvider extends FluidTagsProvider {
         common("yttrium", MSFluids.YTTRIUM);
 
         tag(fluidTag("create", "no_infinite_draining")).add(
-              MSFluids.AMMONIA.get(),
-              MSFluids.AMMONIUM_NITRATE.get(),
-              MSFluids.BROMINE.get(),
-              MSFluids.BERYLLIUM.get(),
-              MSFluids.COMPRESSED_AIR.get(),
-              MSFluids.SEAWATER.get(),
-              MSFluids.IODINE.get(),
-              MSFluids.POTASSIUM_HYDROXIDE.get(),
-              MSFluids.POTASSIUM_IODIDE.get(),
-              MSFluids.POTASSIUM_CHLORIDE.get(),
-              MSFluids.NITROGEN.get(),
-              MSFluids.NITRIC_OXIDE.get(),
-              MSFluids.NITROGEN_DIOXIDE.get(),
-              MSFluids.NITRIC_ACID.get(),
-              MSFluids.XENON.get(),
-              MSFluids.HELIUM.get(),
-              MSFluids.SUPERHEATED_HELIUM.get(),
-              MSFluids.STRONTIUM.get(),
-              MSFluids.YTTRIUM.get()
+              MSFluids.AMMONIA.getFluid(),
+              MSFluids.AMMONIUM_NITRATE.getFluid(),
+              MSFluids.BROMINE.getFluid(),
+              MSFluids.BERYLLIUM.getFluid(),
+              MSFluids.COMPRESSED_AIR.getFluid(),
+              MSFluids.SEAWATER.getFluid(),
+              MSFluids.IODINE.getFluid(),
+              MSFluids.POTASSIUM_HYDROXIDE.getFluid(),
+              MSFluids.POTASSIUM_IODIDE.getFluid(),
+              MSFluids.POTASSIUM_CHLORIDE.getFluid(),
+              MSFluids.NITROGEN.getFluid(),
+              MSFluids.NITRIC_OXIDE.getFluid(),
+              MSFluids.NITROGEN_DIOXIDE.getFluid(),
+              MSFluids.NITRIC_ACID.getFluid(),
+              MSFluids.XENON.getFluid(),
+              MSFluids.HELIUM.getFluid(),
+              MSFluids.SUPERHEATED_HELIUM.getFluid(),
+              MSFluids.STRONTIUM.getFluid(),
+              MSFluids.YTTRIUM.getFluid()
         );
     }
 
     private void common(String path, FluidRegistryObject<?, ?, ?, ?, ?> fluid) {
-        tag(fluidTag("c", path)).add(fluid.get(), fluid.getFlowingFluid().get());
+        tag(fluidTag("forge", path)).add(fluid.getFluid(), fluid.getFlowingFluid());
     }
 
     private static TagKey<Fluid> fluidTag(String namespace, String path) {
-        return TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath(namespace, path));
+        return TagKey.create(Registries.FLUID, new ResourceLocation(namespace, path));
     }
 }

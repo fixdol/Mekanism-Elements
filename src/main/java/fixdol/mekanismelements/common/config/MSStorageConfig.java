@@ -1,36 +1,32 @@
 package fixdol.mekanismelements.common.config;
 
+import mekanism.api.math.FloatingLong;
 import mekanism.common.config.BaseMekanismConfig;
-import mekanism.common.config.IConfigTranslation;
-import mekanism.common.config.value.CachedLongValue;
-import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.fml.config.ModConfig;
+import mekanism.common.config.value.CachedFloatingLongValue;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.config.ModConfig;
 
 public class MSStorageConfig extends BaseMekanismConfig {
-    private final ModConfigSpec configSpec;
 
-    public final CachedLongValue airCompressor;
-    public final CachedLongValue radiationIrradiator;
-    public final CachedLongValue adsorptionSeparator;
-    public final CachedLongValue seawaterPump;
-    public final CachedLongValue organicLiquidExtractor;
-    public final CachedLongValue infinityOreReprocessing;
+    public final CachedFloatingLongValue airCompressor;
+    public final CachedFloatingLongValue radiationIrradiator;
+    public final CachedFloatingLongValue adsorptionSeparator;
+    public final CachedFloatingLongValue seawaterPump;
+    public final CachedFloatingLongValue organicLiquidExtractor;
+    public final CachedFloatingLongValue infinityOreReprocessing;
+
+    private final ForgeConfigSpec configSpec;
 
     MSStorageConfig() {
-        ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
-        builder.comment("Mekanism Eelements Energy Storage Config. This config is synced from server to client.").push("storage");
+        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        builder.comment("MS Energy Storage Config. This config is synced from server to client.").push("storage");
 
-        airCompressor = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.storage.airCompressor", "Air Compressor", "Base energy storage (Joules)."), "airCompressor", 40_000L, 0L, Long.MAX_VALUE);
-
-        radiationIrradiator = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.storage.radiationIrradiator", "Radiation Irradiator", "Base energy storage (Joules)."), "radiationIrradiator", 40_000L, 0L, Long.MAX_VALUE);
-
-        adsorptionSeparator = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.storage.adsorptionSeparator", "Adsorption Separator", "Base energy storage (Joules)."), "adsorptionSeparator", 40_000L, 0L, Long.MAX_VALUE);
-
-        organicLiquidExtractor = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.storage.organicLiquidExtractor", "Organic Liquid Extractor", "Base energy storage (Joules)."), "organicLiquidExtractor", 40_000L, 0L, Long.MAX_VALUE);
-
-        seawaterPump = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.storage.seawaterPump", "Seawater Pump", "Base energy storage (Joules)."), "seawaterPump", 40_000L, 0L, Long.MAX_VALUE);
-
-        infinityOreReprocessing = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.storage.infinityOreReprocessing", "Infinity Ore Reprocessing", "Base energy storage (Joules)."), "infinityOreReprocessing", 40_000L, 0L, Long.MAX_VALUE);
+        airCompressor = CachedFloatingLongValue.define(this, builder, "Base energy storage (Joules).", "airCompressor", FloatingLong.createConst(40_000));
+        radiationIrradiator = CachedFloatingLongValue.define(this, builder, "Base energy storage (Joules).", "radiationIrradiator", FloatingLong.createConst(40_000));
+        adsorptionSeparator = CachedFloatingLongValue.define(this, builder, "Base energy storage (Joules).", "adsorptionSeparator", FloatingLong.createConst(40_000));
+        organicLiquidExtractor = CachedFloatingLongValue.define(this, builder, "Base energy storage (Joules).", "organicLiquidExtractor", FloatingLong.createConst(40_000));
+        seawaterPump = CachedFloatingLongValue.define(this, builder, "Base energy storage (Joules).", "seawaterPump", FloatingLong.createConst(40_000));
+        infinityOreReprocessing = CachedFloatingLongValue.define(this, builder, "Base energy storage (Joules).", "infinityOreReprocessing", FloatingLong.createConst(40_000));
 
         builder.pop();
         configSpec = builder.build();
@@ -42,17 +38,12 @@ public class MSStorageConfig extends BaseMekanismConfig {
     }
 
     @Override
-    public ModConfigSpec getConfigSpec() {
+    public ForgeConfigSpec getConfigSpec() {
         return configSpec;
     }
 
     @Override
     public ModConfig.Type getConfigType() {
         return ModConfig.Type.SERVER;
-    }
-
-    @Override
-    public String getTranslation() {
-        return "config.mekanismelements.storage";
     }
 }

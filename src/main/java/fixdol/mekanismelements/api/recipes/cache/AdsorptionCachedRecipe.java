@@ -1,21 +1,26 @@
 package fixdol.mekanismelements.api.recipes.cache;
 
+import fixdol.mekanismelements.api.recipes.cache.AdsorptionCachedRecipe;
+import mekanism.api.chemical.Chemical;
+import net.minecraftforge.fluids.FluidStack;
+import mekanism.api.chemical.merged.BoxedChemicalStack;
+import mekanism.api.recipes.outputs.BoxedChemicalOutputHandler;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import java.util.Objects;
+
 import fixdol.mekanismelements.api.recipes.AdsorptionRecipe;
-import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.api.recipes.inputs.IInputHandler;
 import mekanism.api.recipes.outputs.IOutputHandler;
-import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
 
 public class AdsorptionCachedRecipe extends CachedRecipe<AdsorptionRecipe> {
     private static int diagCounter = 0;
-    private final IOutputHandler<ChemicalStack> outputHandler;
+    private final BoxedChemicalOutputHandler outputHandler;
     private final IInputHandler<@NotNull ItemStack> itemInputHandler;
     private final IInputHandler<@NotNull FluidStack> fluidInputHandler;
     private final IntSupplier fluidUsage;
@@ -23,7 +28,7 @@ public class AdsorptionCachedRecipe extends CachedRecipe<AdsorptionRecipe> {
 
     private ItemStack recipeItem = ItemStack.EMPTY;
     private FluidStack recipeFluid = FluidStack.EMPTY;
-    private ChemicalStack output = ChemicalStack.EMPTY;
+    private BoxedChemicalStack output = BoxedChemicalStack.EMPTY;
 
     /**
      * @param recipe            Recipe.
@@ -35,7 +40,7 @@ public class AdsorptionCachedRecipe extends CachedRecipe<AdsorptionRecipe> {
      * @param outputHandler     Output handler.
      */
     public AdsorptionCachedRecipe(AdsorptionRecipe recipe, BooleanSupplier recheckAllErrors, IInputHandler<@NotNull ItemStack> itemInputHandler,
-                                  IInputHandler<@NotNull FluidStack> fluidInputHandler, IntSupplier fluidUsage, IOutputHandler<ChemicalStack> outputHandler) {
+                                  IInputHandler<@NotNull FluidStack> fluidInputHandler, IntSupplier fluidUsage, BoxedChemicalOutputHandler outputHandler) {
         super(recipe, recheckAllErrors);
         this.itemInputHandler = Objects.requireNonNull(itemInputHandler, "Item input handler cannot be null.");
         this.fluidInputHandler = Objects.requireNonNull(fluidInputHandler, "Fluid input handler cannot be null.");
@@ -68,7 +73,7 @@ public class AdsorptionCachedRecipe extends CachedRecipe<AdsorptionRecipe> {
                     fluidInputHandler.calculateOperationsCanSupport(tracker, recipeFluid, fluidUsageMultiplier);
                     if (tracker.shouldContinueChecking()) {
                         output = recipe.getOutput(recipeItem, recipeFluid);
-                        outputHandler.calculateOperationsCanSupport(tracker, output);
+                        outputHandler.calculateOperationsRoomFor(tracker, output);
                     }
                 }
             }

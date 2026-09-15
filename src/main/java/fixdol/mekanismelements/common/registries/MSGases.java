@@ -1,61 +1,66 @@
 package fixdol.mekanismelements.common.registries;
 
-import fixdol.mekanismelements.common.MekanismElements;
+import mekanism.api.math.FloatingLong;
+
+import mekanism.api.chemical.gas.Gas;
 import fixdol.mekanismelements.common.gas.MSChemicalConstants;
-import mekanism.api.chemical.Chemical;
-import mekanism.api.chemical.ChemicalBuilder;
-import mekanism.api.chemical.attribute.ChemicalAttributes;
-import mekanism.common.registration.impl.ChemicalDeferredRegister;
-import mekanism.common.registration.impl.DeferredChemical;
+import fixdol.mekanismelements.common.registries.MSGases;
+import fixdol.mekanismelements.common.MekanismElements;
+
+import mekanism.api.chemical.gas.GasBuilder;
+import mekanism.api.chemical.attribute.ChemicalAttribute;
+import mekanism.api.chemical.gas.attribute.GasAttributes;
+import mekanism.common.registration.impl.GasDeferredRegister;
+import mekanism.common.registration.impl.GasRegistryObject;
 
 public class MSGases {
-    public static final ChemicalDeferredRegister GASES = new ChemicalDeferredRegister(MekanismElements.MODID);
+    public static final GasDeferredRegister GASES = new GasDeferredRegister(MekanismElements.MODID);
 
-    public static final DeferredChemical<Chemical> AMERICIUM;
-    public static final DeferredChemical<Chemical> AMMONIA;
-    public static final DeferredChemical<Chemical> AMMONIUM_NITRATE;
-    public static final DeferredChemical<Chemical> AMMONIUM_NITRATE_SOLUTION;
-    public static final DeferredChemical<Chemical> AQUA_REGIA;
-    public static final DeferredChemical<Chemical> BROMINE;
-    public static final DeferredChemical<Chemical> BERYLLIUM;
-    public static final DeferredChemical<Chemical> CALIFORNIUM;
-    public static final DeferredChemical<Chemical> COMPRESSED_AIR;
-    public static final DeferredChemical<Chemical> CURIUM;
-    public static final DeferredChemical<Chemical> DISSOLVED_SPENT_NUCLEAR_WASTE;
-    public static final DeferredChemical<Chemical> HELIUM;
-    public static final DeferredChemical<Chemical> HYDROGEN_CYANIDE;
-    public static final DeferredChemical<Chemical> SUPERHEATED_HELIUM;
-    public static final DeferredChemical<Chemical> IODINE;
-    public static final DeferredChemical<Chemical> METHANE;
-    public static final DeferredChemical<Chemical> NITROGEN_DIOXIDE;
-    public static final DeferredChemical<Chemical> NITRIC_ACID;
-    public static final DeferredChemical<Chemical> NITROGEN;
-    public static final DeferredChemical<Chemical> NETHERITE_ACID;
-    public static final DeferredChemical<Chemical> NITRIC_OXIDE;
-    public static final DeferredChemical<Chemical> POTASSIUM_CHLORIDE;
-    public static final DeferredChemical<Chemical> POTASSIUM_CYANIDE;
-    public static final DeferredChemical<Chemical> POTASSIUM_HYDROXIDE;
-    public static final DeferredChemical<Chemical> POTASSIUM_IODIDE;
-    public static final DeferredChemical<Chemical> SEAWATER;
-    public static final DeferredChemical<Chemical> STRONTIUM;
-    public static final DeferredChemical<Chemical> XENON;
-    public static final DeferredChemical<Chemical> YTTRIUM;
+    public static final GasRegistryObject<Gas> AMERICIUM;
+    public static final GasRegistryObject<Gas> AMMONIA;
+    public static final GasRegistryObject<Gas> AMMONIUM_NITRATE;
+    public static final GasRegistryObject<Gas> AMMONIUM_NITRATE_SOLUTION;
+    public static final GasRegistryObject<Gas> AQUA_REGIA;
+    public static final GasRegistryObject<Gas> BROMINE;
+    public static final GasRegistryObject<Gas> BERYLLIUM;
+    public static final GasRegistryObject<Gas> CALIFORNIUM;
+    public static final GasRegistryObject<Gas> COMPRESSED_AIR;
+    public static final GasRegistryObject<Gas> CURIUM;
+    public static final GasRegistryObject<Gas> DISSOLVED_SPENT_NUCLEAR_WASTE;
+    public static final GasRegistryObject<Gas> HELIUM;
+    public static final GasRegistryObject<Gas> HYDROGEN_CYANIDE;
+    public static final GasRegistryObject<Gas> SUPERHEATED_HELIUM;
+    public static final GasRegistryObject<Gas> IODINE;
+    public static final GasRegistryObject<Gas> METHANE;
+    public static final GasRegistryObject<Gas> NITROGEN_DIOXIDE;
+    public static final GasRegistryObject<Gas> NITRIC_ACID;
+    public static final GasRegistryObject<Gas> NITROGEN;
+    public static final GasRegistryObject<Gas> NETHERITE_ACID;
+    public static final GasRegistryObject<Gas> NITRIC_OXIDE;
+    public static final GasRegistryObject<Gas> POTASSIUM_CHLORIDE;
+    public static final GasRegistryObject<Gas> POTASSIUM_CYANIDE;
+    public static final GasRegistryObject<Gas> POTASSIUM_HYDROXIDE;
+    public static final GasRegistryObject<Gas> POTASSIUM_IODIDE;
+    public static final GasRegistryObject<Gas> SEAWATER;
+    public static final GasRegistryObject<Gas> STRONTIUM;
+    public static final GasRegistryObject<Gas> XENON;
+    public static final GasRegistryObject<Gas> YTTRIUM;
 
     static {
-        AMERICIUM                     = GASES.register("americium", 13983840);
-        AMMONIA                       = GASES.register(MSChemicalConstants.AMMONIA);
+        AMERICIUM                     = GASES.register("americium", 13983840, Attributes.AMERICIUM_FUEL);
+        AMMONIA                       = GASES.register(MSChemicalConstants.AMMONIA, Attributes.AMMONIA_FUEL);
         AMMONIUM_NITRATE              = GASES.register(MSChemicalConstants.AMMONIUM_NITRATE);
-        AMMONIUM_NITRATE_SOLUTION     = GASES.register(MSChemicalConstants.AMMONIUM_NITRATE_SOLUTION);
+        AMMONIUM_NITRATE_SOLUTION     = GASES.register(MSChemicalConstants.AMMONIUM_NITRATE_SOLUTION, Coolants.AMMONIUM_NITRATE_SOLUTION_COOLANT);
         AQUA_REGIA                    = GASES.register(MSChemicalConstants.AQUA_REGIA);
         BROMINE                       = GASES.register(MSChemicalConstants.BROMINE);
         BERYLLIUM                     = GASES.register(MSChemicalConstants.BERYLLIUM);
-        CALIFORNIUM                   = GASES.register("californium", 0x00F08B00);
+        CALIFORNIUM                   = GASES.register("californium", 0x00F08B00, Attributes.CALIFORNIUM_RADIATION);
         COMPRESSED_AIR                = GASES.register(MSChemicalConstants.COMPRESSED_AIR);
-        CURIUM                        = GASES.register("curium", 15725501);
+        CURIUM                        = GASES.register("curium", 15725501, Attributes.CURIUM_RADIATION);
         DISSOLVED_SPENT_NUCLEAR_WASTE = GASES.register("dissolved_spent_nuclear_waste", 0x8588b1);
-        HELIUM                        = GASES.register(MSChemicalConstants.HELIUM);
+        HELIUM                        = GASES.register(MSChemicalConstants.HELIUM, Coolants.HELIUM_COOLANT);
         HYDROGEN_CYANIDE              = GASES.register(MSChemicalConstants.HYDROGEN_CYANIDE);
-        SUPERHEATED_HELIUM            = GASES.register(MSChemicalConstants.SUPERHEATED_HELIUM);
+        SUPERHEATED_HELIUM            = GASES.register(MSChemicalConstants.SUPERHEATED_HELIUM, Coolants.HEATED_HELIUM_COOLANT);
         IODINE                        = GASES.register(MSChemicalConstants.IODINE);
         METHANE                       = GASES.register(MSChemicalConstants.METHANE);
         NETHERITE_ACID                = GASES.register(MSChemicalConstants.NETHERITE_ACID);
@@ -77,29 +82,29 @@ public class MSGases {
     }
 
     
+    /**
+     * Coolant attributes. The paired gas is referenced through a lambda so it is resolved lazily,
+     * otherwise the field of whichever gas registers second would still be null here.
+     */
     public static class Coolants {
 
+        public static final GasAttributes.CooledCoolant HELIUM_COOLANT =
+                new GasAttributes.CooledCoolant(() -> SUPERHEATED_HELIUM.getChemical(), 100, 1);
+        public static final GasAttributes.HeatedCoolant HEATED_HELIUM_COOLANT =
+                new GasAttributes.HeatedCoolant(() -> HELIUM.getChemical(), 100, 1);
+        public static final GasAttributes.CooledCoolant AMMONIUM_NITRATE_SOLUTION_COOLANT =
+                new GasAttributes.CooledCoolant(() -> AMMONIUM_NITRATE_SOLUTION.getChemical(), 120, 0.7);
+    }
 
-        public static ChemicalAttributes.CooledCoolant getHeliumCoolant() {
-            return new ChemicalAttributes.CooledCoolant(
-                    SUPERHEATED_HELIUM.get().getAsHolder(), 100, 1.5);
-        }
+    public static class Attributes {
 
-        public static ChemicalAttributes.HeatedCoolant getHeatedHeliumCoolant() {
-            return new ChemicalAttributes.HeatedCoolant(
-                    HELIUM.get().getAsHolder(), 100);
-        }
-
-        // Ammonium Nitrate Solution coolant
-        // thermalEnthalpy=120, conductivity=0.7 -> enfria mas rapido que Helium pero menos que Sodium
-        public static ChemicalAttributes.CooledCoolant getAmmoniumNitrateSolutionCoolant() {
-            return new ChemicalAttributes.CooledCoolant(
-                    AMMONIUM_NITRATE_SOLUTION.get().getAsHolder(), 120, 0.7);
-        }
-
-        public static ChemicalAttributes.HeatedCoolant getHeatedAmmoniumNitrateSolutionCoolant() {
-            return new ChemicalAttributes.HeatedCoolant(
-                    AMMONIUM_NITRATE_SOLUTION.get().getAsHolder(), 120);
-        }
+        public static final GasAttributes.Fuel AMMONIA_FUEL =
+                new GasAttributes.Fuel(10, FloatingLong.createConst(99999));
+        public static final GasAttributes.Fuel AMERICIUM_FUEL =
+                new GasAttributes.Fuel(500, FloatingLong.createConst(60000));
+        public static final GasAttributes.Radiation CALIFORNIUM_RADIATION =
+                new GasAttributes.Radiation(0.1);
+        public static final GasAttributes.Radiation CURIUM_RADIATION =
+                new GasAttributes.Radiation(0.07);
     }
 }

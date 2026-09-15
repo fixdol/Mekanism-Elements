@@ -1,26 +1,27 @@
 package fixdol.mekanismelements.client.gui.machine;
 
-import fixdol.mekanismelements.common.tile.machine.TileEntitySeawaterPump;
+import java.util.ArrayList;
+import net.minecraft.network.chat.Component;
+import mekanism.common.util.text.EnergyDisplay;
+import net.minecraftforge.fluids.FluidStack;
+import mekanism.client.gui.element.gauge.GaugeType;
 import mekanism.client.gui.GuiConfigurableTile;
+import mekanism.client.gui.element.tab.GuiEnergyTab;
+import mekanism.client.gui.element.gauge.GuiFluidGauge;
+import net.minecraft.client.gui.GuiGraphics;
 import mekanism.client.gui.element.GuiInnerScreen;
 import mekanism.client.gui.element.bar.GuiVerticalPowerBar;
-import mekanism.client.gui.element.gauge.GaugeType;
-import mekanism.client.gui.element.gauge.GuiFluidGauge;
-import mekanism.client.gui.element.tab.GuiEnergyTab;
-import mekanism.common.MekanismLang;
-import mekanism.common.capabilities.energy.MachineEnergyContainer;
-import mekanism.common.inventory.container.tile.MekanismTileContainer;
-import mekanism.common.inventory.warning.WarningTracker;
-import mekanism.common.util.text.EnergyDisplay;
-import mekanism.common.util.text.TextUtils;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.fluids.FluidStack;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.List;
+import mekanism.common.capabilities.energy.MachineEnergyContainer;
+import mekanism.common.MekanismLang;
+import mekanism.common.inventory.container.tile.MekanismTileContainer;
+import javax.annotation.Nonnull;
+import mekanism.common.util.text.TextUtils;
+import mekanism.common.inventory.warning.WarningTracker;
+
+import fixdol.mekanismelements.common.tile.machine.TileEntitySeawaterPump;
+
 
 public class GuiSeawaterPump extends GuiConfigurableTile<TileEntitySeawaterPump, MekanismTileContainer<TileEntitySeawaterPump>> {
     public GuiSeawaterPump(MekanismTileContainer<TileEntitySeawaterPump> container, Inventory inv, Component title) {
@@ -46,7 +47,7 @@ public class GuiSeawaterPump extends GuiConfigurableTile<TileEntitySeawaterPump,
         addRenderableWidget(new GuiVerticalPowerBar(this, tile.getEnergyContainer(), 164, 15))
                 .warning(WarningTracker.WarningType.NOT_ENOUGH_ENERGY, () -> {
                     MachineEnergyContainer<TileEntitySeawaterPump> energyContainer = tile.getEnergyContainer();
-                    return energyContainer.getEnergyPerTick() > energyContainer.getEnergy();
+                    return energyContainer.getEnergyPerTick().greaterThan(energyContainer.getEnergy());
                 });
         addRenderableWidget(new GuiFluidGauge(() -> tile.fluidTank, () -> tile.getFluidTanks(null), GaugeType.STANDARD, this, 6, 13))
                 .warning(WarningTracker.WarningType.NO_SPACE_IN_OUTPUT, () -> tile.fluidTank.getNeeded() < TileEntitySeawaterPump.SEAWATER_STACK.getAmount());

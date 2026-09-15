@@ -1,22 +1,23 @@
 package fixdol.mekanismelements.common.recipe.lookup.cache;
 
+import java.util.function.BiPredicate;
+import mekanism.common.recipe.lookup.cache.DoubleInputRecipeCache;
+import java.util.function.Function;
+import java.util.HashSet;
+import mekanism.common.recipe.lookup.cache.type.IInputCache;
+import mekanism.api.recipes.ingredients.InputIngredient;
+import net.minecraft.world.level.Level;
+import java.util.List;
 import fixdol.mekanismelements.common.recipe.MSRecipeType;
 import mekanism.api.recipes.MekanismRecipe;
-import mekanism.api.recipes.ingredients.InputIngredient;
-import mekanism.common.recipe.lookup.cache.DoubleInputRecipeCache;
-import mekanism.common.recipe.lookup.cache.EitherSideInputRecipeCache;
-import mekanism.common.recipe.lookup.cache.type.IInputCache;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.BiPredicate;
-import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.Set;
 
-public abstract class MSEitherSideInputRecipeCache<INPUT, INGREDIENT extends InputIngredient<INPUT>, RECIPE extends MekanismRecipe<?> & BiPredicate<INPUT, INPUT>,
+import mekanism.common.recipe.lookup.cache.EitherSideInputRecipeCache;
+
+
+public abstract class MSEitherSideInputRecipeCache<INPUT, INGREDIENT extends InputIngredient<INPUT>, RECIPE extends MekanismRecipe & BiPredicate<INPUT, INPUT>,
         CACHE extends IInputCache<INPUT, INGREDIENT, RECIPE>> extends MSAbstractInputRecipeCache<RECIPE> {
     private final Set<RECIPE> complexRecipes = new HashSet<>();
     private final Function<RECIPE, INGREDIENT> inputAExtractor;

@@ -1,39 +1,38 @@
 package fixdol.mekanismelements.api.recipes;
 
-import mekanism.api.chemical.ChemicalStack;
-import mekanism.api.recipes.MekanismRecipe;
-import mekanism.api.recipes.ingredients.ChemicalStackIngredient;
-import mekanism.api.recipes.ingredients.ItemStackIngredient;
-import mekanism.api.recipes.vanilla_input.FluidRecipeInput;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
 import java.util.function.BiPredicate;
+import java.util.Collections;
+import org.jetbrains.annotations.Contract;
+import net.minecraft.network.FriendlyByteBuf;
+import mekanism.api.chemical.gas.GasStack;
+import fixdol.mekanismelements.api.recipes.InfinityOreReprocessingRecipe;
+import net.minecraft.world.item.ItemStack;
+import mekanism.api.recipes.ingredients.ItemStackIngredient;
+import java.util.List;
+import mekanism.api.recipes.MekanismRecipe;
+import org.jetbrains.annotations.NotNull;
+import java.util.Objects;
+import net.minecraft.resources.ResourceLocation;
+
+import mekanism.api.recipes.ingredients.ChemicalStackIngredient;
 
 
-public abstract class InfinityOreReprocessingRecipe extends MekanismRecipe<FluidRecipeInput> implements
-        BiPredicate<@NotNull ItemStack, @NotNull ChemicalStack> {
+
+public abstract class InfinityOreReprocessingRecipe extends MekanismRecipe implements
+        BiPredicate<@NotNull ItemStack, @NotNull GasStack> {
 
     private final ItemStackIngredient itemInput;
-    private final ChemicalStackIngredient chemicalInput;
+    private final ChemicalStackIngredient.GasStackIngredient chemicalInput;
     private final ItemStack output;
 
-    @org.jetbrains.annotations.Nullable
-    private ResourceLocation id;
-
     /**
-     * @param itemInput     Input de ítem (la mena "sucia" que se coloca en la máquina).
-     * @param chemicalInput Input químico.
+     * @param id            Recipe id.
+     * @param itemInput     Input de item (la mena "sucia" que se coloca en la maquina).
+     * @param chemicalInput Input quimico.
      * @param output        Output.
      */
-    public InfinityOreReprocessingRecipe(ItemStackIngredient itemInput, ChemicalStackIngredient chemicalInput, ItemStack output) {
-        super();
+    public InfinityOreReprocessingRecipe(ResourceLocation id, ItemStackIngredient itemInput, ChemicalStackIngredient.GasStackIngredient chemicalInput, ItemStack output) {
+        super(id);
         this.itemInput = Objects.requireNonNull(itemInput, "Item input cannot be null.");
         this.chemicalInput = Objects.requireNonNull(chemicalInput, "Chemical input cannot be null.");
         Objects.requireNonNull(output, "Output cannot be null.");
@@ -41,14 +40,6 @@ public abstract class InfinityOreReprocessingRecipe extends MekanismRecipe<Fluid
             throw new IllegalArgumentException("Output cannot be empty.");
         }
         this.output = output.copy();
-    }
-
-    public void setId(ResourceLocation id) {
-        this.id = id;
-    }
-
-    public ResourceLocation getId() {
-        return id;
     }
 
     /**
@@ -61,7 +52,7 @@ public abstract class InfinityOreReprocessingRecipe extends MekanismRecipe<Fluid
     /**
      * Gets the input chemical ingredient.
      */
-    public ChemicalStackIngredient getChemicalInput() {
+    public ChemicalStackIngredient.GasStackIngredient getChemicalInput() {
         return chemicalInput;
     }
 
@@ -71,17 +62,14 @@ public abstract class InfinityOreReprocessingRecipe extends MekanismRecipe<Fluid
      * @param itemInput     Specific item input.
      * @param chemicalInput Specific chemical input.
      * @return New output.
-     * @apiNote While Mekanism does not currently make use of the inputs, it is important to support them and pass the proper values in case any addons define
-     * input based outputs where things like NBT may be different.
-     * @implNote The passed in inputs should <strong>NOT</strong> be modified.
      */
     @Contract(value = "_, _ -> new", pure = true)
-    public ItemStack getOutput(ItemStack itemInput, ChemicalStack chemicalInput) {
+    public ItemStack getOutput(ItemStack itemInput, GasStack chemicalInput) {
         return output.copy();
     }
 
     @Override
-    public boolean test(ItemStack itemStack, ChemicalStack chemicalStack) {
+    public boolean test(ItemStack itemStack, GasStack chemicalStack) {
         return itemInput.test(itemStack) && chemicalInput.test(chemicalStack);
     }
 
@@ -99,9 +87,10 @@ public abstract class InfinityOreReprocessingRecipe extends MekanismRecipe<Fluid
         return itemInput.hasNoMatchingInstances() || chemicalInput.hasNoMatchingInstances();
     }
 
-    public void write(RegistryFriendlyByteBuf buffer) {
-        ItemStackIngredient.STREAM_CODEC.encode(buffer, itemInput);
-        ChemicalStackIngredient.STREAM_CODEC.encode(buffer, chemicalInput);
-        ItemStack.STREAM_CODEC.encode(buffer, output);
+    @Override
+    public void write(FriendlyByteBuf buffer) {
+        itemInput.write(buffer);
+        chemicalInput.write(buffer);
+        buffer.writeItem(output);
     }
 }

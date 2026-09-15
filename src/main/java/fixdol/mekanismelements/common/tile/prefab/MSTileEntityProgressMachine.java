@@ -1,30 +1,33 @@
 package fixdol.mekanismelements.common.tile.prefab;
 
-import mekanism.api.Upgrade;
-import net.minecraft.core.Holder;
+import mekanism.api.providers.IBlockProvider;
+
 import net.minecraft.world.level.block.Block;
-import mekanism.api.recipes.MekanismRecipe;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import mekanism.api.recipes.cache.CachedRecipe;
+import net.minecraft.network.chat.Component;
+import net.minecraft.nbt.CompoundTag;
 import mekanism.common.integration.computer.annotation.ComputerMethod;
+import net.minecraft.core.Holder;
+import java.util.List;
+import fixdol.mekanismelements.common.tile.prefab.MSTileEntityProgressMachine;
+import mekanism.api.recipes.MekanismRecipe;
+import mekanism.common.util.MekanismUtils;
+import org.jetbrains.annotations.NotNull;
+import mekanism.api.Upgrade;
+import mekanism.common.util.UpgradeUtils;
+
 import mekanism.common.inventory.container.MekanismContainer;
 import mekanism.common.inventory.container.sync.SyncableInt;
-import mekanism.common.util.MekanismUtils;
-import mekanism.common.util.UpgradeUtils;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 
-public abstract class MSTileEntityProgressMachine<RECIPE extends MekanismRecipe<?>> extends MSTileEntityRecipeMachine<RECIPE> {
+public abstract class MSTileEntityProgressMachine<RECIPE extends MekanismRecipe> extends MSTileEntityRecipeMachine<RECIPE> {
     public int ticksRequired;
     protected int baseTicksRequired;
     private int operatingTicks;
 
-    protected MSTileEntityProgressMachine(Holder<Block> blockProvider, BlockPos pos, BlockState state, List<CachedRecipe.OperationTracker.RecipeError> errorTypes, int baseTicksRequired) {
+    protected MSTileEntityProgressMachine(IBlockProvider blockProvider, BlockPos pos, BlockState state, List<CachedRecipe.OperationTracker.RecipeError> errorTypes, int baseTicksRequired) {
         super(blockProvider, pos, state, errorTypes);
         this.baseTicksRequired = baseTicksRequired;
         ticksRequired = this.baseTicksRequired;
@@ -54,14 +57,14 @@ public abstract class MSTileEntityProgressMachine<RECIPE extends MekanismRecipe<
     }
 
     @Override
-    public void loadAdditional(@NotNull CompoundTag nbt, @NotNull HolderLookup.Provider provider) {
-        super.loadAdditional(nbt, provider);
+    public void load(@NotNull CompoundTag nbt) {
+        super.load(nbt);
         operatingTicks = nbt.getInt("progress");
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag nbtTags, @NotNull HolderLookup.Provider provider) {
-        super.saveAdditional(nbtTags, provider);
+    public void saveAdditional(@NotNull CompoundTag nbtTags) {
+        super.saveAdditional(nbtTags);
         nbtTags.putInt("progress", getOperatingTicks());
     }
 

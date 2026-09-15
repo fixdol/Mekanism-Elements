@@ -1,0 +1,20 @@
+{
+  "type": "mekanismelements:chemical_demolition",
+  "chemicalInput": {
+    "amount": 1,
+    "gas": "mekanismelements:seawater"
+  },
+  "itemInput": {
+    "ingredient": {
+      "item": "minecraft:totem_of_undying"
+    }
+  },
+  "mainOutput": {
+    "count": 20,
+    "item": "minecraft:emerald"
+  },
+  "secondaryOutput": {
+    "count": 7,
+    "item": "minecraft:enchanted_golden_apple"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "mekanismelements:infinity_ore_reprocessing",
+  "chemicalInput": {
+    "amount": 9500,
+    "gas": "mekanismelements:seawater"
+  },
+  "itemInput": {
+    "ingredient": {
+      "item": "mekanismelements:ingot_beryllium"
+    }
+  },
+  "output": {
+    "count": 16,
+    "item": "mekanismelements:dust_beryllium"
+  }
+}

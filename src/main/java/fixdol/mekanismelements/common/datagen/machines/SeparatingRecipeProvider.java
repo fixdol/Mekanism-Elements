@@ -1,25 +1,29 @@
-package fixdol.mekanismelements.datagen.machines;
+package fixdol.mekanismelements.common.datagen.machines;
 
-import fixdol.mekanismelements.common.MekanismElements;
+import java.util.function.Consumer;
+import net.minecraft.data.recipes.FinishedRecipe;
+import mekanism.api.chemical.gas.GasStack;
+import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
 import fixdol.mekanismelements.common.registries.MSFluids;
 import fixdol.mekanismelements.common.registries.MSGases;
-import mekanism.api.chemical.ChemicalStack;
-import mekanism.api.datagen.recipe.builder.ElectrolysisRecipeBuilder;
-import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
-import mekanism.common.registries.MekanismChemicals;
-import net.minecraft.data.recipes.RecipeOutput;
+import fixdol.mekanismelements.common.MekanismElements;
+import mekanism.common.registries.MekanismGases;
 import net.minecraft.resources.ResourceLocation;
+import fixdol.mekanismelements.common.datagen.machines.SeparatingRecipeProvider;
+
+
+import mekanism.api.datagen.recipe.builder.ElectrolysisRecipeBuilder;
 
 public class SeparatingRecipeProvider {
 
-    public static void buildRecipes(RecipeOutput recipeOutput) {
+    public static void buildRecipes(Consumer<FinishedRecipe> recipeOutput) {
         String basePath = "separating/";
 
         // Potassium Chloride (fluid, 2 mB) -> Potassium Hydroxide (left, 2 mB) + Chlorine (right, 1 mB)
         ElectrolysisRecipeBuilder.separating(
-                IngredientCreatorAccess.fluid().from(MSFluids.POTASSIUM_CHLORIDE.get(), 2),
-                new ChemicalStack(MSGases.POTASSIUM_HYDROXIDE.get().getAsHolder(), 2),
-                new ChemicalStack(MekanismChemicals.CHLORINE.get().getAsHolder(), 1)
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "potassium_chloride"));
+                IngredientCreatorAccess.fluid().from(MSFluids.POTASSIUM_CHLORIDE.getFluid(), 2),
+                new GasStack(MSGases.POTASSIUM_HYDROXIDE.get(), 2),
+                new GasStack(MekanismGases.CHLORINE.get(), 1)
+        ).build(recipeOutput, new ResourceLocation(MekanismElements.MODID, basePath + "potassium_chloride"));
     }
 }

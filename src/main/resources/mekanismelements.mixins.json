@@ -3,14 +3,12 @@
   "minVersion": "0.8",
   "package": "fixdol.mekanismelements.mixin",
   "refmap": "mekanismelements.refmap.json",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "JAVA_17",
   "mixins": [
     "MixinTileEntityChemicalInfuser",
-    "MixinTileEntityGasGenerator",
     "MixinClientTickHandler",
-    "MixinCommonPlayerTickHandler",
-    "MixinComponentBackedChemicalTank",
     "MixinItemChemicalArmor",
+    "MixinItemGasArmor",
     "MixinItemJetpack",
     "MixinItemMekaSuitArmor",
     "MixinModuleJetpackUnit"

@@ -1,0 +1,12 @@
+{
+  "type": "mekanism:oxidizing",
+  "input": {
+    "ingredient": {
+      "item": "mekanism:substrate"
+    }
+  },
+  "output": {
+    "amount": 100,
+    "gas": "mekanismelements:methane"
+  }
+}

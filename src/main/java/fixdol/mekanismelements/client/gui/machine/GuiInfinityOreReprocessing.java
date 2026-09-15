@@ -1,12 +1,11 @@
 package fixdol.mekanismelements.client.gui.machine;
 
-import fixdol.mekanismelements.client.MSJEIRecipeType;
 import fixdol.mekanismelements.common.tile.machine.TileEntityInfinityOreReprocessing;
 import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.client.gui.GuiConfigurableTile;
 import mekanism.client.gui.element.bar.GuiVerticalPowerBar;
 import mekanism.client.gui.element.gauge.GaugeType;
-import mekanism.client.gui.element.gauge.GuiChemicalGauge;
+import mekanism.client.gui.element.gauge.GuiGasGauge;
 import mekanism.client.gui.element.progress.GuiProgress;
 import mekanism.client.gui.element.progress.ProgressType;
 import mekanism.client.gui.element.tab.GuiEnergyTab;
@@ -28,10 +27,10 @@ public class GuiInfinityOreReprocessing extends GuiConfigurableTile<TileEntityIn
     @Override
     protected void addGuiElements() {
         super.addGuiElements();
-        addRenderableWidget(new GuiChemicalGauge(() -> tile.chemicalInputTank, () -> tile.getChemicalTanks(null), GaugeType.STANDARD, this, 42, 13))
+        addRenderableWidget(new GuiGasGauge(() -> tile.chemicalInputTank, () -> tile.getGasTanks(null), GaugeType.STANDARD, this, 42, 13))
                 .warning(WarningTracker.WarningType.NO_MATCHING_RECIPE, tile.getWarningCheck(CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_INPUT));
         addRenderableWidget(new GuiProgress(tile::getScaledProgress, ProgressType.LARGE_RIGHT, this, 64, 40)
-                .recipeViewerCategories(MSJEIRecipeType.INFINITY_ORE_REPROCESSING))
+                .jeiCategories(fixdol.mekanismelements.client.MSJEIRecipeType.INFINITY_ORE_REPROCESSING))
                 .warning(WarningTracker.WarningType.INPUT_DOESNT_PRODUCE_OUTPUT, tile.getWarningCheck(CachedRecipe.OperationTracker.RecipeError.INPUT_DOESNT_PRODUCE_OUTPUT));
         addRenderableWidget(new GuiVerticalPowerBar(this, tile.getEnergyContainer(), 164, 15))
                 .warning(WarningTracker.WarningType.NOT_ENOUGH_ENERGY, tile.getWarningCheck(CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_ENERGY))

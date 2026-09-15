@@ -1,0 +1,19 @@
+{
+  "type": "mekanism:rotary",
+  "fluidInput": {
+    "amount": 1,
+    "fluid": "mekanismelements:potassium_cyanide"
+  },
+  "fluidOutput": {
+    "amount": 1,
+    "fluid": "mekanismelements:potassium_cyanide"
+  },
+  "gasInput": {
+    "amount": 1,
+    "gas": "mekanismelements:potassium_cyanide"
+  },
+  "gasOutput": {
+    "amount": 1,
+    "gas": "mekanismelements:potassium_cyanide"
+  }
+}

@@ -1,53 +1,59 @@
 package fixdol.mekanismelements.common.tile.machine;
 
-import mekanism.common.tile.component.config.ConfigInfo;
-import fixdol.mekanismelements.common.registries.MSBlocks;
-import fixdol.mekanismelements.common.registries.MSFluids;
-import mekanism.api.*;
-import mekanism.common.capabilities.Capabilities;
-import mekanism.common.capabilities.energy.MachineEnergyContainer;
+import mekanism.common.tile.component.TileComponentConfig;
+
+import mekanism.api.IConfigurable;
+
+import mekanism.api.math.FloatingLong;
+
+import mekanism.api.Action;
+import mekanism.api.AutomationType;
 import mekanism.common.capabilities.fluid.BasicFluidTank;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.network.chat.Component;
+import net.minecraft.nbt.CompoundTag;
+import mekanism.common.tile.component.config.ConfigInfo;
+import net.minecraft.core.Direction;
 import mekanism.common.capabilities.holder.energy.EnergyContainerHelper;
-import mekanism.common.capabilities.holder.energy.IEnergyContainerHolder;
+import mekanism.common.inventory.slot.EnergyInventorySlot;
+import net.minecraftforge.fluids.FluidStack;
 import mekanism.common.capabilities.holder.fluid.FluidTankHelper;
+import mekanism.api.IContentsListener;
+import mekanism.common.capabilities.holder.energy.IEnergyContainerHolder;
 import mekanism.common.capabilities.holder.fluid.IFluidTankHolder;
 import mekanism.common.capabilities.holder.slot.IInventorySlotHolder;
+import net.minecraft.world.InteractionResult;
 import mekanism.common.capabilities.holder.slot.InventorySlotHelper;
-import mekanism.common.capabilities.resolver.BasicCapabilityResolver;
-import mekanism.common.integration.computer.SpecialComputerMethodWrapper;
-import mekanism.common.integration.computer.annotation.WrappingComputerMethod;
-import mekanism.common.inventory.slot.EnergyInventorySlot;
-import mekanism.common.inventory.slot.FluidInventorySlot;
+import java.util.List;
+import fixdol.mekanismelements.common.registries.MSBlocks;
+import fixdol.mekanismelements.common.registries.MSFluids;
+import mekanism.common.capabilities.energy.MachineEnergyContainer;
+import mekanism.common.util.MekanismUtils;
+import javax.annotation.Nonnull;
+import org.jetbrains.annotations.Nullable;
 import mekanism.common.inventory.slot.OutputInventorySlot;
-import mekanism.common.lib.transmitter.TransmissionType;
-import mekanism.common.tile.component.TileComponentConfig;
+import net.minecraft.world.entity.player.Player;
+import mekanism.api.RelativeSide;
+import mekanism.common.integration.computer.SpecialComputerMethodWrapper;
 import mekanism.common.tile.component.TileComponentEjector;
 import mekanism.common.tile.prefab.TileEntityConfigurableMachine;
-import mekanism.common.util.FluidUtils;
-import mekanism.common.util.MekanismUtils;
+import fixdol.mekanismelements.common.tile.machine.TileEntitySeawaterPump;
+import mekanism.common.lib.transmitter.TransmissionType;
+import mekanism.api.Upgrade;
 import mekanism.common.util.UpgradeUtils;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.tags.BiomeTags;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
-import org.jetbrains.annotations.Nullable;
+import mekanism.common.integration.computer.annotation.WrappingComputerMethod;
 
-import javax.annotation.Nonnull;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import mekanism.common.capabilities.resolver.BasicCapabilityResolver;
+import mekanism.common.inventory.slot.FluidInventorySlot;
+import mekanism.common.util.FluidUtils;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.world.level.material.Fluids;
+
 
 public class TileEntitySeawaterPump extends TileEntityConfigurableMachine implements IConfigurable {
     private static final int BASE_TICKS_REQUIRED = 19;
-    public static final FluidStack SEAWATER_STACK = new FluidStack(MSFluids.SEAWATER.get(), 200);
+    public static final FluidStack SEAWATER_STACK = new FluidStack(MSFluids.SEAWATER.getFluid(), 200);
 
     @WrappingComputerMethod(wrapper = SpecialComputerMethodWrapper.ComputerFluidTankWrapper.class, methodNames = {"getFluid", "getFluidCapacity", "getFluidNeeded", "getFluidFilledPercentage"}, docPlaceholder = "buffer tank")
     public BasicFluidTank fluidTank;
@@ -68,6 +74,7 @@ public class TileEntitySeawaterPump extends TileEntityConfigurableMachine implem
 
     public TileEntitySeawaterPump(BlockPos pos, BlockState state) {
         super(MSBlocks.SEAWATER_PUMP, pos, state);
+        configComponent = new TileComponentConfig(this, mekanism.common.lib.transmitter.TransmissionType.ITEM, mekanism.common.lib.transmitter.TransmissionType.FLUID, mekanism.common.lib.transmitter.TransmissionType.ENERGY);
         // Config is created from block attributes in parent constructor
         getConfig().setupItemIOConfig(List.of(inputSlot),List.of(outputSlot),energySlot,true);
         
@@ -89,9 +96,9 @@ public class TileEntitySeawaterPump extends TileEntityConfigurableMachine implem
 
         ejectorComponent = new TileComponentEjector(this);
         ejectorComponent.setOutputData(getConfig(),TransmissionType.ITEM)
-                .setCanEject(type -> canFunction());
+                .setCanEject(type -> MekanismUtils.canFunction(this));
         ejectorComponent.setOutputData(getConfig(),TransmissionType.FLUID)
-                .setCanEject(type -> canFunction());
+                .setCanEject(type -> MekanismUtils.canFunction(this));
     }
 
     @Override
@@ -128,8 +135,8 @@ public class TileEntitySeawaterPump extends TileEntityConfigurableMachine implem
     }
 
     @Override
-    protected boolean onUpdateServer() {
-        boolean needsUpdate = super.onUpdateServer();
+    protected void onUpdateServer() {
+        super.onUpdateServer();
         if (this.getLevel().getBiome(this.getBlockPos()).is(BiomeTags.IS_OCEAN)) {
             BlockPos belowPos = this.getBlockPos().below();
             BlockState belowState = this.getLevel().getBlockState(belowPos);
@@ -138,10 +145,10 @@ public class TileEntitySeawaterPump extends TileEntityConfigurableMachine implem
                 energySlot.fillContainerOrConvert();
                 inputSlot.drainTank(outputSlot);
 
-                if (canFunction() && SEAWATER_STACK.getAmount() <= fluidTank.getNeeded()) {
-                    long energyPerTick = energyContainer.getEnergyPerTick();
+                if (MekanismUtils.canFunction(this) && SEAWATER_STACK.getAmount() <= fluidTank.getNeeded()) {
+                    FloatingLong energyPerTick = energyContainer.getEnergyPerTick();
 
-                    if (energyContainer.extract(energyPerTick, Action.SIMULATE, AutomationType.INTERNAL) == energyPerTick) {
+                    if (energyContainer.extract(energyPerTick, Action.SIMULATE, AutomationType.INTERNAL).equals(energyPerTick)) {
                         operatingTicks++;
 
                         if (operatingTicks >= ticksRequired) {
@@ -153,26 +160,21 @@ public class TileEntitySeawaterPump extends TileEntityConfigurableMachine implem
                 }
                 if (!fluidTank.isEmpty()) {
                     int emitRate = (int)(256L * (1 + upgradeComponent.getUpgrades(Upgrade.SPEED)));
-                    if (level instanceof net.minecraft.server.level.ServerLevel serverLevel) {
-                        BlockCapabilityCache<net.neoforged.neoforge.fluids.capability.IFluidHandler, net.minecraft.core.Direction> cache = 
-                            mekanism.common.capabilities.Capabilities.FLUID.createCache(serverLevel, getBlockPos().relative(Direction.UP), Direction.DOWN);
-                        FluidUtils.emit(Collections.singletonList(cache), fluidTank, emitRate);
-                    }
+                    FluidUtils.emit(java.util.Collections.singleton(Direction.UP), fluidTank, this, emitRate);
                 }
             }
         }
-        return needsUpdate;
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundTag nbtTags, @Nonnull HolderLookup.Provider provider) {
-        super.saveAdditional(nbtTags, provider);
+    public void saveAdditional(@Nonnull CompoundTag nbtTags) {
+        super.saveAdditional(nbtTags);
         nbtTags.putInt("progress", operatingTicks);
     }
 
     @Override
-    public void loadAdditional(@Nonnull CompoundTag nbt, @Nonnull HolderLookup.Provider provider) {
-        super.loadAdditional(nbt, provider);
+    public void load(@Nonnull CompoundTag nbt) {
+        super.load(nbt);
 
         operatingTicks = nbt.getInt("progress");
     }

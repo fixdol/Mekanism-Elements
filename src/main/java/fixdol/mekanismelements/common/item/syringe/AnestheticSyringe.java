@@ -1,8 +1,10 @@
 package fixdol.mekanismelements.common.item.syringe;
 
+import fixdol.mekanismelements.common.item.syringe.AnestheticSyringe;
 import fixdol.mekanismelements.common.registries.MSEffects;
-import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
+
+import net.minecraft.core.Holder;
 
 public class AnestheticSyringe extends DrugSyringe {
     public AnestheticSyringe(Properties properties) {
@@ -10,8 +12,8 @@ public class AnestheticSyringe extends DrugSyringe {
     }
 
     @Override
-    protected Holder<MobEffect> getEffectType() {
-        return MSEffects.SENSORY_PARALYSIS;
+    protected MobEffect getEffectType() {
+        return MSEffects.SENSORY_PARALYSIS.get();
     }
 
     @Override
