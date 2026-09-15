@@ -1,0 +1,15 @@
+{
+  "type": "mekanism:chemical_infusing",
+  "leftInput": {
+    "amount": 10,
+    "gas": "mekanismelements:ammonium_nitrate"
+  },
+  "output": {
+    "amount": 10,
+    "gas": "mekanismelements:ammonium_nitrate_solution"
+  },
+  "rightInput": {
+    "amount": 1,
+    "gas": "mekanism:water_vapor"
+  }
+}

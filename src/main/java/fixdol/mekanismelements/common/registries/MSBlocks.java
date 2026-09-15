@@ -1,23 +1,33 @@
 package fixdol.mekanismelements.common.registries;
 
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.BlockItem;
+import fixdol.mekanismelements.common.registries.MSBlocks;
 import fixdol.mekanismelements.common.MekanismElements;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.StairBlock;
+import java.util.function.Supplier;
+import fixdol.mekanismelements.common.tile.machine.TileEntityAdsorptionSeparator;
+import fixdol.mekanismelements.common.tile.machine.TileEntityAirCompressor;
+import fixdol.mekanismelements.common.tile.machine.TileEntityChemicalDemolitionMachine;
+import fixdol.mekanismelements.common.tile.machine.TileEntityInfinityOreReprocessing;
+import fixdol.mekanismelements.common.tile.machine.TileEntityRadiationIrradiator;
+import fixdol.mekanismelements.common.tile.machine.TileEntitySeawaterPump;
+
 import fixdol.mekanismelements.common.content.blocktype.MSMachine;
 import fixdol.mekanismelements.common.tile.machine.*;
 import mekanism.common.block.interfaces.IHasDescription;
 import mekanism.common.block.prefab.BlockTile;
 import mekanism.common.item.block.ItemBlockTooltip;
-import mekanism.common.item.block.ItemBlockTooltip;
 import mekanism.common.registration.impl.BlockDeferredRegister;
 import mekanism.common.registration.impl.BlockRegistryObject;
 import mekanism.common.resource.BlockResourceInfo;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 
-import java.util.function.Supplier;
 
 import static net.minecraft.world.item.Items.registerBlock;
 
@@ -120,25 +130,25 @@ public class MSBlocks {
         BROWN_HIGH_QUALITY_CONCRETE = BUILDING_BLOCKS.register("brown_high_quality_concrete", () -> new Block(BlockBehaviour.Properties.of().mapColor(DyeColor.BROWN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
         PINK_HIGH_QUALITY_CONCRETE = BUILDING_BLOCKS.register("pink_high_quality_concrete", () -> new Block(BlockBehaviour.Properties.of().mapColor(DyeColor.PINK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
 
-        HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("high_quality_concrete_stairs", () -> new StairBlock(HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.LIGHT_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        AQUA_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("aqua_high_quality_concrete_stairs", () -> new StairBlock(AQUA_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        BLACK_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("black_high_quality_concrete_stairs", () -> new StairBlock(BLACK_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.BLACK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        BLUE_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("blue_high_quality_concrete_stairs", () -> new StairBlock(BLUE_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.BLUE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        GREEN_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("green_high_quality_concrete_stairs", () -> new StairBlock(GREEN_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.GREEN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        CYAN_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("cyan_high_quality_concrete_stairs", () -> new StairBlock(CYAN_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.CYAN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        DARK_RED_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("dark_red_high_quality_concrete_stairs", () -> new StairBlock(DARK_RED_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.RED).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        PURPLE_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("purple_high_quality_concrete_stairs", () -> new StairBlock(PURPLE_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.PURPLE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        ORANGE_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("orange_high_quality_concrete_stairs", () -> new StairBlock(ORANGE_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.ORANGE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        LIGHT_GRAY_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("light_gray_high_quality_concrete_stairs", () -> new StairBlock(LIGHT_GRAY_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.LIGHT_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        GRAY_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("gray_high_quality_concrete_stairs", () -> new StairBlock(GRAY_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        LIGHT_BLUE_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("light_blue_high_quality_concrete_stairs", () -> new StairBlock(LIGHT_BLUE_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        LIME_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("lime_high_quality_concrete_stairs", () -> new StairBlock(LIME_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.LIME).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        RED_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("red_high_quality_concrete_stairs", () -> new StairBlock(RED_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.RED).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        MAGENTA_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("magenta_high_quality_concrete_stairs", () -> new StairBlock(MAGENTA_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.MAGENTA).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        YELLOW_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("yellow_high_quality_concrete_stairs", () -> new StairBlock(YELLOW_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.YELLOW).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        WHITE_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("white_high_quality_concrete_stairs", () -> new StairBlock(WHITE_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.WHITE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        BROWN_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("brown_high_quality_concrete_stairs", () -> new StairBlock(BROWN_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.BROWN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
-        PINK_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("pink_high_quality_concrete_stairs", () -> new StairBlock(PINK_HIGH_QUALITY_CONCRETE.get().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.PINK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("high_quality_concrete_stairs", () -> new StairBlock(HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.LIGHT_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        AQUA_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("aqua_high_quality_concrete_stairs", () -> new StairBlock(AQUA_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        BLACK_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("black_high_quality_concrete_stairs", () -> new StairBlock(BLACK_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.BLACK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        BLUE_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("blue_high_quality_concrete_stairs", () -> new StairBlock(BLUE_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.BLUE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        GREEN_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("green_high_quality_concrete_stairs", () -> new StairBlock(GREEN_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.GREEN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        CYAN_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("cyan_high_quality_concrete_stairs", () -> new StairBlock(CYAN_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.CYAN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        DARK_RED_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("dark_red_high_quality_concrete_stairs", () -> new StairBlock(DARK_RED_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.RED).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        PURPLE_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("purple_high_quality_concrete_stairs", () -> new StairBlock(PURPLE_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.PURPLE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        ORANGE_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("orange_high_quality_concrete_stairs", () -> new StairBlock(ORANGE_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.ORANGE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        LIGHT_GRAY_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("light_gray_high_quality_concrete_stairs", () -> new StairBlock(LIGHT_GRAY_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.LIGHT_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        GRAY_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("gray_high_quality_concrete_stairs", () -> new StairBlock(GRAY_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        LIGHT_BLUE_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("light_blue_high_quality_concrete_stairs", () -> new StairBlock(LIGHT_BLUE_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        LIME_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("lime_high_quality_concrete_stairs", () -> new StairBlock(LIME_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.LIME).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        RED_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("red_high_quality_concrete_stairs", () -> new StairBlock(RED_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.RED).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        MAGENTA_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("magenta_high_quality_concrete_stairs", () -> new StairBlock(MAGENTA_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.MAGENTA).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        YELLOW_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("yellow_high_quality_concrete_stairs", () -> new StairBlock(YELLOW_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.YELLOW).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        WHITE_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("white_high_quality_concrete_stairs", () -> new StairBlock(WHITE_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.WHITE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        BROWN_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("brown_high_quality_concrete_stairs", () -> new StairBlock(BROWN_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.BROWN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
+        PINK_HIGH_QUALITY_CONCRETE_STAIRS = BUILDING_BLOCKS.register("pink_high_quality_concrete_stairs", () -> new StairBlock(PINK_HIGH_QUALITY_CONCRETE.getBlock().defaultBlockState(), BlockBehaviour.Properties.of().mapColor(DyeColor.PINK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
 
         HIGH_QUALITY_CONCRETE_SLABS = BUILDING_BLOCKS.register("high_quality_concrete_slab", () -> new SlabBlock(BlockBehaviour.Properties.of().mapColor(DyeColor.LIGHT_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
         AQUA_HIGH_QUALITY_CONCRETE_SLABS = BUILDING_BLOCKS.register("aqua_high_quality_concrete_slab", () -> new SlabBlock(BlockBehaviour.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 1200.0F)));
@@ -175,6 +185,6 @@ public class MSBlocks {
 
     private static <BLOCK extends Block & IHasDescription> BlockRegistryObject<BLOCK, ItemBlockTooltip<BLOCK>> registerBlock(String name,
                                                                                                                              Supplier<? extends BLOCK> blockSupplier, Rarity rarity) {
-        return BLOCKS.register(name, blockSupplier, (block, props) -> new ItemBlockTooltip<>(block, props.rarity(rarity)));
+        return BLOCKS.register(name, blockSupplier, block -> new ItemBlockTooltip<>(block, new net.minecraft.world.item.Item.Properties().rarity(rarity)));
     }
 }

@@ -1,50 +1,32 @@
 package fixdol.mekanismelements.common.recipe.impl;
 
+import fixdol.mekanismelements.common.recipe.impl.ChemicalDemolitionIRecipe;
 import fixdol.mekanismelements.api.recipes.ChemicalDemolitionRecipe;
-import fixdol.mekanismelements.common.recipe.MSRecipeType;
-import fixdol.mekanismelements.common.registries.MSBlocks;
-import fixdol.mekanismelements.common.registries.MSRecipeSerializers;
 import mekanism.api.recipes.ingredients.ChemicalStackIngredient;
-import mekanism.api.recipes.ingredients.ItemStackIngredient;
-import mekanism.api.recipes.vanilla_input.ItemChemicalRecipeInput;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import mekanism.api.recipes.ingredients.ItemStackIngredient;
+import fixdol.mekanismelements.common.registries.MSRecipeSerializers;
+import fixdol.mekanismelements.common.recipe.MSRecipeType;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.Level;
+import net.minecraft.resources.ResourceLocation;
+
 
 public class ChemicalDemolitionIRecipe extends ChemicalDemolitionRecipe {
 
-    public ChemicalDemolitionIRecipe(ItemStackIngredient itemInput, ChemicalStackIngredient fluidInput, ItemStack firstOutput, ItemStack secondOutput) {
-        super(itemInput, fluidInput, firstOutput, secondOutput);
+    public ChemicalDemolitionIRecipe(ResourceLocation id, ItemStackIngredient itemInput, ChemicalStackIngredient.GasStackIngredient gasInput, ItemStack firstOutput, ItemStack secondOutput) {
+        super(id, itemInput, gasInput, firstOutput, secondOutput);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public RecipeType<ChemicalDemolitionRecipe> getType() {
-        return MSRecipeType.CHEMICAL_DEMOLITION.get();
+        return (RecipeType<ChemicalDemolitionRecipe>) (RecipeType<?>) MSRecipeType.CHEMICAL_DEMOLITION.get();
     }
 
     @Override
-    public RecipeSerializer<ChemicalDemolitionRecipe> getSerializer() {
-        return MSRecipeSerializers.CHEMICAL_DEMOLITION.get();
-    }
-
-    @Override
-    public String getGroup() {
-        return MSBlocks.ADSORPTION_SEPARATOR.getName();
-    }
-
-    @Override
-    public ItemStack getToastSymbol() {
-        return new ItemStack(MSBlocks.ADSORPTION_SEPARATOR.asItem());
-    }
-
-    @Override
-    public boolean matches(ItemChemicalRecipeInput input, Level level) {
-        if (isIncomplete()) {
-            return false;
-        }
-        return this.test(input.getItem(0), input.getChemical(0));
+    @SuppressWarnings("unchecked")
+    public RecipeSerializer<ChemicalDemolitionIRecipe> getSerializer() {
+        return (RecipeSerializer<ChemicalDemolitionIRecipe>) (RecipeSerializer<?>) MSRecipeSerializers.CHEMICAL_DEMOLITION.get();
     }
 }
-

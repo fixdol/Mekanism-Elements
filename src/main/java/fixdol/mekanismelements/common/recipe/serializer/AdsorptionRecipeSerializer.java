@@ -1,57 +1,82 @@
 package fixdol.mekanismelements.common.recipe.serializer;
 
 import fixdol.mekanismelements.api.recipes.AdsorptionRecipe;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import mekanism.api.SerializationConstants;
-import mekanism.api.chemical.ChemicalStack;
+import fixdol.mekanismelements.common.recipe.serializer.AdsorptionRecipeSerializer;
 import mekanism.api.recipes.ingredients.FluidStackIngredient;
+import net.minecraft.network.FriendlyByteBuf;
+import mekanism.api.chemical.ChemicalStack;
+import mekanism.api.chemical.ChemicalType;
+import mekanism.api.chemical.gas.GasStack;
+import mekanism.api.chemical.infuse.InfusionStack;
+import mekanism.api.chemical.pigment.PigmentStack;
+import mekanism.api.chemical.slurry.SlurryStack;
+import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
 import mekanism.api.recipes.ingredients.ItemStackIngredient;
-import mekanism.common.Mekanism;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.neoforged.neoforge.fluids.FluidStack;
+import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.resources.ResourceLocation;
+
+import mekanism.api.JsonConstants;
+import mekanism.api.SerializerHelper;
+import mekanism.common.Mekanism;
+import net.minecraft.util.GsonHelper;
 
 public class AdsorptionRecipeSerializer<RECIPE extends AdsorptionRecipe> implements RecipeSerializer<RECIPE> {
-    private final AdsorptionRecipeSerializer.IFactory<RECIPE> factory;
-    private final MapCodec<RECIPE> codec;
-    private final StreamCodec<RegistryFriendlyByteBuf, RECIPE> streamCodec;
 
-    public AdsorptionRecipeSerializer(AdsorptionRecipeSerializer.IFactory<RECIPE> factory) {
+    private final IFactory<RECIPE> factory;
+
+    public AdsorptionRecipeSerializer(IFactory<RECIPE> factory) {
         this.factory = factory;
-        this.codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ItemStackIngredient.CODEC.fieldOf(SerializationConstants.ITEM_INPUT).forGetter(AdsorptionRecipe::getItemInput),
-                FluidStackIngredient.CODEC.fieldOf(SerializationConstants.FLUID_INPUT).forGetter(AdsorptionRecipe::getFluidInput),
-                ChemicalStack.CODEC.fieldOf(SerializationConstants.OUTPUT).forGetter(recipe -> recipe.getOutput(ItemStack.EMPTY, FluidStack.EMPTY))
-        ).apply(instance, factory::create));
-        
-        this.streamCodec = StreamCodec.composite(
-                ItemStackIngredient.STREAM_CODEC, AdsorptionRecipe::getItemInput,
-                FluidStackIngredient.STREAM_CODEC, AdsorptionRecipe::getFluidInput,
-                ChemicalStack.STREAM_CODEC, recipe -> recipe.getOutput(ItemStack.EMPTY, FluidStack.EMPTY),
-                factory::create
-        );
+    }
+
+    @NotNull
+    @Override
+    public RECIPE fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
+        ItemStackIngredient itemInput = IngredientCreatorAccess.item().deserialize(GsonHelper.isArrayNode(json, JsonConstants.ITEM_INPUT)
+              ? GsonHelper.getAsJsonArray(json, JsonConstants.ITEM_INPUT)
+              : GsonHelper.getAsJsonObject(json, JsonConstants.ITEM_INPUT));
+        FluidStackIngredient fluidInput = IngredientCreatorAccess.fluid().deserialize(GsonHelper.isArrayNode(json, JsonConstants.FLUID_INPUT)
+              ? GsonHelper.getAsJsonArray(json, JsonConstants.FLUID_INPUT)
+              : GsonHelper.getAsJsonObject(json, JsonConstants.FLUID_INPUT));
+        ChemicalStack<?> output = SerializerHelper.getBoxedChemicalStack(json, JsonConstants.OUTPUT);
+        if (output.isEmpty()) {
+            throw new com.google.gson.JsonSyntaxException("Recipe output must not be empty.");
+        }
+        return this.factory.create(recipeId, itemInput, fluidInput, output);
     }
 
     @Override
-    @NotNull
-    public MapCodec<RECIPE> codec() {
-        return this.codec;
+    public RECIPE fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
+        try {
+            ItemStackIngredient itemInput = IngredientCreatorAccess.item().read(buffer);
+            FluidStackIngredient fluidInput = IngredientCreatorAccess.fluid().read(buffer);
+            ChemicalType chemicalType = buffer.readEnum(ChemicalType.class);
+            ChemicalStack<?> output = switch (chemicalType) {
+                case GAS -> GasStack.readFromPacket(buffer);
+                case INFUSION -> InfusionStack.readFromPacket(buffer);
+                case PIGMENT -> PigmentStack.readFromPacket(buffer);
+                case SLURRY -> SlurryStack.readFromPacket(buffer);
+            };
+            return this.factory.create(recipeId, itemInput, fluidInput, output);
+        } catch (Exception e) {
+            Mekanism.logger.error("Error reading adsorption recipe from packet.", e);
+            throw e;
+        }
     }
 
     @Override
-    @NotNull
-    public StreamCodec<RegistryFriendlyByteBuf, RECIPE> streamCodec() {
-        return this.streamCodec;
+    public void toNetwork(@NotNull FriendlyByteBuf buffer, @NotNull RECIPE recipe) {
+        try {
+            recipe.write(buffer);
+        } catch (Exception e) {
+            Mekanism.logger.error("Error writing adsorption recipe to packet.", e);
+            throw e;
+        }
     }
 
     @FunctionalInterface
     public interface IFactory<RECIPE extends AdsorptionRecipe> {
-        RECIPE create(ItemStackIngredient itemInput, FluidStackIngredient fluidInput, ChemicalStack output);
+        RECIPE create(ResourceLocation id, ItemStackIngredient itemInput, FluidStackIngredient fluidInput, ChemicalStack<?> output);
     }
 }
-

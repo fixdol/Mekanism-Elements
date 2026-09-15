@@ -1,25 +1,28 @@
-package fixdol.mekanismelements.datagen.machines;
+package fixdol.mekanismelements.common.datagen.machines;
 
-import fixdol.mekanismelements.common.MekanismElements;
-import fixdol.mekanismelements.common.registries.MSGases;
-import mekanism.api.chemical.ChemicalStack;
-import mekanism.api.datagen.recipe.builder.ItemStackToChemicalRecipeBuilder;
-import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
-import mekanism.common.registries.MekanismItems;
-import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
+import java.util.function.Consumer;
+import net.minecraft.data.recipes.FinishedRecipe;
+import mekanism.api.chemical.gas.GasStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
+import fixdol.mekanismelements.common.registries.MSGases;
+import fixdol.mekanismelements.common.MekanismElements;
+import mekanism.common.registries.MekanismItems;
+import fixdol.mekanismelements.common.datagen.machines.OxidizingRecipeProvider;
+import net.minecraft.resources.ResourceLocation;
+
+
+import mekanism.api.datagen.recipe.builder.ItemStackToChemicalRecipeBuilder;
 
 public class OxidizingRecipeProvider {
 
-    public static void buildRecipes(RecipeOutput recipeOutput) {
+    public static void buildRecipes(Consumer<FinishedRecipe> recipeOutput) {
         String basePath = "oxidizing/";
 
         // Substrate -> Methane (100 mB)
         ItemStackToChemicalRecipeBuilder.oxidizing(
                 IngredientCreatorAccess.item().from(Ingredient.of(MekanismItems.SUBSTRATE.get())),
-                new ChemicalStack(MSGases.METHANE.get().getAsHolder(), 100)
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "methane"));
+                new GasStack(MSGases.METHANE.get(), 100)
+        ).build(recipeOutput, new ResourceLocation(MekanismElements.MODID, basePath + "methane"));
     }
 }

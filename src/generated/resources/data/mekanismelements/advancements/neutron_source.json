@@ -1,0 +1,38 @@
+{
+  "parent": "mekanism:plutonium",
+  "criteria": {
+    "pellet_neutron_source": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mekanismelements:pellet_neutron_source"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.mekanismelements.neutron_source.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "mekanismelements:pellet_neutron_source"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.mekanismelements.neutron_source.title"
+    }
+  },
+  "requirements": [
+    [
+      "pellet_neutron_source"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

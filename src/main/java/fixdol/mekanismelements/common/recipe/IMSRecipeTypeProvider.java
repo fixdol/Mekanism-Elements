@@ -1,17 +1,20 @@
 package fixdol.mekanismelements.common.recipe;
 
-import mekanism.api.recipes.MekanismRecipe;
-import mekanism.common.recipe.lookup.cache.IInputRecipeCache;
-import net.minecraft.resources.ResourceLocation;
+import fixdol.mekanismelements.common.recipe.IMSRecipeTypeProvider;
 import net.minecraft.world.level.Level;
+import java.util.List;
+import fixdol.mekanismelements.common.recipe.MSRecipeType;
+import mekanism.api.recipes.MekanismRecipe;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 import java.util.function.Predicate;
+import net.minecraft.resources.ResourceLocation;
 import java.util.stream.Stream;
 
-public interface IMSRecipeTypeProvider<RECIPE extends MekanismRecipe<?>, INPUT_CACHE extends IInputRecipeCache>{
+import mekanism.common.recipe.lookup.cache.IInputRecipeCache;
+
+
+public interface IMSRecipeTypeProvider<RECIPE extends MekanismRecipe, INPUT_CACHE extends IInputRecipeCache>{
     default ResourceLocation getRegistryName() {
         return getMSRecipeType().getRegistryName();
     }

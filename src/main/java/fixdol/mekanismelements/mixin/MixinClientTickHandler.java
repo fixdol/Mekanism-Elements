@@ -1,28 +1,27 @@
 package fixdol.mekanismelements.mixin;
 
+import mekanism.common.capabilities.Capabilities;
+import mekanism.api.chemical.gas.GasStack;
+import mekanism.api.chemical.gas.IGasHandler;
+import net.minecraft.world.item.ItemStack;
+import fixdol.mekanismelements.common.registries.MSGases;
+import net.minecraft.client.Minecraft;
+
 import mekanism.client.ClientTickHandler;
 import mekanism.common.item.interfaces.IJetpackItem;
 import mekanism.common.item.interfaces.IJetpackItem.JetpackMode;
-import mekanism.common.capabilities.Capabilities;
-import mekanism.api.chemical.IChemicalHandler;
-import mekanism.api.chemical.ChemicalStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import fixdol.mekanismelements.common.registries.MSGases;
-import mekanism.common.Mekanism;
 
 @Mixin(value = ClientTickHandler.class, remap = false)
 public class MixinClientTickHandler {
 
     @Inject(method = "onTick", at = @At("TAIL"), remap = false)
-    private void onClientTickEnd(net.neoforged.neoforge.client.event.ClientTickEvent.Pre event, CallbackInfo ci) {
+    private void onClientTickEnd(net.minecraftforge.event.TickEvent.ClientTickEvent event, CallbackInfo ci) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
 
@@ -30,13 +29,13 @@ public class MixinClientTickHandler {
         if (!primaryJetpack.isEmpty()) {
             IJetpackItem jetpackItem = (IJetpackItem) primaryJetpack.getItem();
             JetpackMode primaryMode = jetpackItem.getJetpackMode(primaryJetpack);
-            JetpackMode mode = IJetpackItem.getPlayerJetpackMode(player, primaryMode, p -> p.input.jumping);
+            JetpackMode mode = IJetpackItem.getPlayerJetpackMode(player, primaryMode, () -> player.input.jumping);
             
             if (mode == JetpackMode.HOVER) {
-                IChemicalHandler chemicalHandler = Capabilities.CHEMICAL.getCapability(primaryJetpack);
-                if (chemicalHandler != null && chemicalHandler.getChemicalTanks() > 0) {
-                    ChemicalStack stored = chemicalHandler.getChemicalInTank(0);
-                    if (stored.is(MSGases.AMMONIA)) {
+                IGasHandler chemicalHandler = primaryJetpack.getCapability(Capabilities.GAS_HANDLER).resolve().orElse(null);
+                if (chemicalHandler != null && chemicalHandler.getTanks() > 0) {
+                    GasStack stored = chemicalHandler.getChemicalInTank(0);
+                    if (stored.getType() == MSGases.AMMONIA.get()) {
                         Vec3 motion = player.getDeltaMovement();
                         boolean isMoving = player.input.forwardImpulse != 0 || player.input.leftImpulse != 0;
                         if (isMoving) {

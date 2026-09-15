@@ -1,22 +1,26 @@
-package fixdol.mekanismelements.datagen.machines;
+package fixdol.mekanismelements.common.datagen.machines;
 
+import java.util.function.Consumer;
+import fixdol.mekanismelements.common.datagen.machines.EvaporatingRecipeProvider;
+import net.minecraft.data.recipes.FinishedRecipe;
+import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
 import fixdol.mekanismelements.common.MekanismElements;
+import net.minecraft.resources.ResourceLocation;
+
+
 import fixdol.mekanismelements.common.registries.MSFluids;
 import mekanism.api.datagen.recipe.builder.FluidToFluidRecipeBuilder;
-import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
-import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidStack;
 
 public class EvaporatingRecipeProvider {
 
-    public static void buildRecipes(RecipeOutput recipeOutput) {
+    public static void buildRecipes(Consumer<FinishedRecipe> recipeOutput) {
         String basePath = "evaporating/";
 
         // Seawater (fluid, 1 mB) -> Potassium Chloride (fluid, 1 mB)
         FluidToFluidRecipeBuilder.evaporating(
-                IngredientCreatorAccess.fluid().from(MSFluids.SEAWATER.get(), 1),
-                new FluidStack(MSFluids.POTASSIUM_CHLORIDE.get(), 1)
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "potassium_chloride"));
+                IngredientCreatorAccess.fluid().from(MSFluids.SEAWATER.getFluid(), 1),
+                new FluidStack(MSFluids.POTASSIUM_CHLORIDE.getFluid(), 1)
+        ).build(recipeOutput, new ResourceLocation(MekanismElements.MODID, basePath + "potassium_chloride"));
     }
 }

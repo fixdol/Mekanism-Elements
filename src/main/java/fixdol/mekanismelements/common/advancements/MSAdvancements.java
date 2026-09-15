@@ -1,6 +1,7 @@
 package fixdol.mekanismelements.common.advancements;
 
 import fixdol.mekanismelements.common.MekanismElements;
+
 import mekanism.common.advancements.MekanismAdvancement;
 import org.jetbrains.annotations.Nullable;
 

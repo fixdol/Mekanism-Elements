@@ -2,8 +2,9 @@ package fixdol.mekanismelements.common.tier;
 
 import fixdol.mekanismelements.api.IMSTier;
 import fixdol.mekanismelements.api.MSBaseTier;
-import mekanism.common.config.value.CachedLongValue;
 import org.jetbrains.annotations.Nullable;
+
+import mekanism.common.config.value.CachedLongValue;
 
 public enum MSInductionCellTier implements IMSTier {
     TRANSCENDENT(MSBaseTier.TRANSCENDENT, Long.MAX_VALUE);

@@ -1,57 +1,74 @@
 package fixdol.mekanismelements.common.recipe.serializer;
 
 import fixdol.mekanismelements.api.recipes.ChemicalDemolitionRecipe;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import mekanism.api.SerializationConstants;
-import mekanism.api.chemical.ChemicalStack;
+import fixdol.mekanismelements.common.recipe.serializer.ChemicalDemolitionRecipeSerializer;
 import mekanism.api.recipes.ingredients.ChemicalStackIngredient;
-import mekanism.api.recipes.ingredients.ItemStackIngredient;
-import mekanism.common.Mekanism;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeSerializer;
+import mekanism.api.recipes.ingredients.ItemStackIngredient;
+import mekanism.api.JsonConstants;
+import com.google.gson.JsonObject;
+import mekanism.common.Mekanism;
 import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.resources.ResourceLocation;
+import mekanism.api.SerializerHelper;
+
+import com.google.gson.JsonSyntaxException;
 
 public class ChemicalDemolitionRecipeSerializer<RECIPE extends ChemicalDemolitionRecipe> implements RecipeSerializer<RECIPE> {
-    private final ChemicalDemolitionRecipeSerializer.IFactory<RECIPE> factory;
-    private final MapCodec<RECIPE> codec;
-    private final StreamCodec<RegistryFriendlyByteBuf, RECIPE> streamCodec;
 
-    public ChemicalDemolitionRecipeSerializer(ChemicalDemolitionRecipeSerializer.IFactory<RECIPE> factory) {
+    private final IFactory<RECIPE> factory;
+
+    public ChemicalDemolitionRecipeSerializer(IFactory<RECIPE> factory) {
         this.factory = factory;
-        this.codec = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ItemStackIngredient.CODEC.fieldOf(SerializationConstants.ITEM_INPUT).forGetter(ChemicalDemolitionRecipe::getItemInput),
-                ChemicalStackIngredient.CODEC.fieldOf(SerializationConstants.CHEMICAL_INPUT).forGetter(ChemicalDemolitionRecipe::getGasInput),
-                ItemStack.CODEC.fieldOf(SerializationConstants.MAIN_OUTPUT).forGetter(recipe -> recipe.getFirstOutput(ItemStack.EMPTY, ChemicalStack.EMPTY)),
-                ItemStack.CODEC.fieldOf(SerializationConstants.SECONDARY_OUTPUT).forGetter(recipe -> recipe.getSecondOutput(ItemStack.EMPTY, ChemicalStack.EMPTY))
-        ).apply(instance, factory::create));
+    }
 
-        this.streamCodec = StreamCodec.composite(
-                ItemStackIngredient.STREAM_CODEC, ChemicalDemolitionRecipe::getItemInput,
-                ChemicalStackIngredient.STREAM_CODEC, ChemicalDemolitionRecipe::getGasInput,
-                ItemStack.STREAM_CODEC, recipe -> recipe.getFirstOutput(ItemStack.EMPTY, ChemicalStack.EMPTY),
-                ItemStack.STREAM_CODEC, recipe -> recipe.getSecondOutput(ItemStack.EMPTY, ChemicalStack.EMPTY),
-                factory::create
-        );
+    @NotNull
+    @Override
+    public RECIPE fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
+        ItemStackIngredient itemInput = IngredientCreatorAccess.item().deserialize(GsonHelper.isArrayNode(json, JsonConstants.ITEM_INPUT)
+              ? GsonHelper.getAsJsonArray(json, JsonConstants.ITEM_INPUT)
+              : GsonHelper.getAsJsonObject(json, JsonConstants.ITEM_INPUT));
+        ChemicalStackIngredient.GasStackIngredient gasInput = IngredientCreatorAccess.gas().deserialize(GsonHelper.isArrayNode(json, JsonConstants.CHEMICAL_INPUT)
+              ? GsonHelper.getAsJsonArray(json, JsonConstants.CHEMICAL_INPUT)
+              : GsonHelper.getAsJsonObject(json, JsonConstants.CHEMICAL_INPUT));
+        ItemStack firstOutput = SerializerHelper.getItemStack(json, JsonConstants.MAIN_OUTPUT);
+        ItemStack secondOutput = SerializerHelper.getItemStack(json, JsonConstants.SECONDARY_OUTPUT);
+        if (firstOutput.isEmpty() || secondOutput.isEmpty()) {
+            throw new JsonSyntaxException("Recipe outputs must not be empty.");
+        }
+        return this.factory.create(recipeId, itemInput, gasInput, firstOutput, secondOutput);
     }
 
     @Override
-    @NotNull
-    public MapCodec<RECIPE> codec() {
-        return this.codec;
+    public RECIPE fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
+        try {
+            ItemStackIngredient itemInput = IngredientCreatorAccess.item().read(buffer);
+            ChemicalStackIngredient.GasStackIngredient gasInput = IngredientCreatorAccess.gas().read(buffer);
+            ItemStack firstOutput = buffer.readItem();
+            ItemStack secondOutput = buffer.readItem();
+            return this.factory.create(recipeId, itemInput, gasInput, firstOutput, secondOutput);
+        } catch (Exception e) {
+            Mekanism.logger.error("Error reading chemical demolition recipe from packet.", e);
+            throw e;
+        }
     }
 
     @Override
-    @NotNull
-    public StreamCodec<RegistryFriendlyByteBuf, RECIPE> streamCodec() {
-        return this.streamCodec;
+    public void toNetwork(@NotNull FriendlyByteBuf buffer, @NotNull RECIPE recipe) {
+        try {
+            recipe.write(buffer);
+        } catch (Exception e) {
+            Mekanism.logger.error("Error writing chemical demolition recipe to packet.", e);
+            throw e;
+        }
     }
 
     @FunctionalInterface
     public interface IFactory<RECIPE extends ChemicalDemolitionRecipe> {
-        RECIPE create(ItemStackIngredient itemInput, ChemicalStackIngredient gasInput, ItemStack firstOutput, ItemStack secondOutput);
+        RECIPE create(ResourceLocation id, ItemStackIngredient itemInput, ChemicalStackIngredient.GasStackIngredient gasInput, ItemStack firstOutput, ItemStack secondOutput);
     }
 }
-

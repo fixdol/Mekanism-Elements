@@ -1,36 +1,35 @@
 package fixdol.mekanismelements.common.tile.prefab;
 
-import fixdol.mekanismelements.common.recipe.lookup.IMSRecipeLookupHandler;
-import fixdol.mekanismelements.common.recipe.lookup.monitor.MSRecipeCacheLookupMonitor;
-import mekanism.api.IContentsListener;
-import mekanism.api.chemical.Chemical;
-import mekanism.api.chemical.ChemicalStack;
-import mekanism.api.chemical.IChemicalTank;
-import net.minecraft.core.Holder;
-import net.minecraft.world.level.block.Block;
-import mekanism.api.recipes.MekanismRecipe;
-import mekanism.api.recipes.cache.CachedRecipe;
-import mekanism.common.capabilities.heat.CachedAmbientTemperature;
-import mekanism.common.capabilities.holder.chemical.IChemicalTankHolder;
-import mekanism.common.capabilities.holder.energy.IEnergyContainerHolder;
-import mekanism.common.capabilities.holder.fluid.IFluidTankHolder;
-import mekanism.common.capabilities.holder.heat.IHeatCapacitorHolder;
-import mekanism.common.capabilities.holder.slot.IInventorySlotHolder;
-import mekanism.common.inventory.container.MekanismContainer;
-import mekanism.common.tile.base.TileEntityMekanism;
-import mekanism.common.tile.component.TileComponentConfig;
-import mekanism.common.tile.prefab.TileEntityConfigurableMachine;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
+import mekanism.api.providers.IBlockProvider;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import java.util.function.BooleanSupplier;
+import mekanism.api.recipes.cache.CachedRecipe;
+import net.minecraft.core.Holder;
+import mekanism.common.capabilities.holder.chemical.IChemicalTankHolder;
+import mekanism.api.IContentsListener;
+import mekanism.common.capabilities.holder.energy.IEnergyContainerHolder;
+import mekanism.common.capabilities.holder.fluid.IFluidTankHolder;
+import mekanism.common.capabilities.holder.slot.IInventorySlotHolder;
+import fixdol.mekanismelements.common.recipe.lookup.IMSRecipeLookupHandler;
+import java.util.List;
+import mekanism.common.inventory.container.MekanismContainer;
+import mekanism.api.recipes.MekanismRecipe;
+import org.jetbrains.annotations.Nullable;
+import java.util.Set;
+import mekanism.common.tile.prefab.TileEntityConfigurableMachine;
+import mekanism.common.tile.base.TileEntityMekanism;
 
-public abstract class MSTileEntityRecipeMachine<RECIPE extends MekanismRecipe<?>> extends TileEntityConfigurableMachine implements IMSRecipeLookupHandler<RECIPE> {
+import fixdol.mekanismelements.common.recipe.lookup.monitor.MSRecipeCacheLookupMonitor;
+import mekanism.common.capabilities.heat.CachedAmbientTemperature;
+import mekanism.common.capabilities.holder.heat.IHeatCapacitorHolder;
+
+import java.util.concurrent.ThreadLocalRandom;
+
+public abstract class MSTileEntityRecipeMachine<RECIPE extends MekanismRecipe> extends TileEntityConfigurableMachine implements IMSRecipeLookupHandler<RECIPE> {
     public static final int RECIPE_CHECK_FREQUENCY = 100;
 
     protected final BooleanSupplier recheckAllRecipeErrors;
@@ -41,7 +40,7 @@ public abstract class MSTileEntityRecipeMachine<RECIPE extends MekanismRecipe<?>
     @Nullable
     private IContentsListener recipeCacheSaveOnlyListener;
 
-    protected MSTileEntityRecipeMachine(Holder<Block> blockProvider, BlockPos pos, BlockState state, List<CachedRecipe.OperationTracker.RecipeError> errorTypes) {
+    protected MSTileEntityRecipeMachine(IBlockProvider blockProvider, BlockPos pos, BlockState state, List<CachedRecipe.OperationTracker.RecipeError> errorTypes) {
         super(blockProvider, pos, state);
         this.errorTypes = List.copyOf(errorTypes);
         recheckAllRecipeErrors = shouldRecheckAllErrors(this);

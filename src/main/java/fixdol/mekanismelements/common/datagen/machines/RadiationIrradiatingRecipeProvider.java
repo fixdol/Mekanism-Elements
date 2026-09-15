@@ -1,74 +1,80 @@
-package fixdol.mekanismelements.datagen.machines;
+package fixdol.mekanismelements.common.datagen.machines;
 
-import fixdol.mekanismelements.api.recipes.RadiationIrradiatingRecipe;
-import fixdol.mekanismelements.common.MekanismElements;
-import fixdol.mekanismelements.common.recipe.impl.RadiationIrradiatingIRecipe;
+import mekanism.api.recipes.ingredients.ChemicalStackIngredient;
+import java.util.function.Consumer;
+import net.minecraft.data.recipes.FinishedRecipe;
+import mekanism.api.chemical.gas.GasStack;
+import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
+import mekanism.api.recipes.ingredients.ItemStackIngredient;
 import fixdol.mekanismelements.common.registries.MSGases;
 import fixdol.mekanismelements.common.registries.MSItems;
-import mekanism.api.chemical.ChemicalStack;
-import mekanism.api.recipes.ingredients.ChemicalStackIngredient;
-import mekanism.api.recipes.ingredients.ItemStackIngredient;
-import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
-import mekanism.common.registries.MekanismChemicals;
-import mekanism.generators.common.registries.GeneratorsChemicals;
-import net.minecraft.data.recipes.RecipeOutput;
+import fixdol.mekanismelements.common.MekanismElements;
+import mekanism.common.registries.MekanismGases;
+import fixdol.mekanismelements.common.datagen.machines.RadiationIrradiatingRecipeProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.common.crafting.SizedIngredient;
+
+
+import fixdol.mekanismelements.api.recipes.RadiationIrradiatingRecipe;
+import fixdol.mekanismelements.common.recipe.impl.RadiationIrradiatingIRecipe;
+import mekanism.generators.common.registries.GeneratorsGases;
 
 public class RadiationIrradiatingRecipeProvider {
 
     // Llamado directamente desde ModRecipeProvider.buildRecipes()
-    public static void buildRecipes(RecipeOutput output) {
+    public static void buildRecipes(Consumer<FinishedRecipe> output) {
 
         // strontium: 1 uranium_hexafluoride + 1 pellet_neutron_source -> 500 strontium
         addRecipe(output, "strontium",
-                ItemStackIngredient.of(SizedIngredient.of(MSItems.NEUTRON_SOURCE_PELLET.get(), 1)),
-                IngredientCreatorAccess.chemicalStack().fromHolder(MekanismChemicals.URANIUM_HEXAFLUORIDE, 1),
-                new ChemicalStack(MSGases.STRONTIUM.get(), 500)
+                IngredientCreatorAccess.item().from(MSItems.NEUTRON_SOURCE_PELLET.get(), 1),
+                IngredientCreatorAccess.gas().from(MekanismGases.URANIUM_HEXAFLUORIDE.get(), 1),
+                new GasStack(MSGases.STRONTIUM.get(), 500)
         );
 
         // tritium: 4 lithium + 1 pellet_neutron_source -> 500 tritium
         addRecipe(output, "tritium",
-                ItemStackIngredient.of(SizedIngredient.of(MSItems.NEUTRON_SOURCE_PELLET.get(), 1)),
-                IngredientCreatorAccess.chemicalStack().fromHolder(MekanismChemicals.LITHIUM, 4),
-                new ChemicalStack(GeneratorsChemicals.TRITIUM.get(), 500)
+                IngredientCreatorAccess.item().from(MSItems.NEUTRON_SOURCE_PELLET.get(), 1),
+                IngredientCreatorAccess.gas().from(MekanismGases.LITHIUM.get(), 4),
+                new GasStack(GeneratorsGases.TRITIUM.get(), 500)
         );
 
         // americium: 4 plutonium + 1 pellet_neutron_source -> 500 americium
         addRecipe(output, "americium",
-                ItemStackIngredient.of(SizedIngredient.of(MSItems.NEUTRON_SOURCE_PELLET.get(), 1)),
-                IngredientCreatorAccess.chemicalStack().fromHolder(MekanismChemicals.PLUTONIUM, 4),
-                new ChemicalStack(MSGases.AMERICIUM.get(), 500)
+                IngredientCreatorAccess.item().from(MSItems.NEUTRON_SOURCE_PELLET.get(), 1),
+                IngredientCreatorAccess.gas().from(MekanismGases.PLUTONIUM.get(), 4),
+                new GasStack(MSGases.AMERICIUM.get(), 500)
         );
 
         // californium: 4 curium + 5 pellet_neutron_source -> 50 californium
         addRecipe(output, "californium",
-                ItemStackIngredient.of(SizedIngredient.of(MSItems.NEUTRON_SOURCE_PELLET.get(), 5)),
-                IngredientCreatorAccess.chemicalStack().fromHolder(MSGases.CURIUM, 4),
-                new ChemicalStack(MSGases.CALIFORNIUM.get(), 50)
+                IngredientCreatorAccess.item().from(MSItems.NEUTRON_SOURCE_PELLET.get(), 5),
+                IngredientCreatorAccess.gas().from(MSGases.CURIUM.get(), 4),
+                new GasStack(MSGases.CALIFORNIUM.get(), 50)
         );
 
         // nuclear_waste: 4 fissile_fuel + 3 pellet_neutron_source -> 10 nuclear_waste
         addRecipe(output, "nuclear_waste",
-                ItemStackIngredient.of(SizedIngredient.of(MSItems.NEUTRON_SOURCE_PELLET.get(), 3)),
-                IngredientCreatorAccess.chemicalStack().fromHolder(MekanismChemicals.FISSILE_FUEL, 4),
-                new ChemicalStack(MekanismChemicals.NUCLEAR_WASTE.get(), 10)
+                IngredientCreatorAccess.item().from(MSItems.NEUTRON_SOURCE_PELLET.get(), 3),
+                IngredientCreatorAccess.gas().from(MekanismGases.FISSILE_FUEL.get(), 4),
+                new GasStack(MekanismGases.NUCLEAR_WASTE.get(), 10)
         );
 
         // polonium: 4 nuclear_waste + 1 pellet_neutron_source -> 500 polonium
         addRecipe(output, "polonium",
-                ItemStackIngredient.of(SizedIngredient.of(MSItems.NEUTRON_SOURCE_PELLET.get(), 1)),
-                IngredientCreatorAccess.chemicalStack().fromHolder(MekanismChemicals.NUCLEAR_WASTE, 4),
-                new ChemicalStack(MekanismChemicals.POLONIUM.get(), 500)
+                IngredientCreatorAccess.item().from(MSItems.NEUTRON_SOURCE_PELLET.get(), 1),
+                IngredientCreatorAccess.gas().from(MekanismGases.NUCLEAR_WASTE.get(), 4),
+                new GasStack(MekanismGases.POLONIUM.get(), 500)
         );
     }
 
-    private static void addRecipe(RecipeOutput output, String name,
+    private static void addRecipe(Consumer<FinishedRecipe> output, String name,
                                    ItemStackIngredient itemInput,
-                                   ChemicalStackIngredient chemicalInput,
-                                   ChemicalStack chemicalOutput) {
+                                   ChemicalStackIngredient.GasStackIngredient chemicalInput,
+                                   GasStack chemicalOutput) {
         ResourceLocation id = MekanismElements.rl("radiation_irradiating/" + name);
-        RadiationIrradiatingRecipe recipe = new RadiationIrradiatingIRecipe(itemInput, chemicalInput, chemicalOutput);
-        output.accept(id, recipe, null);
+        com.google.gson.JsonObject json = new com.google.gson.JsonObject();
+        json.add(mekanism.api.JsonConstants.ITEM_INPUT, itemInput.serialize());
+        json.add(mekanism.api.JsonConstants.CHEMICAL_INPUT, chemicalInput.serialize());
+        json.add(mekanism.api.JsonConstants.OUTPUT, mekanism.api.SerializerHelper.serializeGasStack(chemicalOutput));
+        output.accept(new fixdol.mekanismelements.common.datagen.MSFinishedRecipe(id, fixdol.mekanismelements.common.registries.MSRecipeSerializers.RADIATION_IRRADIATOR::get, json));
     }
 }

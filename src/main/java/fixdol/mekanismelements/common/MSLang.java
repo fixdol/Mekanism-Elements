@@ -1,6 +1,9 @@
 package fixdol.mekanismelements.common;
 
 import mekanism.api.text.ILangEntry;
+import fixdol.mekanismelements.common.MSLang;
+import fixdol.mekanismelements.common.MekanismElements;
+
 import net.minecraft.Util;
 
 public enum MSLang implements ILangEntry {

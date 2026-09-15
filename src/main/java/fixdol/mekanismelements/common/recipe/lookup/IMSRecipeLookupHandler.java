@@ -1,17 +1,19 @@
 package fixdol.mekanismelements.common.recipe.lookup;
 
-import fixdol.mekanismelements.common.recipe.IMSRecipeTypeProvider;
-import mekanism.api.IContentsListener;
-import mekanism.api.recipes.MekanismRecipe;
 import mekanism.api.recipes.cache.CachedRecipe;
-import mekanism.common.recipe.lookup.cache.IInputRecipeCache;
 import net.minecraft.world.entity.Entity;
+import mekanism.api.IContentsListener;
+import mekanism.common.recipe.lookup.cache.IInputRecipeCache;
+import fixdol.mekanismelements.common.recipe.lookup.IMSRecipeLookupHandler;
+import fixdol.mekanismelements.common.recipe.IMSRecipeTypeProvider;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import mekanism.api.recipes.MekanismRecipe;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface IMSRecipeLookupHandler<RECIPE extends MekanismRecipe<?>> extends IContentsListener {
+import net.minecraft.world.level.block.entity.BlockEntity;
+
+public interface IMSRecipeLookupHandler<RECIPE extends MekanismRecipe> extends IContentsListener {
 
     @Nullable
     default Level getHandlerWorld() {
@@ -43,7 +45,7 @@ public interface IMSRecipeLookupHandler<RECIPE extends MekanismRecipe<?>> extend
     default void clearRecipeErrors(int cacheIndex) {
     }
 
-    interface IMSRecipeTypedLookupHandler<RECIPE extends MekanismRecipe<?>, INPUT_CACHE extends IInputRecipeCache>
+    interface IMSRecipeTypedLookupHandler<RECIPE extends MekanismRecipe, INPUT_CACHE extends IInputRecipeCache>
             extends IMSRecipeLookupHandler<RECIPE> {
 
         @NotNull

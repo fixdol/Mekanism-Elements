@@ -1,8 +1,10 @@
 package fixdol.mekanismelements.common.item.syringe;
 
 import net.minecraft.core.Holder;
+import fixdol.mekanismelements.common.item.syringe.LevitationSyringe;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
+
 
 public class LevitationSyringe extends DrugSyringe{
     public LevitationSyringe(Properties properties) {
@@ -10,7 +12,7 @@ public class LevitationSyringe extends DrugSyringe{
     }
 
     @Override
-    protected Holder<MobEffect> getEffectType() {
+    protected MobEffect getEffectType() {
         return MobEffects.LEVITATION;
     }
 

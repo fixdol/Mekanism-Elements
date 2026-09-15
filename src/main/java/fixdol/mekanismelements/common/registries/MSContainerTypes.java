@@ -1,8 +1,16 @@
 package fixdol.mekanismelements.common.registries;
 
+import fixdol.mekanismelements.common.registries.MSBlocks;
+import fixdol.mekanismelements.common.registries.MSContainerTypes;
 import fixdol.mekanismelements.common.MekanismElements;
-import fixdol.mekanismelements.common.tile.machine.*;
 import mekanism.common.inventory.container.tile.MekanismTileContainer;
+import fixdol.mekanismelements.common.tile.machine.TileEntityAdsorptionSeparator;
+import fixdol.mekanismelements.common.tile.machine.TileEntityAirCompressor;
+import fixdol.mekanismelements.common.tile.machine.TileEntityChemicalDemolitionMachine;
+import fixdol.mekanismelements.common.tile.machine.TileEntityInfinityOreReprocessing;
+import fixdol.mekanismelements.common.tile.machine.TileEntityRadiationIrradiator;
+import fixdol.mekanismelements.common.tile.machine.TileEntitySeawaterPump;
+
 import mekanism.common.registration.impl.ContainerTypeDeferredRegister;
 import mekanism.common.registration.impl.ContainerTypeRegistryObject;
 

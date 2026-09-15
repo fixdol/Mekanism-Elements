@@ -1,9 +1,11 @@
 package fixdol.mekanismelements.common.registries;
 
-import fixdol.mekanismelements.common.MekanismElements;
-import fixdol.mekanismelements.common.gas.MSChemicalConstants;
-import mekanism.common.registration.impl.FluidDeferredRegister;
 import mekanism.common.registration.impl.FluidRegistryObject;
+import fixdol.mekanismelements.common.gas.MSChemicalConstants;
+import fixdol.mekanismelements.common.registries.MSFluids;
+import fixdol.mekanismelements.common.MekanismElements;
+
+import mekanism.common.registration.impl.FluidDeferredRegister;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.level.block.LiquidBlock;
 

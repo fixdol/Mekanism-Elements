@@ -1,17 +1,19 @@
 package fixdol.mekanismelements.common.datagen.providers;
 
-import fixdol.mekanismelements.common.MekanismElements;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraft.world.item.Item;
+import java.util.List;
+import fixdol.mekanismelements.common.datagen.providers.MSItemModelProvider;
+import fixdol.mekanismelements.common.MekanismElements;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
-import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-
-import java.util.List;
 import java.util.Set;
+
+import net.minecraft.world.item.BlockItem;
+import net.minecraftforge.client.model.generators.ItemModelBuilder;
+import net.minecraftforge.client.model.generators.ItemModelProvider;
+
 
 public class MSItemModelProvider extends ItemModelProvider {
 

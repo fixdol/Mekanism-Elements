@@ -1,0 +1,59 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="${issue_tracker}"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/mekanism-elements"
+logoFile="logo.png"
+credits="${mod_authors}"
+authors="${mod_authors}"
+description="${mod_description}"
+
+[[mixins]]
+config="mekanismelements.mixins.json"
+
+[[dependencies.${mod_id}]]
+    modId="forge"
+    mandatory=true
+    versionRange="${forge_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="mekanism"
+    mandatory=true
+    versionRange="${mekanism_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="mekanismgenerators"
+    mandatory=true
+    versionRange="${mekanism_generators_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="patchouli"
+    mandatory=true
+    versionRange="${patchouli_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="jei"
+    mandatory=false
+    versionRange="${jei_version}"
+    ordering="NONE"
+    side="BOTH"

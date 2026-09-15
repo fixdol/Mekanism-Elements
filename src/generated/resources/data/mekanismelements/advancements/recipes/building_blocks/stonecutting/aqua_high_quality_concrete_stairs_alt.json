@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_aqua_high_quality_concrete": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mekanismelements:aqua_high_quality_concrete"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "mekanismelements:stonecutting/aqua_high_quality_concrete_stairs_alt"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_aqua_high_quality_concrete",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mekanismelements:stonecutting/aqua_high_quality_concrete_stairs_alt"
+    ]
+  },
+  "sends_telemetry_event": false
+}

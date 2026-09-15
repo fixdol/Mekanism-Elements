@@ -1,0 +1,19 @@
+{
+  "type": "mekanism:rotary",
+  "fluidInput": {
+    "amount": 1,
+    "fluid": "mekanismelements:compressed_air"
+  },
+  "fluidOutput": {
+    "amount": 1,
+    "fluid": "mekanismelements:compressed_air"
+  },
+  "gasInput": {
+    "amount": 1,
+    "gas": "mekanismelements:compressed_air"
+  },
+  "gasOutput": {
+    "amount": 1,
+    "gas": "mekanismelements:compressed_air"
+  }
+}

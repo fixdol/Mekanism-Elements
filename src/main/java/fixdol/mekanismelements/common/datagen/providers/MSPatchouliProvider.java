@@ -1,21 +1,23 @@
 package fixdol.mekanismelements.common.datagen.providers;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import fixdol.mekanismelements.common.MekanismElements;
+import java.util.ArrayList;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
+import java.util.concurrent.CompletableFuture;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-
-import java.util.ArrayList;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.util.LinkedHashMap;
 import java.util.List;
+import fixdol.mekanismelements.common.datagen.providers.MSPatchouliProvider;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
+import fixdol.mekanismelements.common.MekanismElements;
+import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
+
+
 
 public class MSPatchouliProvider implements DataProvider {
 
@@ -50,16 +52,16 @@ public class MSPatchouliProvider implements DataProvider {
     public MSPatchouliProvider(PackOutput output) {
         this.books = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "patchouli_books");
         this.bookDefinition = output.createPathProvider(PackOutput.Target.DATA_PACK, "patchouli_books");
-        this.recipes = output.createPathProvider(PackOutput.Target.DATA_PACK, "recipe");
+        this.recipes = output.createPathProvider(PackOutput.Target.DATA_PACK, "recipes");
     }
 
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
         List<CompletableFuture<?>> futures = new ArrayList<>();
         futures.add(DataProvider.saveStable(cache, book(),
-              bookDefinition.json(ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, BOOK + "/book"))));
+              bookDefinition.json(new ResourceLocation(MekanismElements.MODID, BOOK + "/book"))));
         futures.add(DataProvider.saveStable(cache, guideBookRecipe(),
-              recipes.json(ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "guide_book"))));
+              recipes.json(new ResourceLocation(MekanismElements.MODID, "guide_book"))));
 
         for (Category category : CATEGORIES) {
             futures.add(save(cache, category(category), LANG + "/categories/" + category.id()));
@@ -83,7 +85,7 @@ public class MSPatchouliProvider implements DataProvider {
 
     private CompletableFuture<?> save(CachedOutput cache, JsonObject json, String path) {
         return DataProvider.saveStable(cache, json,
-              books.json(ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, BOOK + "/" + path)));
+              books.json(new ResourceLocation(MekanismElements.MODID, BOOK + "/" + path)));
     }
 
     private static JsonObject guideBookRecipe() {
@@ -97,13 +99,13 @@ public class MSPatchouliProvider implements DataProvider {
         pattern.add("C  ");
         pattern.add("   ");
 
-        JsonObject components = new JsonObject();
-        components.addProperty("patchouli:book", MekanismElements.MODID + ":" + BOOK);
+        JsonObject nbt = new JsonObject();
+        nbt.addProperty("patchouli:book", MekanismElements.MODID + ":" + BOOK);
 
         JsonObject result = new JsonObject();
-        result.add("components", components);
+        result.addProperty("item", "patchouli:guide_book");
         result.addProperty("count", 1);
-        result.addProperty("id", "patchouli:guide_book");
+        result.add("nbt", nbt);
 
         JsonObject recipe = new JsonObject();
         recipe.addProperty("type", "minecraft:crafting_shaped");
@@ -256,7 +258,7 @@ public class MSPatchouliProvider implements DataProvider {
     }
 
     private static String nameKey(String path) {
-        return (BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, path)) instanceof BlockItem
+        return (BuiltInRegistries.ITEM.get(new ResourceLocation(MekanismElements.MODID, path)) instanceof BlockItem
               ? "block." : "item.") + MekanismElements.MODID + "." + path;
     }
 

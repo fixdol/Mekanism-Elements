@@ -1,14 +1,15 @@
 package fixdol.mekanismelements.common.inventory.slot;
 
-import mekanism.api.AutomationType;
-import mekanism.api.IContentsListener;
-import mekanism.api.annotations.NothingNullByDefault;
-import mekanism.common.inventory.slot.BasicInventorySlot;
+import java.util.function.BiPredicate;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import mekanism.api.annotations.NothingNullByDefault;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.BiPredicate;
+import mekanism.api.AutomationType;
+import mekanism.api.IContentsListener;
+import mekanism.common.inventory.slot.BasicInventorySlot;
+
 import java.util.function.Predicate;
 
 @NothingNullByDefault

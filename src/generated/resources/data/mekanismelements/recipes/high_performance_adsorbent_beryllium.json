@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "mekanism:pellet_antimatter"
+    },
+    "C": {
+      "tag": "forge:ingots/beryllium"
+    },
+    "X": {
+      "item": "mekanismelements:high_performance_adsorbent"
+    }
+  },
+  "pattern": [
+    "ACA",
+    "CXC",
+    "ACA"
+  ],
+  "result": {
+    "item": "mekanismelements:high_performance_adsorbent_beryllium"
+  },
+  "show_notification": true
+}

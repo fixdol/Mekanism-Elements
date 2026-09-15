@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "forge:dusts/lead"
+    },
+    {
+      "item": "minecraft:sand"
+    },
+    {
+      "tag": "forge:dusts/calcium_oxide"
+    }
+  ],
+  "result": {
+    "count": 3,
+    "item": "mekanismelements:powder_high_quality_concrete"
+  }
+}

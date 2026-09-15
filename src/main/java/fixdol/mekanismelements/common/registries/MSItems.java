@@ -1,16 +1,18 @@
 package fixdol.mekanismelements.common.registries;
 
+import mekanism.api.text.EnumColor;
+import net.minecraft.world.item.Item;
+import fixdol.mekanismelements.common.registries.MSItems;
 import fixdol.mekanismelements.common.MekanismElements;
+
 import fixdol.mekanismelements.common.item.IodineTablet;
 import fixdol.mekanismelements.common.item.NeutronSourcePellet;
 import fixdol.mekanismelements.common.item.syringe.AnestheticSyringe;
 import fixdol.mekanismelements.common.item.syringe.FlameRetardantSyringe;
 import fixdol.mekanismelements.common.item.syringe.LevitationSyringe;
-import mekanism.api.text.EnumColor;
 import mekanism.common.registration.impl.ItemDeferredRegister;
 import mekanism.common.registration.impl.ItemRegistryObject;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.Item;
 
 public class MSItems {
     public static final ItemDeferredRegister ITEMS = new ItemDeferredRegister(MekanismElements.MODID);

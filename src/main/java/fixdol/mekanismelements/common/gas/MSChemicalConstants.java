@@ -1,5 +1,7 @@
 package fixdol.mekanismelements.common.gas;
 
+import fixdol.mekanismelements.common.gas.MSChemicalConstants;
+
 import mekanism.common.base.IChemicalConstant;
 
 public enum MSChemicalConstants implements IChemicalConstant {

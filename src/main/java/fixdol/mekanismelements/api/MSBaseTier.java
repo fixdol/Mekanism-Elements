@@ -1,5 +1,7 @@
 package fixdol.mekanismelements.api;
 
+import fixdol.mekanismelements.api.MSBaseTier;
+
 import mekanism.api.SupportsColorMap;
 import mekanism.api.math.MathUtils;
 import net.minecraft.network.chat.TextColor;
@@ -94,10 +96,6 @@ public enum MSBaseTier implements StringRepresentable, SupportsColorMap {
         return name().toLowerCase(Locale.ROOT);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public int getPackedColor() {
         return rgbCode[0] << 16 | rgbCode[1] << 8 | rgbCode[2];
     }

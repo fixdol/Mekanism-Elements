@@ -1,15 +1,17 @@
 package fixdol.mekanismelements.common.datagen.providers;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import fixdol.mekanismelements.common.datagen.providers.ChemLibRecipeProvider;
+import java.util.Map;
 import fixdol.mekanismelements.common.MekanismElements;
-import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import net.minecraft.data.CachedOutput;
+import net.minecraft.data.DataProvider;
+
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class ChemLibRecipeProvider implements DataProvider {
@@ -39,7 +41,7 @@ public class ChemLibRecipeProvider implements DataProvider {
     private final PackOutput.PathProvider recipePath;
 
     public ChemLibRecipeProvider(PackOutput output) {
-        this.recipePath = output.createPathProvider(PackOutput.Target.DATA_PACK, "recipe");
+        this.recipePath = output.createPathProvider(PackOutput.Target.DATA_PACK, "recipes");
     }
 
     @Override
@@ -47,7 +49,7 @@ public class ChemLibRecipeProvider implements DataProvider {
         CompletableFuture<?>[] futures = new CompletableFuture<?>[CRYSTALLIZING.size()];
         int i = 0;
         for (Map.Entry<String, String> entry : CRYSTALLIZING.entrySet()) {
-            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(CHEMLIB, "crystallizing/" + entry.getValue());
+            ResourceLocation id = new ResourceLocation(CHEMLIB, "crystallizing/" + entry.getValue());
             futures[i++] = DataProvider.saveStable(cache, crystallizing(entry.getKey(), entry.getValue()), recipePath.json(id));
         }
         return CompletableFuture.allOf(futures);
@@ -55,20 +57,20 @@ public class ChemLibRecipeProvider implements DataProvider {
 
     private static JsonObject crystallizing(String chemical, String result) {
         JsonObject condition = new JsonObject();
-        condition.addProperty("type", "neoforge:mod_loaded");
+        condition.addProperty("type", "forge:mod_loaded");
         condition.addProperty("modid", CHEMLIB);
         JsonArray conditions = new JsonArray();
         conditions.add(condition);
 
         JsonObject input = new JsonObject();
         input.addProperty("amount", AMOUNT);
-        input.addProperty("chemical", ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, chemical).toString());
+        input.addProperty("chemical", new ResourceLocation(MekanismElements.MODID, chemical).toString());
 
         JsonObject output = new JsonObject();
-        output.addProperty("id", ResourceLocation.fromNamespaceAndPath(CHEMLIB, result).toString());
+        output.addProperty("id", new ResourceLocation(CHEMLIB, result).toString());
 
         JsonObject recipe = new JsonObject();
-        recipe.add("neoforge:conditions", conditions);
+        recipe.add("conditions", conditions);
         recipe.addProperty("type", "mekanism:crystallizing");
         recipe.add("input", input);
         recipe.add("output", output);

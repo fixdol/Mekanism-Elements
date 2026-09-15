@@ -1,12 +1,15 @@
 package fixdol.mekanismelements.client.gui.machine;
 
-import fixdol.mekanismelements.client.MSJEIRecipeType;
-import fixdol.mekanismelements.common.tile.machine.TileEntityAdsorptionSeparator;
+import mekanism.client.gui.element.gauge.GuiMergedChemicalTankGauge;
+
 import mekanism.api.recipes.cache.CachedRecipe;
+import org.jetbrains.annotations.NotNull;
+
+import fixdol.mekanismelements.common.tile.machine.TileEntityAdsorptionSeparator;
 import mekanism.client.gui.GuiConfigurableTile;
 import mekanism.client.gui.element.bar.GuiHorizontalPowerBar;
 import mekanism.client.gui.element.gauge.GaugeType;
-import mekanism.client.gui.element.gauge.GuiChemicalGauge;
+import mekanism.client.gui.element.gauge.GuiGasGauge;
 import mekanism.client.gui.element.gauge.GuiFluidGauge;
 import mekanism.client.gui.element.progress.GuiProgress;
 import mekanism.client.gui.element.progress.ProgressType;
@@ -16,7 +19,6 @@ import mekanism.common.inventory.warning.WarningTracker;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import org.jetbrains.annotations.NotNull;
 
 public class GuiAdsorptionSeparator extends GuiConfigurableTile<TileEntityAdsorptionSeparator, MekanismTileContainer<TileEntityAdsorptionSeparator>> {
     public GuiAdsorptionSeparator(MekanismTileContainer<TileEntityAdsorptionSeparator> container, Inventory inv, Component title) {
@@ -34,10 +36,10 @@ public class GuiAdsorptionSeparator extends GuiConfigurableTile<TileEntityAdsorp
         addRenderableWidget(new GuiEnergyTab(this, tile.getEnergyContainer(), tile::getActive));
         addRenderableWidget(new GuiFluidGauge(() -> tile.inputTank, () -> tile.getFluidTanks(null), GaugeType.MEDIUM, this, 17, 13))
                 .warning(WarningTracker.WarningType.NO_MATCHING_RECIPE, tile.getWarningCheck(CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_SECONDARY_INPUT));
-        addRenderableWidget(new GuiChemicalGauge(() -> tile.chemicalOutputTank, () -> tile.getChemicalTanks(null), GaugeType.STANDARD, this, 131, 13))
+        addRenderableWidget(new GuiMergedChemicalTankGauge<>(() -> tile.outputTank, () -> tile, GaugeType.STANDARD, this, 131, 13))
                 .warning(WarningTracker.WarningType.NO_SPACE_IN_OUTPUT, tile.getWarningCheck(CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_OUTPUT_SPACE));
         addRenderableWidget(new GuiProgress(tile::getScaledProgress, ProgressType.LARGE_RIGHT, this, 64, 40)
-                .recipeViewerCategories(MSJEIRecipeType.ADSORPTION_SEPARATOR))
+                .jeiCategories(fixdol.mekanismelements.client.MSJEIRecipeType.ADSORPTION_SEPARATOR))
                 .warning(WarningTracker.WarningType.INPUT_DOESNT_PRODUCE_OUTPUT, tile.getWarningCheck(CachedRecipe.OperationTracker.RecipeError.INPUT_DOESNT_PRODUCE_OUTPUT));
     }
 

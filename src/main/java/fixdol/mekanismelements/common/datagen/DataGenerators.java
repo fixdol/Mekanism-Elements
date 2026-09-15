@@ -1,9 +1,13 @@
 package fixdol.mekanismelements.common.datagen;
 
+import net.minecraftforge.fml.common.Mod;
+
+import java.util.List;
 import fixdol.mekanismelements.common.MekanismElements;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+
 import fixdol.mekanismelements.common.datagen.providers.LanguageGenerator;
 import fixdol.mekanismelements.common.datagen.providers.ModAdvancementProvider;
-import fixdol.mekanismelements.common.datagen.providers.ModDataMapProvider;
 import fixdol.mekanismelements.common.datagen.providers.ModLootTableProvider;
 import fixdol.mekanismelements.common.datagen.providers.ModRecipeProvider;
 import fixdol.mekanismelements.common.datagen.providers.ChemLibRecipeProvider;
@@ -15,15 +19,12 @@ import fixdol.mekanismelements.common.datagen.providers.MSBlockTagsProvider;
 import fixdol.mekanismelements.common.datagen.providers.MSItemModelProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.data.AdvancementProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.minecraftforge.common.data.ForgeAdvancementProvider;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
 
-import java.util.List;
 
-@EventBusSubscriber(modid = MekanismElements.MODID, bus = EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = MekanismElements.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DataGenerators {
 
     @SubscribeEvent
@@ -32,15 +33,14 @@ public class DataGenerators {
         PackOutput output = generator.getPackOutput();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-        generator.addProvider(event.includeServer(), new ModRecipeProvider(output, event.getLookupProvider()));
-        generator.addProvider(event.includeServer(), new ModLootTableProvider(output, event.getLookupProvider()));
+        generator.addProvider(event.includeServer(), new ModRecipeProvider(output));
+        generator.addProvider(event.includeServer(), new ModLootTableProvider(output));
         MSBlockTagsProvider blockTags = new MSBlockTagsProvider(output, event.getLookupProvider(), existingFileHelper);
         generator.addProvider(event.includeServer(), blockTags);
         generator.addProvider(event.includeServer(), new MSItemTagsProvider(output, event.getLookupProvider(), blockTags.contentsGetter(), existingFileHelper));
         generator.addProvider(event.includeServer(), new MSFluidTagsProvider(output, event.getLookupProvider(), existingFileHelper));
         generator.addProvider(event.includeServer(), new ChemLibRecipeProvider(output));
-        generator.addProvider(event.includeServer(), new AdvancementProvider(output, event.getLookupProvider(), existingFileHelper, List.of(new ModAdvancementProvider())));
-        generator.addProvider(event.includeServer(), new ModDataMapProvider(output, event.getLookupProvider()));
+        generator.addProvider(event.includeServer(), new ForgeAdvancementProvider(output, event.getLookupProvider(), existingFileHelper, List.of(new ModAdvancementProvider())));
 
         // Models and blockstates
         generator.addProvider(event.includeClient(), new MSBlockStateProvider(output, existingFileHelper));

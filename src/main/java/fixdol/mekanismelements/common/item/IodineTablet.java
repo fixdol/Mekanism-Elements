@@ -1,12 +1,14 @@
 package fixdol.mekanismelements.common.item;
 
+import fixdol.mekanismelements.common.item.IodineTablet;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+
 import fixdol.mekanismelements.common.registries.MSEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 
@@ -23,7 +25,7 @@ public class IodineTablet extends Item {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (!level.isClientSide && entity instanceof Player player) {
 
-            MobEffectInstance currentEffect = player.getEffect(MSEffects.RADIATION_RESISTANCE);
+            MobEffectInstance currentEffect = player.getEffect(MSEffects.RADIATION_RESISTANCE.get());
             //player.getCooldowns().addCooldown(this, 3600);
 
             int newDuration;
@@ -33,7 +35,7 @@ public class IodineTablet extends Item {
                 newDuration = BASE_DURATION;
             }
 
-            player.addEffect(new MobEffectInstance(MSEffects.RADIATION_RESISTANCE, newDuration, 0));
+            player.addEffect(new MobEffectInstance(MSEffects.RADIATION_RESISTANCE.get(), newDuration, 0));
 
             player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, REGENERATION_DURATION, REGENERATION_AMPLIFIER));
         }

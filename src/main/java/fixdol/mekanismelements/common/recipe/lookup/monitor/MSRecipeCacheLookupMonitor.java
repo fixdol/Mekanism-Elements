@@ -1,17 +1,21 @@
 package fixdol.mekanismelements.common.recipe.lookup.monitor;
 
-import fixdol.mekanismelements.common.recipe.lookup.IMSRecipeLookupHandler;
-import mekanism.api.IContentsListener;
-import mekanism.api.energy.IEnergyContainer;
-import mekanism.api.recipes.MekanismRecipe;
+import mekanism.api.math.FloatingLong;
+
 import mekanism.api.recipes.cache.CachedRecipe;
-import mekanism.api.recipes.cache.ICachedRecipeHolder;
-import mekanism.common.CommonWorldTickHandler;
-import mekanism.common.recipe.lookup.IRecipeLookupHandler;
+import mekanism.api.IContentsListener;
+import fixdol.mekanismelements.common.recipe.lookup.monitor.MSRecipeCacheLookupMonitor;
+import mekanism.api.recipes.MekanismRecipe;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class MSRecipeCacheLookupMonitor<RECIPE extends MekanismRecipe<?>> implements ICachedRecipeHolder<RECIPE>, IContentsListener {
+import fixdol.mekanismelements.common.recipe.lookup.IMSRecipeLookupHandler;
+import mekanism.api.energy.IEnergyContainer;
+import mekanism.api.recipes.cache.ICachedRecipeHolder;
+import mekanism.common.CommonWorldTickHandler;
+import mekanism.common.recipe.lookup.IRecipeLookupHandler;
+
+public class MSRecipeCacheLookupMonitor<RECIPE extends MekanismRecipe> implements ICachedRecipeHolder<RECIPE>, IContentsListener {
     private final IMSRecipeLookupHandler<RECIPE> handler;
     protected final int cacheIndex;
     protected CachedRecipe<RECIPE> cachedRecipe;
@@ -50,15 +54,15 @@ public class MSRecipeCacheLookupMonitor<RECIPE extends MekanismRecipe<?>> implem
     /**
      * Helper that wraps {@link #updateAndProcess()} inside of a brief check to calculate how much energy actually got used.
      */
-    public long updateAndProcess(IEnergyContainer energyContainer) {
+    public FloatingLong updateAndProcess(IEnergyContainer energyContainer) {
         //Copy this so that if it changes we still have the original amount
-        long prev = energyContainer.getEnergy();
+        FloatingLong prev = energyContainer.getEnergy();
         if (updateAndProcess()) {
             //Update amount of energy that actually got used, as if we are "near" full we may not have performed our max number of operations
-            return prev - energyContainer.getEnergy();
+            return prev.subtract(energyContainer.getEnergy());
         }
-        //If we don't have a cached recipe so didn't process anything at all just return zero
-        return 0;
+        //If we do not have a cached recipe so did not process anything at all just return zero
+        return FloatingLong.ZERO;
     }
 
     public boolean updateAndProcess() {
@@ -70,7 +74,6 @@ public class MSRecipeCacheLookupMonitor<RECIPE extends MekanismRecipe<?>> implem
         if (cachedRecipe != null) {
             if (shouldUnpause) {
                 shouldUnpause = false;
-                cachedRecipe.unpauseErrors();
             }
             cachedRecipe.process();
             return true;

@@ -1,10 +1,11 @@
 package fixdol.mekanismelements.common.datagen.providers;
 
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
-import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
-import net.neoforged.neoforge.client.model.generators.ModelBuilder.FaceRotation;
+
+import net.minecraft.core.Direction;
+import net.minecraftforge.client.model.generators.BlockModelBuilder;
+import net.minecraftforge.client.model.generators.BlockModelProvider;
+import net.minecraftforge.client.model.generators.ModelBuilder.FaceRotation;
 
 public final class MSMachineModels {
 
@@ -14,10 +15,10 @@ public final class MSMachineModels {
     public static BlockModelBuilder adsorptionSeparator(BlockModelProvider models) {
         BlockModelBuilder model = models.withExistingParent("adsorption_separator", "block/cube_all");
         model.renderType("minecraft:cutout");
-        model.texture("0", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/adsorption_separator"));
-        model.texture("1", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports"));
-        model.texture("2", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports_led"));
-        model.texture("particle", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/adsorption_separator"));
+        model.texture("0", new ResourceLocation("mekanismelements", "block/adsorption_separator"));
+        model.texture("1", new ResourceLocation("mekanism", "block/models/ports"));
+        model.texture("2", new ResourceLocation("mekanism", "block/models/ports_led"));
+        model.texture("particle", new ResourceLocation("mekanismelements", "block/adsorption_separator"));
 
         //base
         model.element()
@@ -203,35 +204,35 @@ public final class MSMachineModels {
 
     public static BlockModelBuilder airCompressor(BlockModelProvider models) {
         BlockModelBuilder model = models.withExistingParent("air_compressor", "mekanism:block/machine");
-        model.texture("sides", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
-        model.texture("front", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/front"));
-        model.texture("west", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
-        model.texture("east", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
-        model.texture("south", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/back"));
-        model.texture("up", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/top"));
-        model.texture("down", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/bottom"));
+        model.texture("sides", new ResourceLocation("mekanismelements", "block/air_compressor/side"));
+        model.texture("front", new ResourceLocation("mekanismelements", "block/air_compressor/front"));
+        model.texture("west", new ResourceLocation("mekanismelements", "block/air_compressor/side"));
+        model.texture("east", new ResourceLocation("mekanismelements", "block/air_compressor/side"));
+        model.texture("south", new ResourceLocation("mekanismelements", "block/air_compressor/back"));
+        model.texture("up", new ResourceLocation("mekanismelements", "block/air_compressor/top"));
+        model.texture("down", new ResourceLocation("mekanismelements", "block/air_compressor/bottom"));
         return model;
     }
 
     public static BlockModelBuilder airCompressorActive(BlockModelProvider models) {
         BlockModelBuilder model = models.withExistingParent("air_compressor_active", "mekanism:block/machine");
-        model.texture("sides", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
-        model.texture("front", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/front_active"));
-        model.texture("west", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
-        model.texture("east", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
-        model.texture("south", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/back"));
-        model.texture("up", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/top"));
-        model.texture("down", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/bottom"));
+        model.texture("sides", new ResourceLocation("mekanismelements", "block/air_compressor/side"));
+        model.texture("front", new ResourceLocation("mekanismelements", "block/air_compressor/front_active"));
+        model.texture("west", new ResourceLocation("mekanismelements", "block/air_compressor/side"));
+        model.texture("east", new ResourceLocation("mekanismelements", "block/air_compressor/side"));
+        model.texture("south", new ResourceLocation("mekanismelements", "block/air_compressor/back"));
+        model.texture("up", new ResourceLocation("mekanismelements", "block/air_compressor/top"));
+        model.texture("down", new ResourceLocation("mekanismelements", "block/air_compressor/bottom"));
         return model;
     }
 
     public static BlockModelBuilder chemicalDemolitionMachine(BlockModelProvider models) {
         BlockModelBuilder model = models.withExistingParent("chemical_demolition_machine", "block/cube_all");
         model.renderType("minecraft:cutout");
-        model.texture("0", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/chemical_demolition_machine"));
-        model.texture("1", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports"));
-        model.texture("2", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports_led"));
-        model.texture("particle", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/chemical_demolition_machine"));
+        model.texture("0", new ResourceLocation("mekanismelements", "block/chemical_demolition_machine"));
+        model.texture("1", new ResourceLocation("mekanism", "block/models/ports"));
+        model.texture("2", new ResourceLocation("mekanism", "block/models/ports_led"));
+        model.texture("particle", new ResourceLocation("mekanismelements", "block/chemical_demolition_machine"));
 
         //base
         model.element()
@@ -418,12 +419,12 @@ public final class MSMachineModels {
     public static BlockModelBuilder radiationIrradiator(BlockModelProvider models) {
         BlockModelBuilder model = models.withExistingParent("radiation_irradiator", "block/cube_all");
         model.renderType("minecraft:cutout");
-        model.texture("0", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports"));
-        model.texture("1", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports_led"));
-        model.texture("2", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports_large_led"));
-        model.texture("3", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator"));
-        model.texture("4", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator_window"));
-        model.texture("particle", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator"));
+        model.texture("0", new ResourceLocation("mekanism", "block/models/ports"));
+        model.texture("1", new ResourceLocation("mekanism", "block/models/ports_led"));
+        model.texture("2", new ResourceLocation("mekanism", "block/models/ports_large_led"));
+        model.texture("3", new ResourceLocation("mekanismelements", "block/radiation_irradiator"));
+        model.texture("4", new ResourceLocation("mekanismelements", "block/radiation_irradiator_window"));
+        model.texture("particle", new ResourceLocation("mekanismelements", "block/radiation_irradiator"));
 
         model.element()
               .from(0F, 4F, 12F)
@@ -729,12 +730,12 @@ public final class MSMachineModels {
     public static BlockModelBuilder radiationIrradiatorActive(BlockModelProvider models) {
         BlockModelBuilder model = models.withExistingParent("radiation_irradiator_active", "block/cube_all");
         model.renderType("minecraft:cutout");
-        model.texture("0", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports"));
-        model.texture("1", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports_led"));
-        model.texture("2", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports_large_led"));
-        model.texture("3", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator_active"));
-        model.texture("4", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator_window"));
-        model.texture("particle", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator"));
+        model.texture("0", new ResourceLocation("mekanism", "block/models/ports"));
+        model.texture("1", new ResourceLocation("mekanism", "block/models/ports_led"));
+        model.texture("2", new ResourceLocation("mekanism", "block/models/ports_large_led"));
+        model.texture("3", new ResourceLocation("mekanismelements", "block/radiation_irradiator_active"));
+        model.texture("4", new ResourceLocation("mekanismelements", "block/radiation_irradiator_window"));
+        model.texture("particle", new ResourceLocation("mekanismelements", "block/radiation_irradiator"));
 
         model.element()
               .from(0F, 4F, 12F)
@@ -1040,10 +1041,10 @@ public final class MSMachineModels {
     public static BlockModelBuilder seawaterPump(BlockModelProvider models) {
         BlockModelBuilder model = models.withExistingParent("seawater_pump", "block/cube_all");
         model.renderType("minecraft:cutout");
-        model.texture("0", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports"));
-        model.texture("1", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports_led"));
-        model.texture("2", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/seawater_pump"));
-        model.texture("particle", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/seawater_pump"));
+        model.texture("0", new ResourceLocation("mekanism", "block/models/ports"));
+        model.texture("1", new ResourceLocation("mekanism", "block/models/ports_led"));
+        model.texture("2", new ResourceLocation("mekanismelements", "block/seawater_pump"));
+        model.texture("particle", new ResourceLocation("mekanismelements", "block/seawater_pump"));
 
         model.element()
               .from(4F, 12F, 0F)

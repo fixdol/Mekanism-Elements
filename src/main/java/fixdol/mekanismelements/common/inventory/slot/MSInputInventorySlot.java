@@ -2,16 +2,16 @@ package fixdol.mekanismelements.common.inventory.slot;
 
 import mekanism.api.AutomationType;
 import mekanism.api.IContentsListener;
-import mekanism.api.annotations.NothingNullByDefault;
-import mekanism.common.inventory.container.slot.ContainerSlotType;
-import mekanism.common.inventory.slot.BasicInventorySlot;
 import net.minecraft.world.item.ItemStack;
+import fixdol.mekanismelements.common.inventory.slot.MSInputInventorySlot;
 import org.jetbrains.annotations.NotNull;
+import mekanism.api.annotations.NothingNullByDefault;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.Objects;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+
+import mekanism.common.inventory.container.slot.ContainerSlotType;
+
 
 @NothingNullByDefault
 public class MSInputInventorySlot extends MSBasicInventorySlot {

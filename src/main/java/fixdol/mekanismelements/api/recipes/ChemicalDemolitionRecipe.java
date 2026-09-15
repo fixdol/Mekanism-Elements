@@ -1,27 +1,31 @@
 package fixdol.mekanismelements.api.recipes;
 
-import mekanism.api.annotations.NothingNullByDefault;
-import mekanism.api.chemical.ChemicalStack;
-import mekanism.api.recipes.MekanismRecipe;
-import mekanism.api.recipes.vanilla_input.ItemChemicalRecipeInput;
-import mekanism.api.recipes.ingredients.ChemicalStackIngredient;
-import mekanism.api.recipes.ingredients.ItemStackIngredient;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
 import java.util.function.BiPredicate;
+import mekanism.api.chemical.Chemical;
+import fixdol.mekanismelements.api.recipes.ChemicalDemolitionRecipe;
+import mekanism.api.recipes.ingredients.ChemicalStackIngredient;
+import java.util.Collections;
+import org.jetbrains.annotations.Contract;
+import net.minecraft.network.FriendlyByteBuf;
+import mekanism.api.chemical.gas.GasStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import mekanism.api.recipes.ingredients.ItemStackIngredient;
+import java.util.List;
+import mekanism.common.Mekanism;
+import mekanism.api.recipes.MekanismRecipe;
+import org.jetbrains.annotations.NotNull;
+import java.util.Objects;
+import net.minecraft.resources.ResourceLocation;
+
+import mekanism.api.annotations.NothingNullByDefault;
+import mekanism.api.recipes.ingredients.ChemicalStackIngredient.GasStackIngredient;
+
 
 @NothingNullByDefault
-public abstract class ChemicalDemolitionRecipe extends MekanismRecipe<ItemChemicalRecipeInput> implements BiPredicate<@NotNull ItemStack, @NotNull ChemicalStack> {
+public abstract class ChemicalDemolitionRecipe extends MekanismRecipe implements BiPredicate<@NotNull ItemStack, @NotNull GasStack> {
     private final ItemStackIngredient itemInput;
-    private final ChemicalStackIngredient gasInput;
+    private final ChemicalStackIngredient.GasStackIngredient gasInput;
     private final ItemStack firstOutput;
     private final ItemStack secondOutput;
 
@@ -30,8 +34,8 @@ public abstract class ChemicalDemolitionRecipe extends MekanismRecipe<ItemChemic
      * @param gasInput  Chemical input.
      * @param firstOutput    Output.
      */
-    public ChemicalDemolitionRecipe(ItemStackIngredient itemInput, ChemicalStackIngredient gasInput, ItemStack firstOutput, ItemStack secondOutput) {
-        super();
+    public ChemicalDemolitionRecipe(ResourceLocation id, ItemStackIngredient itemInput, ChemicalStackIngredient.GasStackIngredient gasInput, ItemStack firstOutput, ItemStack secondOutput) {
+        super(id);
         this.itemInput = Objects.requireNonNull(itemInput, "Item input cannot be null.");
         this.gasInput = Objects.requireNonNull(gasInput, "Chemical input cannot be null.");
         Objects.requireNonNull(firstOutput, "Output cannot be null.");
@@ -45,15 +49,8 @@ public abstract class ChemicalDemolitionRecipe extends MekanismRecipe<ItemChemic
         this.secondOutput = secondOutput.copy();
     }
 
-    private ResourceLocation id;
 
-    public void setId(ResourceLocation id) {
-        this.id = id;
-    }
 
-    public ResourceLocation getId() {
-        return id;
-    }
 
     /**
      * Gets the input item ingredient.
@@ -65,7 +62,7 @@ public abstract class ChemicalDemolitionRecipe extends MekanismRecipe<ItemChemic
     /**
      * Gets the input chemical ingredient.
      */
-    public ChemicalStackIngredient getGasInput() {
+    public ChemicalStackIngredient.GasStackIngredient getGasInput() {
         return gasInput;
     }
 
@@ -80,16 +77,16 @@ public abstract class ChemicalDemolitionRecipe extends MekanismRecipe<ItemChemic
      * @implNote The passed in inputs should <strong>NOT</strong> be modified.
      */
     @Contract(value = "_, _ -> new", pure = true)
-    public ItemStack getFirstOutput(ItemStack inputItem, ChemicalStack inputGas) {
+    public ItemStack getFirstOutput(ItemStack inputItem, GasStack inputGas) {
         return firstOutput.copy();
     }
     @Contract(value = "_, _ -> new", pure = true)
-    public ItemStack getSecondOutput(ItemStack inputItem, ChemicalStack inputGas) {
+    public ItemStack getSecondOutput(ItemStack inputItem, GasStack inputGas) {
         return secondOutput.copy();
     }
 
     @Override
-    public boolean test(ItemStack itemStack, ChemicalStack gasStack) {
+    public boolean test(ItemStack itemStack, GasStack gasStack) {
         return itemInput.test(itemStack) && gasInput.test(gasStack);
     }
 
@@ -111,11 +108,12 @@ public abstract class ChemicalDemolitionRecipe extends MekanismRecipe<ItemChemic
         return itemInput.hasNoMatchingInstances() || gasInput.hasNoMatchingInstances();
     }
 
-    public void write(RegistryFriendlyByteBuf buffer) {
-        ItemStackIngredient.STREAM_CODEC.encode(buffer, itemInput);
-        ChemicalStackIngredient.STREAM_CODEC.encode(buffer, gasInput);
-        ItemStack.STREAM_CODEC.encode(buffer, firstOutput);
-        ItemStack.STREAM_CODEC.encode(buffer, secondOutput);
+    @Override
+    public void write(FriendlyByteBuf buffer) {
+        itemInput.write(buffer);
+        gasInput.write(buffer);
+        buffer.writeItem(firstOutput);
+        buffer.writeItem(secondOutput);
     }
 }
 
