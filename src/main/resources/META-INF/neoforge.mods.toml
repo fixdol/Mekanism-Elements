@@ -47,7 +47,7 @@ config="mekanismelements.mixins.json"
 [[dependencies.${mod_id}]]
     modId="patchouli"
     type="required"
-    versionRange="${patchouli_version_range}"
+    versionRange="[${patchouli_version},)"
     ordering="NONE"
     side="BOTH"
 

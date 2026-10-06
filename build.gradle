@@ -128,6 +128,7 @@ tasks.withType(ProcessResources).configureEach {
             mekanism_generators_version_range: mekanism_generators_version_range,
             mekanism_version_range: mekanism_version_range,
             patchouli_version_range: patchouli_version_range,
+            patchouli_version        : patchouli_version,
             jei_version      : jei_version,
             issue_tracker     : issue_tracker,
     ]
