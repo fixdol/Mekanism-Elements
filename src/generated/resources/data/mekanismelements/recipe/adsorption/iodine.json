@@ -1,0 +1,15 @@
+{
+  "type": "mekanismelements:adsorption",
+  "fluid_input": {
+    "amount": 50,
+    "fluid": "mekanismelements:seawater"
+  },
+  "item_input": {
+    "count": 1,
+    "item": "minecraft:kelp"
+  },
+  "output": {
+    "amount": 300,
+    "id": "mekanismelements:iodine"
+  }
+}

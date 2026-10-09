@@ -1,0 +1,19 @@
+{
+  "type": "mekanism:rotary",
+  "chemical_input": {
+    "amount": 1,
+    "chemical": "mekanism:antimatter"
+  },
+  "chemical_output": {
+    "amount": 1,
+    "id": "mekanism:antimatter"
+  },
+  "fluid_input": {
+    "amount": 1,
+    "fluid": "mekanismelements:antimatter_fluid"
+  },
+  "fluid_output": {
+    "amount": 1,
+    "id": "mekanismelements:antimatter_fluid"
+  }
+}

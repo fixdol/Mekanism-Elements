@@ -1,0 +1,33 @@
+{
+  "parent": "mekanismelements:neutron_source",
+  "criteria": {
+    "pellet_neutron_source": {
+      "conditions": {
+        "items": [
+          {
+            "items": "mekanismelements:radiation_irradiator"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.mekanismelements.radiation_irradiator.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "mekanismelements:radiation_irradiator"
+    },
+    "title": {
+      "translate": "advancements.mekanismelements.radiation_irradiator.title"
+    }
+  },
+  "requirements": [
+    [
+      "pellet_neutron_source"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

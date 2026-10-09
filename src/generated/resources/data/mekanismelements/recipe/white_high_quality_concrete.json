@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "mekanismelements:clump_high_quality_concrete_white"
+    }
+  },
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "result": {
+    "count": 4,
+    "id": "mekanismelements:white_high_quality_concrete"
+  }
+}

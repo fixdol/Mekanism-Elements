@@ -1,0 +1,16 @@
+{
+  "type": "mekanism:injecting",
+  "chemical_input": {
+    "amount": 1,
+    "chemical": "mekanismelements:xenon"
+  },
+  "item_input": {
+    "count": 1,
+    "item": "mekanismelements:syringe"
+  },
+  "output": {
+    "count": 1,
+    "id": "mekanismelements:syringe_anesthetic"
+  },
+  "per_tick_usage": false
+}

@@ -1,5 +1,22 @@
 ⚡ Mekanism: Elements — Changelog
 
+🚀 [3.0.18]
+
+Bug Fixes
+1) Missing recipes and data
+
+3.0.17 was published without part of the generated data, so recipes, loot tables, chemical attribute data maps, tags and advancements were missing from the jar. Among them was the Pressurized Reaction Chamber recipe for Yttrium.
+All of them are restored and match 3.0.16 again.
+
+Additions & Changes
+1) Internal
+
+Updated JEI to 19.57.0.451.
+
+🚀 [3.0.17]
+
+Required patchouli 1.21.1-93-NEOFORGE or newer
+
 🚀 [3.0.16]
 
 Additions & Changes

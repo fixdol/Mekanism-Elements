@@ -1,0 +1,19 @@
+{
+  "type": "mekanism:rotary",
+  "chemical_input": {
+    "amount": 1,
+    "chemical": "mekanismelements:seawater"
+  },
+  "chemical_output": {
+    "amount": 1,
+    "id": "mekanismelements:seawater"
+  },
+  "fluid_input": {
+    "amount": 1,
+    "fluid": "mekanismelements:seawater"
+  },
+  "fluid_output": {
+    "amount": 1,
+    "id": "mekanismelements:seawater"
+  }
+}

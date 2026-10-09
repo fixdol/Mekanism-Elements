@@ -1,0 +1,15 @@
+{
+  "type": "mekanism:washing",
+  "chemical_input": {
+    "amount": 1000,
+    "chemical": "mekanismelements:ammonium_nitrate"
+  },
+  "fluid_input": {
+    "amount": 100,
+    "tag": "minecraft:water"
+  },
+  "output": {
+    "amount": 1000,
+    "id": "mekanismelements:ammonium_nitrate_solution"
+  }
+}

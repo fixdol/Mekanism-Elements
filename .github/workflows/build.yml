@@ -55,3 +55,48 @@ jobs:
             build/libs/*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Publishes the jar to CurseForge only when the pushed commit message contains [curseforge], optionally with a
+      # release type: [curseforge], [curseforge beta] or [curseforge alpha]. Needs the CURSEFORGE_TOKEN secret and the
+      # CURSEFORGE_PROJECT_ID variable of the repository.
+      - name: Publish to CurseForge
+        if: ${{ contains(github.event.head_commit.message, '[curseforge') }}
+        env:
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          CURSEFORGE_PROJECT_ID: ${{ vars.CURSEFORGE_PROJECT_ID }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          MOD_VERSION: ${{ steps.gradle_props.outputs.mod_version }}
+        run: |
+          set -euo pipefail
+          : "${CURSEFORGE_TOKEN:?Add the CURSEFORGE_TOKEN secret to the repository}"
+          : "${CURSEFORGE_PROJECT_ID:?Add the CURSEFORGE_PROJECT_ID variable to the repository}"
+          MC=$(grep '^minecraft_version=' gradle.properties | cut -d'=' -f2 | tr -d '\r')
+          LOADER_NAME=NeoForge
+          RELEASE_TYPE=release
+          if [[ "$COMMIT_MESSAGE" =~ \[curseforge\ (alpha|beta|release)\] ]]; then RELEASE_TYPE="${BASH_REMATCH[1]}"; fi
+          # The changelog section of this mod version, or a plain line when it has none
+          CHANGELOG=$(awk -v v="$MOD_VERSION" 'index($0, "🚀 [") == 1 { if (found) exit; if (index($0, "🚀 [" v "]") == 1) found=1 } found' CHANGELOG.md)
+          [ -n "$CHANGELOG" ] || CHANGELOG="Mekanism: Elements $MOD_VERSION for Minecraft $MC."
+          # A jar that is already on CurseForge (marked with a tag once it was uploaded) is not uploaded again
+          tag="curseforge-neoforge-$MC-$MOD_VERSION"
+          if git rev-parse -q --verify "refs/tags/$tag" > /dev/null; then
+            echo "$LOADER_NAME $MC $MOD_VERSION is already on CurseForge (tag $tag), not uploading it again"
+            exit 0
+          fi
+          jar=$(find build/libs -maxdepth 1 -name "*$MOD_VERSION*.jar" ! -name '*-sources.jar' | head -n1)
+          [ -n "$jar" ] || { echo "No jar for $MOD_VERSION found in build/libs"; exit 1; }
+          metadata=$(jq -nc \
+            --arg changelog "$CHANGELOG" \
+            --arg type "$RELEASE_TYPE" \
+            --arg name "MekanismElements $MOD_VERSION ($LOADER_NAME $MC)" \
+            --arg mc "$MC" --arg loader "$LOADER_NAME" \
+            '{changelog: $changelog, changelogType: "text", releaseType: $type, displayName: $name,
+              gameVersionNames: [$mc, $loader, "Client", "Server"]}')
+          echo "Uploading $jar to CurseForge as a $RELEASE_TYPE for $LOADER_NAME $MC"
+          curl -sS --fail-with-body -X POST \
+            "https://minecraft.curseforge.com/api/projects/$CURSEFORGE_PROJECT_ID/upload-file" \
+            -H "X-Api-Token: $CURSEFORGE_TOKEN" \
+            -F "metadata=$metadata" -F "file=@$jar"
+          echo
+          git tag "$tag"
+          git push origin "$tag"

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "mekanismelements:clump_high_quality_concrete_aqua"
+    }
+  },
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "result": {
+    "count": 4,
+    "id": "mekanismelements:aqua_high_quality_concrete"
+  }
+}

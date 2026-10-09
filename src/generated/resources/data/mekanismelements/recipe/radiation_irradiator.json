@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "mekanism:pellet_polonium"
+    },
+    "C": {
+      "item": "mekanismelements:clump_high_quality_concrete"
+    },
+    "S": {
+      "item": "mekanism:laser"
+    },
+    "X": {
+      "item": "mekanism:steel_casing"
+    },
+    "_": {
+      "item": "mekanism:ultimate_control_circuit"
+    }
+  },
+  "pattern": [
+    "CSC",
+    "_X_",
+    "CAC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mekanismelements:radiation_irradiator"
+  }
+}

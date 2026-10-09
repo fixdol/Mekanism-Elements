@@ -1,0 +1,19 @@
+{
+  "type": "mekanism:rotary",
+  "chemical_input": {
+    "amount": 1,
+    "chemical": "mekanismelements:beryllium"
+  },
+  "chemical_output": {
+    "amount": 1,
+    "id": "mekanismelements:beryllium"
+  },
+  "fluid_input": {
+    "amount": 1,
+    "fluid": "mekanismelements:beryllium"
+  },
+  "fluid_output": {
+    "amount": 1,
+    "id": "mekanismelements:beryllium"
+  }
+}

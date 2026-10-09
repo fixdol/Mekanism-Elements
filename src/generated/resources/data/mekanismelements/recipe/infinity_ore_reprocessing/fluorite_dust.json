@@ -1,0 +1,15 @@
+{
+  "type": "mekanismelements:infinity_ore_reprocessing",
+  "chemical_input": {
+    "amount": 9500,
+    "chemical": "mekanismelements:seawater"
+  },
+  "item_input": {
+    "count": 1,
+    "item": "mekanism:fluorite_gem"
+  },
+  "output": {
+    "count": 16,
+    "id": "mekanism:dust_fluorite"
+  }
+}
