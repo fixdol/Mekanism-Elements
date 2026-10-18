@@ -85,10 +85,12 @@ jobs:
           fi
           jar=$(find build/libs -maxdepth 1 -name "*$MOD_VERSION*.jar" ! -name '*-sources.jar' | head -n1)
           [ -n "$jar" ] || { echo "No jar for $MOD_VERSION found in build/libs"; exit 1; }
+          # Same name the build gives the jar (archivesName + version in build.gradle), without the extension
+          name=$(basename "$jar" .jar)
           metadata=$(jq -nc \
             --arg changelog "$CHANGELOG" \
             --arg type "$RELEASE_TYPE" \
-            --arg name "MekanismElements $MOD_VERSION ($LOADER_NAME $MC)" \
+            --arg name "$name" \
             --arg mc "$MC" --arg loader "$LOADER_NAME" \
             '{changelog: $changelog, changelogType: "text", releaseType: $type, displayName: $name,
               gameVersionNames: [$mc, $loader, "Client", "Server"]}')

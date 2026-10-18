@@ -24,7 +24,9 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
+import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.fml.ModList;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -49,38 +51,83 @@ public class MSJEI implements IModPlugin {
         // For now, skip this if the method signature doesn't match
     }
 
+    private static boolean loggedChemicalsUnsupported;
+
+    /**
+     * EMI imports JEI plugins and has its own native categories for every machine here (see MSEmi), so with EMI
+     * installed JEI registers nothing; otherwise each machine would show up twice in EMI.
+     */
+    private static boolean emiShowsRecipes() {
+        return ModList.get().isLoaded("emi");
+    }
+
+    /**
+     * Recipe viewer switch, decided at runtime. The categories that draw Mekanism chemicals need JEI to know the
+     * chemical ingredient type, which Mekanism's own JEI plugin registers. With EMI installed JEI ends up without it
+     * and rejects every one of those recipes, so ask JEI what it really has instead of guessing the viewer.
+     */
+    private static boolean chemicalsSupported(IIngredientManager ingredients) {
+        boolean supported = ingredients.getRegisteredIngredientTypes().contains(MekanismJEI.TYPE_CHEMICAL);
+        if (!supported && !loggedChemicalsUnsupported) {
+            loggedChemicalsUnsupported = true;
+            MekanismElements.logger.info("JEI has no Mekanism chemical ingredient type (EMI installed?), skipping the chemical recipe categories");
+        }
+        return supported;
+    }
+
     @Override
     public void registerCategories(IRecipeCategoryRegistration registry) {
+        if (emiShowsRecipes()) {
+            return;
+        }
         IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
-        registry.addRecipeCategories(new AdsorptionSeparatorRecipeCategory(guiHelper, MSJEIRecipeType.ADSORPTION_SEPARATOR));
-        registry.addRecipeCategories(new ChemicalDemolitionMachineRecipeCategory(guiHelper, MSJEIRecipeType.CHEMICAL_DEMOLITION_MACHINE));
-        registry.addRecipeCategories(new RadiationIrradiatorRecipeCategory(guiHelper, MSJEIRecipeType.RADIATION_IRRADIATOR));
-        registry.addRecipeCategories(new AirCompressorRecipeCategory(guiHelper, AirCompressorRecipeViewerType.INSTANCE));
+        boolean chemicals = chemicalsSupported(registry.getJeiHelpers().getIngredientManager());
+        if (chemicals) {
+            registry.addRecipeCategories(new AdsorptionSeparatorRecipeCategory(guiHelper, MSJEIRecipeType.ADSORPTION_SEPARATOR));
+            registry.addRecipeCategories(new ChemicalDemolitionMachineRecipeCategory(guiHelper, MSJEIRecipeType.CHEMICAL_DEMOLITION_MACHINE));
+            registry.addRecipeCategories(new RadiationIrradiatorRecipeCategory(guiHelper, MSJEIRecipeType.RADIATION_IRRADIATOR));
+            registry.addRecipeCategories(new AirCompressorRecipeCategory(guiHelper, AirCompressorRecipeViewerType.INSTANCE));
+        }
         registry.addRecipeCategories(new SeawaterPumpRecipeCategory(guiHelper, SeawaterPumpRecipeViewerType.INSTANCE));
-        registry.addRecipeCategories(new InfinityOreReprocessingRecipeCategory(guiHelper, MSJEIRecipeType.INFINITY_ORE_REPROCESSING));
+        if (chemicals) {
+            registry.addRecipeCategories(new InfinityOreReprocessingRecipeCategory(guiHelper, MSJEIRecipeType.INFINITY_ORE_REPROCESSING));
+        }
     }
 
     @Override
     public void registerRecipeCatalysts(@Nonnull IRecipeCatalystRegistration registry) {
+        if (emiShowsRecipes()) {
+            return;
+        }
+        boolean chemicals = chemicalsSupported(registry.getJeiHelpers().getIngredientManager());
         // Register catalysts using the recipe types directly
-        CatalystRegistryHelper.register(registry, MSJEIRecipeType.ADSORPTION_SEPARATOR);
-        CatalystRegistryHelper.register(registry, MSJEIRecipeType.CHEMICAL_DEMOLITION_MACHINE);
-        CatalystRegistryHelper.register(registry, MSJEIRecipeType.RADIATION_IRRADIATOR);
-        CatalystRegistryHelper.register(registry, AirCompressorRecipeViewerType.INSTANCE);
+        if (chemicals) {
+            CatalystRegistryHelper.register(registry, MSJEIRecipeType.ADSORPTION_SEPARATOR);
+            CatalystRegistryHelper.register(registry, MSJEIRecipeType.CHEMICAL_DEMOLITION_MACHINE);
+            CatalystRegistryHelper.register(registry, MSJEIRecipeType.RADIATION_IRRADIATOR);
+            CatalystRegistryHelper.register(registry, AirCompressorRecipeViewerType.INSTANCE);
+        }
         CatalystRegistryHelper.register(registry, SeawaterPumpRecipeViewerType.INSTANCE);
-        CatalystRegistryHelper.register(registry, MSJEIRecipeType.INFINITY_ORE_REPROCESSING);
+        if (chemicals) {
+            CatalystRegistryHelper.register(registry, MSJEIRecipeType.INFINITY_ORE_REPROCESSING);
+        }
     }
 
     @Override
     public void registerRecipes(@NotNull IRecipeRegistration registry) {
-        MSRecipeRegistryHelper.register(registry, ADSORPTION_SEPARATOR, MSRecipeType.ADSORPTION);
-        MSRecipeRegistryHelper.register(registry, RADIATION_IRRADIATOR, MSRecipeType.RADIATION_IRRADIATING);
-        MSRecipeRegistryHelper.register(registry, CHEMICAL_DEMOLITION_MACHINE, MSRecipeType.CHEMICAL_DEMOLITION);
-        MSRecipeRegistryHelper.register(registry, INFINITY_ORE_REPROCESSING, MSRecipeType.INFINITY_ORE_REPROCESSING);
+        if (emiShowsRecipes()) {
+            return;
+        }
+        if (chemicalsSupported(registry.getIngredientManager())) {
+            MSRecipeRegistryHelper.register(registry, ADSORPTION_SEPARATOR, MSRecipeType.ADSORPTION);
+            MSRecipeRegistryHelper.register(registry, RADIATION_IRRADIATOR, MSRecipeType.RADIATION_IRRADIATING);
+            MSRecipeRegistryHelper.register(registry, CHEMICAL_DEMOLITION_MACHINE, MSRecipeType.CHEMICAL_DEMOLITION);
+            MSRecipeRegistryHelper.register(registry, INFINITY_ORE_REPROCESSING, MSRecipeType.INFINITY_ORE_REPROCESSING);
 
-        // Maquinas sin receta JSON real: se registra una unica "receta" informativa fija
-        MSRecipeRegistryHelper.register(registry, AirCompressorRecipeViewerType.INSTANCE,
-                List.of(AirCompressorInfoRecipe.INSTANCE));
+            // Maquinas sin receta JSON real: se registra una unica "receta" informativa fija
+            MSRecipeRegistryHelper.register(registry, AirCompressorRecipeViewerType.INSTANCE,
+                    List.of(AirCompressorInfoRecipe.INSTANCE));
+        }
         MSRecipeRegistryHelper.register(registry, SeawaterPumpRecipeViewerType.INSTANCE,
                 List.of(SeawaterPumpInfoRecipe.INSTANCE));
     }

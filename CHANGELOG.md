@@ -1,5 +1,25 @@
 ⚡ Mekanism: Elements — Changelog
 
+🚀 [3.0.19]
+
+Additions & Changes
+1) EMI and REI support
+
+All six machines (Adsorption Separator, Chemical Demolition Machine, Radiation Irradiator, Infinity Ore Reprocessor, Air Compressor and Seawater Pump) now have their own recipe categories in EMI and in REI, drawn with the same layout as in JEI.
+In REI the chemicals are drawn in their gauge and can be hovered for their name, but they cannot be looked up, because REI has no entry type for them.
+With EMI installed, JEI no longer registers these categories, so they do not show up twice.
+2) Internal
+
+New runtime_itemlist_mod property in gradle.properties to pick which recipe viewer (jei, emi, rei or none) runs in the dev client.
+
+Bug Fixes
+1) Crash with EMI and JEI
+
+Opening a Mekanism: Elements recipe category in JEI while EMI was installed broke every recipe of the machines that use chemicals ("Unknown ingredient type: ChemicalStack"). JEI now only registers them when it actually knows the chemical ingredient type.
+2) Cut off descriptions
+
+The text of the Air Compressor and the Seawater Pump was cut off at both sides in the recipe viewer. It is now wrapped to the width of the screen.
+
 🚀 [3.0.18]
 
 Bug Fixes

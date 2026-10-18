@@ -100,11 +100,42 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
+    maven {
+        name = "Shedaniel"
+        url = "https://maven.shedaniel.me/"
+    }
+    maven {
+        name = "Architectury"
+        url = "https://maven.architectury.dev/"
+    }
 }
 
 dependencies {
+    //jei
     compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
-    runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+
+    //rei (Roughly Enough Items)
+    compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
+    compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}"
+
+    //emi
+    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
+
+    switch (runtime_itemlist_mod) {
+        case "emi":
+            runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
+            break
+        case "rei":
+            runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+            break
+        case "jei":
+            runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+            break
+    }
 
     implementation("mekanism:Mekanism:${minecraft_version}-${mekanism_version}")
     runtimeOnly("mekanism:Mekanism:${minecraft_version}-${mekanism_version}:generators")

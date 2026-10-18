@@ -1,5 +1,6 @@
 package fixdol.mekanismelements.client.jei.machine;
 
+import fixdol.mekanismelements.client.MSRecipeViewerText;
 import fixdol.mekanismelements.common.registries.MSFluids;
 import mekanism.client.gui.element.GuiInnerScreen;
 import mekanism.client.gui.element.gauge.GaugeType;
@@ -36,7 +37,7 @@ public class SeawaterPumpRecipeCategory extends BaseRecipeCategory<SeawaterPumpI
 
     public SeawaterPumpRecipeCategory(IGuiHelper helper, IRecipeViewerRecipeType<SeawaterPumpInfoRecipe> recipeType) {
         super(helper, recipeType);
-        addElement(new GuiInnerScreen(this, 5, 5, 122, 70, () -> DESCRIPTION).clearFormat());
+        addElement(new GuiInnerScreen(this, 5, 5, 122, 70, () -> MSRecipeViewerText.wrapForInnerScreen(DESCRIPTION.get(0))).clearFormat());
         outputGauge = addElement(GuiFluidGauge.getDummy(GaugeType.STANDARD.with(DataType.OUTPUT), this, 131, 5));
     }
 

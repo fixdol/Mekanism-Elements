@@ -1,5 +1,6 @@
 package fixdol.mekanismelements.client.jei.machine;
 
+import fixdol.mekanismelements.client.MSRecipeViewerText;
 import fixdol.mekanismelements.common.registries.MSGases;
 import mekanism.api.chemical.Chemical;
 import mekanism.api.chemical.ChemicalStack;
@@ -37,7 +38,7 @@ public class AirCompressorRecipeCategory extends BaseRecipeCategory<AirCompresso
 
     public AirCompressorRecipeCategory(IGuiHelper helper, IRecipeViewerRecipeType<AirCompressorInfoRecipe> recipeType) {
         super(helper, recipeType);
-        addElement(new GuiInnerScreen(this, 5, 5, 122, 70, () -> DESCRIPTION).clearFormat());
+        addElement(new GuiInnerScreen(this, 5, 5, 122, 70, () -> MSRecipeViewerText.wrapForInnerScreen(DESCRIPTION.get(0))).clearFormat());
         outputGauge = addElement(GuiChemicalGauge.getDummy(GaugeType.STANDARD.with(DataType.OUTPUT), this, 131, 5));
     }
 
