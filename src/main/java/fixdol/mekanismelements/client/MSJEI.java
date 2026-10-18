@@ -21,6 +21,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -39,8 +40,19 @@ public class MSJEI implements IModPlugin {
     public void registerItemSubtypes(@Nonnull ISubtypeRegistration registry) {
     }
 
+    /**
+     * EMI imports JEI plugins through its JEI bridge and has its own native categories for every machine here (see
+     * MSEmi), so with EMI installed JEI registers nothing; otherwise each machine would show up twice in EMI.
+     */
+    private static boolean emiShowsRecipes() {
+        return ModList.get().isLoaded("emi");
+    }
+
     @Override
     public void registerCategories(IRecipeCategoryRegistration registry) {
+        if (emiShowsRecipes()) {
+            return;
+        }
         IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
         registry.addRecipeCategories(new AdsorptionSeparatorRecipeCategory(guiHelper, MSJEIRecipeType.ADSORPTION_SEPARATOR));
         registry.addRecipeCategories(new ChemicalDemolitionMachineRecipeCategory(guiHelper, MSJEIRecipeType.CHEMICAL_DEMOLITION_MACHINE));
@@ -52,6 +64,9 @@ public class MSJEI implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(@Nonnull IRecipeCatalystRegistration registry) {
+        if (emiShowsRecipes()) {
+            return;
+        }
         CatalystRegistryHelper.register(registry, MSJEIRecipeType.ADSORPTION_SEPARATOR, MSBlocks.ADSORPTION_SEPARATOR);
         CatalystRegistryHelper.register(registry, MSJEIRecipeType.CHEMICAL_DEMOLITION_MACHINE, MSBlocks.CHEMICAL_DEMOLITION_MACHINE);
         CatalystRegistryHelper.register(registry, MSJEIRecipeType.RADIATION_IRRADIATOR, MSBlocks.RADIATION_IRRADIATOR);
@@ -62,6 +77,9 @@ public class MSJEI implements IModPlugin {
 
     @Override
     public void registerRecipes(@NotNull IRecipeRegistration registry) {
+        if (emiShowsRecipes()) {
+            return;
+        }
         MSRecipeRegistryHelper.register(registry, MSJEIRecipeType.ADSORPTION_SEPARATOR, MSRecipeType.ADSORPTION);
         MSRecipeRegistryHelper.register(registry, MSJEIRecipeType.RADIATION_IRRADIATOR, MSRecipeType.RADIATION_IRRADIATING);
         MSRecipeRegistryHelper.register(registry, MSJEIRecipeType.CHEMICAL_DEMOLITION_MACHINE, MSRecipeType.CHEMICAL_DEMOLITION);

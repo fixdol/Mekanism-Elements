@@ -1,5 +1,14 @@
 ⚡ Mekanism: Elements — Changelog
 
+🚀 [3.0.2]
+
+Additions & Changes
+1) EMI support
+
+All six machines now have their own recipe categories in EMI, drawn with the same layout as in JEI. Until now EMI only showed them through its JEI bridge, which needs JEI to be installed.
+With EMI installed, JEI no longer registers these categories, so they do not show up twice.
+The gases are drawn in their gauge and can be hovered for their name, but they cannot be looked up, because EMI has no stack type for them.
+
 🚀 [3.0.1]
 
 Additions & Changes
