@@ -1,21 +1,13 @@
 ⚡ Mekanism: Elements — Changelog
 
-🚀 [3.0.2]
-
-Additions & Changes
-1) EMI support
-
-All six machines now have their own recipe categories in EMI, drawn with the same layout as in JEI. Until now EMI only showed them through its JEI bridge, which needs JEI to be installed.
-With EMI installed, JEI no longer registers these categories, so they do not show up twice.
-The gases are drawn in their gauge and can be hovered for their name, but they cannot be looked up, because EMI has no stack type for them.
-
 🚀 [3.0.1]
 
 Additions & Changes
-1) REI support
+1) REI and EMI support
 
-All six machines (Adsorption Separator, Chemical Demolition Machine, Radiation Irradiator, Infinity Ore Reprocessor, Air Compressor and Seawater Pump) now have their own recipe categories in REI, drawn with the same layout as in JEI. EMI already showed them through its JEI bridge.
-The gases are drawn in their gauge and can be hovered for their name, but they cannot be looked up, because REI has no entry type for them.
+All six machines (Adsorption Separator, Chemical Demolition Machine, Radiation Irradiator, Infinity Ore Reprocessor, Air Compressor and Seawater Pump) now have their own recipe categories in REI and in EMI, drawn with the same layout as in JEI. EMI used to show them only through its JEI bridge, which needs JEI to be installed.
+The gases are drawn in their gauge and can be hovered for their name, but they cannot be looked up, because REI and EMI have no entry type for them.
+With EMI installed, JEI no longer registers these categories, so they do not show up twice.
 2) JEI
 
 Updated JEI to 15.71.0.224.
