@@ -77,14 +77,49 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
+    maven {
+        name = "Shedaniel"
+        url = "https://maven.shedaniel.me/"
+    }
+    maven {
+        name = "Architectury"
+        url = "https://maven.architectury.dev/"
+    }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
+    //jei
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+
+    //rei (Roughly Enough Items)
+    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}")
+    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-default-plugin-forge:${rei_version}")
+    compileOnly "me.shedaniel.cloth:basic-math:0.6.1"
+    compileOnly fg.deobf("dev.architectury:architectury-forge:9.0.7")
+
+    //emi
+    compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
+
+    switch (runtime_itemlist_mod) {
+        case "emi":
+            runtimeOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
+            break
+        case "rei":
+            runtimeOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
+            runtimeOnly fg.deobf("dev.architectury:architectury-forge:9.0.7")
+            runtimeOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:11.0.99")
+            break
+        case "jei":
+            runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+            break
+    }
 
     implementation fg.deobf("mekanism:Mekanism:${minecraft_version}-${mekanism_version}")
     compileOnly fg.deobf("mekanism:Mekanism:${minecraft_version}-${mekanism_version}:generators")

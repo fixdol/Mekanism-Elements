@@ -1,5 +1,19 @@
 ⚡ Mekanism: Elements — Changelog
 
+🚀 [3.0.1]
+
+Additions & Changes
+1) REI support
+
+All six machines (Adsorption Separator, Chemical Demolition Machine, Radiation Irradiator, Infinity Ore Reprocessor, Air Compressor and Seawater Pump) now have their own recipe categories in REI, drawn with the same layout as in JEI. EMI already showed them through its JEI bridge.
+The gases are drawn in their gauge and can be hovered for their name, but they cannot be looked up, because REI has no entry type for them.
+2) JEI
+
+Updated JEI to 15.71.0.224.
+3) Internal
+
+New runtime_itemlist_mod property in gradle.properties to pick which recipe viewer (jei, emi, rei or none) runs in the dev client.
+
 🚀 [3.0.0]
 
 Ported from Minecraft 1.21.1 to Minecraft 1.20.1.
