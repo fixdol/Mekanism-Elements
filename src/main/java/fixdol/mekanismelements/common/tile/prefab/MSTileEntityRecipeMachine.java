@@ -3,26 +3,24 @@ package fixdol.mekanismelements.common.tile.prefab;
 import fixdol.mekanismelements.common.recipe.lookup.IMSRecipeLookupHandler;
 import fixdol.mekanismelements.common.recipe.lookup.monitor.MSRecipeCacheLookupMonitor;
 import mekanism.api.IContentsListener;
-import mekanism.api.chemical.Chemical;
-import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.chemical.IChemicalTank;
+import mekanism.api.energy.IEnergyContainer;
+import mekanism.api.fluid.IFluidTank;
+import mekanism.api.heat.IHeatCapacitor;
+import mekanism.api.inventory.IInventorySlot;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 import mekanism.api.recipes.MekanismRecipe;
 import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.common.capabilities.heat.CachedAmbientTemperature;
-import mekanism.common.capabilities.holder.chemical.IChemicalTankHolder;
-import mekanism.common.capabilities.holder.energy.IEnergyContainerHolder;
-import mekanism.common.capabilities.holder.fluid.IFluidTankHolder;
-import mekanism.common.capabilities.holder.heat.IHeatCapacitorHolder;
-import mekanism.common.capabilities.holder.slot.IInventorySlotHolder;
+import mekanism.common.capabilities.holder.container.IContainerHolder;
+import mekanism.common.capabilities.holder.single.ISingleContainerHolder;
 import mekanism.common.inventory.container.MekanismContainer;
 import mekanism.common.tile.base.TileEntityMekanism;
-import mekanism.common.tile.component.TileComponentConfig;
 import mekanism.common.tile.prefab.TileEntityConfigurableMachine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,6 +38,10 @@ public abstract class MSTileEntityRecipeMachine<RECIPE extends MekanismRecipe<?>
     protected MSRecipeCacheLookupMonitor<RECIPE> recipeCacheLookupMonitor;
     @Nullable
     private IContentsListener recipeCacheSaveOnlyListener;
+    @Nullable
+    private IContentsListener recipeCacheUnpauseListener;
+    @Nullable
+    private IContentsListener recipeCacheUnpauseSaveOnlyListener;
 
     protected MSTileEntityRecipeMachine(Holder<Block> blockProvider, BlockPos pos, BlockState state, List<CachedRecipe.OperationTracker.RecipeError> errorTypes) {
         super(blockProvider, pos, state);
@@ -47,11 +49,13 @@ public abstract class MSTileEntityRecipeMachine<RECIPE extends MekanismRecipe<?>
         recheckAllRecipeErrors = shouldRecheckAllErrors(this);
         trackedErrors = new boolean[this.errorTypes.size()];
         recipeCacheSaveOnlyListener = null;
+        recipeCacheUnpauseListener = null;
+        recipeCacheUnpauseSaveOnlyListener = null;
     }
 
     public static BooleanSupplier shouldRecheckAllErrors(TileEntityMekanism tile) {
-       int checkOffset = ThreadLocalRandom.current().nextInt(RECIPE_CHECK_FREQUENCY);
-        return () -> !tile.playersUsing.isEmpty() && tile.hasLevel() && tile.getLevel().getGameTime() % RECIPE_CHECK_FREQUENCY == checkOffset;
+        int checkOffset = ThreadLocalRandom.current().nextInt(RECIPE_CHECK_FREQUENCY);
+        return () -> !tile.playersUsing.isEmpty() && tile.getLevel() != null && tile.getLevel().getGameTime() % RECIPE_CHECK_FREQUENCY == checkOffset;
     }
 
     @Override
@@ -75,6 +79,25 @@ public abstract class MSTileEntityRecipeMachine<RECIPE extends MekanismRecipe<?>
             return recipeCacheSaveOnlyListener;
         }
         return recipeCacheLookupMonitor;
+    }
+
+    protected IContentsListener getRecipeCacheUnpauseListener(@Nullable IContentsListener listener) {
+        if (listener == this) {
+            if (recipeCacheUnpauseListener == null) {
+                recipeCacheUnpauseListener = () -> {
+                    onContentsChanged();
+                    recipeCacheLookupMonitor.unpause();
+                };
+            }
+            return recipeCacheUnpauseListener;
+        }
+        if (recipeCacheUnpauseSaveOnlyListener == null) {
+            recipeCacheUnpauseSaveOnlyListener = () -> {
+                markForSave();
+                recipeCacheLookupMonitor.unpause();
+            };
+        }
+        return recipeCacheUnpauseSaveOnlyListener;
     }
 
     @Override
@@ -104,111 +127,73 @@ public abstract class MSTileEntityRecipeMachine<RECIPE extends MekanismRecipe<?>
     }
 
     @Nullable
-    public final IChemicalTankHolder getInitialGasTanks(IContentsListener listener) {
-        return getInitialGasTanks(listener, listener == this ? recipeCacheLookupMonitor : getRecipeCacheSaveOnlyListener());
+    @Override
+    public final IContainerHolder<IChemicalTank> getInitialChemicalTanks(IContentsListener listener) {
+        return getInitialChemicalTanks(listener, listener == this ? recipeCacheLookupMonitor : getRecipeCacheSaveOnlyListener(), getRecipeCacheUnpauseListener(listener));
     }
 
     /**
      * @apiNote Do not call directly, only override implementation
      */
     @Nullable
-    protected IChemicalTankHolder getInitialGasTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
-        return null;
-    }
-
-    @Nullable
-    public final IChemicalTankHolder getInitialInfusionTanks(IContentsListener listener) {
-        return getInitialInfusionTanks(listener, listener == this ? recipeCacheLookupMonitor : getRecipeCacheSaveOnlyListener());
-    }
-
-    /**
-     * @apiNote Do not call directly, only override implementation
-     */
-    @Nullable
-    protected IChemicalTankHolder getInitialInfusionTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
-        return null;
-    }
-
-    @Nullable
-    public final IChemicalTankHolder getInitialPigmentTanks(IContentsListener listener) {
-        return getInitialPigmentTanks(listener, listener == this ? recipeCacheLookupMonitor : getRecipeCacheSaveOnlyListener());
-    }
-
-    /**
-     * @apiNote Do not call directly, only override implementation
-     */
-    @Nullable
-    protected IChemicalTankHolder getInitialPigmentTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
-        return null;
-    }
-
-    @Nullable
-    public final IChemicalTankHolder getInitialSlurryTanks(IContentsListener listener) {
-        return getInitialSlurryTanks(listener, listener == this ? recipeCacheLookupMonitor : getRecipeCacheSaveOnlyListener());
-    }
-
-    /**
-     * @apiNote Do not call directly, only override implementation
-     */
-    @Nullable
-    protected IChemicalTankHolder getInitialSlurryTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
+    protected IContainerHolder<IChemicalTank> getInitialChemicalTanks(IContentsListener listener, IContentsListener recipeCacheListener, IContentsListener recipeCacheUnpauseListener) {
         return null;
     }
 
     @Nullable
     @Override
-    protected final IFluidTankHolder getInitialFluidTanks(IContentsListener listener) {
-        return getInitialFluidTanks(listener, listener == this ? recipeCacheLookupMonitor : getRecipeCacheSaveOnlyListener());
+    protected final IContainerHolder<IFluidTank> getInitialFluidTanks(IContentsListener listener) {
+        return getInitialFluidTanks(listener, listener == this ? recipeCacheLookupMonitor : getRecipeCacheSaveOnlyListener(), getRecipeCacheUnpauseListener(listener));
     }
 
     /**
      * @apiNote Do not call directly, only override implementation
      */
     @Nullable
-    protected IFluidTankHolder getInitialFluidTanks(IContentsListener listener, IContentsListener recipeCacheListener) {
+    protected IContainerHolder<IFluidTank> getInitialFluidTanks(IContentsListener listener, IContentsListener recipeCacheListener, IContentsListener recipeCacheUnpauseListener) {
         return null;
     }
 
     @Nullable
     @Override
-    protected final IEnergyContainerHolder getInitialEnergyContainers(IContentsListener listener) {
-        return getInitialEnergyContainers(listener, listener == this ? recipeCacheLookupMonitor : getRecipeCacheSaveOnlyListener());
+    protected final ISingleContainerHolder<IEnergyContainer> getInitialEnergyContainer(IContentsListener listener) {
+        return getInitialEnergyContainer(listener, listener == this ? recipeCacheLookupMonitor : getRecipeCacheSaveOnlyListener(), getRecipeCacheUnpauseListener(listener));
     }
 
     /**
      * @apiNote Do not call directly, only override implementation
      */
     @Nullable
-    protected IEnergyContainerHolder getInitialEnergyContainers(IContentsListener listener, IContentsListener recipeCacheListener) {
+    protected ISingleContainerHolder<IEnergyContainer> getInitialEnergyContainer(IContentsListener listener, IContentsListener recipeCacheListener, IContentsListener recipeCacheUnpauseListener) {
         return null;
     }
 
     @Nullable
     @Override
-    protected final IInventorySlotHolder getInitialInventory(IContentsListener listener) {
-        return getInitialInventory(listener, listener == this ? recipeCacheLookupMonitor : getRecipeCacheSaveOnlyListener());
+    protected final IContainerHolder<IInventorySlot> getInitialInventory(IContentsListener listener) {
+        return getInitialInventory(listener, listener == this ? recipeCacheLookupMonitor : getRecipeCacheSaveOnlyListener(), getRecipeCacheUnpauseListener(listener));
     }
 
     /**
      * @apiNote Do not call directly, only override implementation
      */
     @Nullable
-    protected IInventorySlotHolder getInitialInventory(IContentsListener listener, IContentsListener recipeCacheListener) {
+    protected IContainerHolder<IInventorySlot> getInitialInventory(IContentsListener listener, IContentsListener recipeCacheListener, IContentsListener recipeCacheUnpauseListener) {
         return null;
     }
 
     @Nullable
     @Override
-    protected final IHeatCapacitorHolder getInitialHeatCapacitors(IContentsListener listener, CachedAmbientTemperature ambientTemperature) {
-        return getInitialHeatCapacitors(listener, listener == this ? recipeCacheLookupMonitor : getRecipeCacheSaveOnlyListener(), ambientTemperature);
+    protected final ISingleContainerHolder<IHeatCapacitor> getInitialHeatCapacitor(IContentsListener listener, CachedAmbientTemperature ambientTemperature) {
+        return getInitialHeatCapacitor(listener, listener == this ? recipeCacheLookupMonitor : getRecipeCacheSaveOnlyListener(), getRecipeCacheUnpauseListener(listener), ambientTemperature);
     }
 
     /**
      * @apiNote Do not call directly, only override implementation
      */
     @Nullable
-    protected IHeatCapacitorHolder getInitialHeatCapacitors(IContentsListener listener, IContentsListener recipeCacheListener, CachedAmbientTemperature ambientTemperature) {
+    protected ISingleContainerHolder<IHeatCapacitor> getInitialHeatCapacitor(IContentsListener listener, IContentsListener recipeCacheListener,
+                                                                            IContentsListener recipeCacheUnpauseListener, CachedAmbientTemperature ambientTemperature) {
         return null;
     }
 }
-

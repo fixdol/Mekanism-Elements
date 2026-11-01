@@ -84,9 +84,9 @@ public class MSItems {
 
     static {
         SYRINGE = ITEMS.register("syringe");
-        ANESTHETIC_SYRINGE = ITEMS.register("syringe_anesthetic", () -> new AnestheticSyringe(new Item.Properties()));
-        FLAME_RETARDANT_SYRINGE = ITEMS.register("syringe_flame_retardant", () -> new FlameRetardantSyringe(new Item.Properties()));
-        LEVITATION_SYRINGE = ITEMS.register("syringe_levitation", () -> new LevitationSyringe(new Item.Properties()));
+        ANESTHETIC_SYRINGE = ITEMS.registerItem("syringe_anesthetic", properties -> new AnestheticSyringe(properties));
+        FLAME_RETARDANT_SYRINGE = ITEMS.registerItem("syringe_flame_retardant", properties -> new FlameRetardantSyringe(properties));
+        LEVITATION_SYRINGE = ITEMS.registerItem("syringe_levitation", properties -> new LevitationSyringe(properties));
         HIGH_PERFORMANCE_ADSORBENT = ITEMS.register("high_performance_adsorbent");
         HIGH_PERFORMANCE_ADSORBENT_BERYLLIUM = ITEMS.register("high_performance_adsorbent_beryllium");
         HIGH_PERFORMANCE_ADSORBENT_COPPER = ITEMS.register("high_performance_adsorbent_copper");
@@ -96,7 +96,7 @@ public class MSItems {
         HIGH_PERFORMANCE_ADSORBENT_OSMIUM = ITEMS.register("high_performance_adsorbent_osmium");
         HIGH_PERFORMANCE_ADSORBENT_TIN = ITEMS.register("high_performance_adsorbent_tin");
         HIGH_PERFORMANCE_ADSORBENT_URANIUM = ITEMS.register("high_performance_adsorbent_uranium");
-        NEUTRON_SOURCE_PELLET = ITEMS.register("pellet_neutron_source", () -> new NeutronSourcePellet(new Item.Properties(), EnumColor.YELLOW));
+        NEUTRON_SOURCE_PELLET = ITEMS.registerItem("pellet_neutron_source", properties -> new NeutronSourcePellet(properties, EnumColor.YELLOW));
         DUST_CALCIUM_OXIDE = ITEMS.register("dust_calcium_oxide");
         DUST_BERYLLIUM = ITEMS.register("dust_beryllium");
         INGOT_BERYLLIUM = ITEMS.register("ingot_beryllium");
@@ -104,7 +104,7 @@ public class MSItems {
         HIGH_QUALITY_CONCRETE_POWDER = ITEMS.register("powder_high_quality_concrete");
         //UNSTABLE_CALIFORNIUM_MIXTURE = ITEMS.register("unstable_californium_mixture", ()-> new UnstableCaliforniumMixture(new Item.Properties(), EnumColor.ORANGE));
         //REFINED_CALIFORNIUM_INGOT = ITEMS.register("ingot_refined_californium", ()-> new RefinedCaliforniumIngot(new Item.Properties(), EnumColor.ORANGE));
-        TABLET_IODINE = ITEMS.register("tablet_iodine", () -> new IodineTablet(new Item.Properties().food(new FoodProperties.Builder().nutrition(0).build())));
+        TABLET_IODINE = ITEMS.registerItem("tablet_iodine", properties -> new IodineTablet(properties.food(new FoodProperties.Builder().nutrition(0).build())));
 
         HIGH_QUALITY_CONCRETE_CLUMP_AQUA = BUILDING_ITEMS.register("clump_high_quality_concrete_aqua");
         HIGH_QUALITY_CONCRETE_CLUMP_BLACK = BUILDING_ITEMS.register("clump_high_quality_concrete_black");

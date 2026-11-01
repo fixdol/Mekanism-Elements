@@ -10,7 +10,7 @@
   },
   "fluid_input": {
     "amount": 1,
-    "fluid": "mekanismelements:beryllium"
+    "ingredient": "mekanismelements:beryllium"
   },
   "fluid_output": {
     "amount": 1,

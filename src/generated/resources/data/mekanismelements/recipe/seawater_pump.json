@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "A": {
-      "tag": "c:ingots/osmium"
-    },
-    "E": {
-      "item": "mekanism:electric_pump"
-    },
-    "_": {
-      "item": "mekanism:elite_control_circuit"
-    }
+    "A": "#c:ingots/osmium",
+    "E": "mekanism:electric_pump",
+    "_": "mekanism:elite_control_circuit"
   },
   "pattern": [
     "AAA",
@@ -18,7 +12,6 @@
     "AAA"
   ],
   "result": {
-    "count": 1,
     "id": "mekanismelements:seawater_pump"
   }
 }

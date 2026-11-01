@@ -6,7 +6,7 @@
   },
   "item_input": {
     "count": 1,
-    "tag": "c:ores/emerald"
+    "ingredient": "#c:ores/emerald"
   },
   "output": {
     "amount": 1000,

@@ -6,11 +6,9 @@ import mekanism.api.MekanismAPI;
 import mekanism.api.MekanismAPITags;
 import mekanism.common.registration.MekanismDeferredHolder;
 import mekanism.common.registration.impl.CreativeTabDeferredRegister;
+import mekanism.common.component.containers.type.ContainerType;
 import mekanism.common.registries.MekanismBlocks;
 import mekanism.common.registries.MekanismCreativeTabs;
-import mekanism.common.util.ChemicalUtil;
-import mekanism.generators.common.MekanismGenerators;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import vazkii.patchouli.api.PatchouliAPI;
 
@@ -29,13 +27,13 @@ public class MSCreativeTab {
                           displayParameters.holders().lookupOrThrow(MekanismAPI.CHEMICAL_REGISTRY_NAME)
                                   .listElements()
                                   .filter(holder -> {
-                                      String namespace = holder.key().location().getNamespace();
+                                      String namespace = holder.key().identifier().getNamespace();
                                       return namespace.equals(MekanismElements.MODID) && 
                                              !holder.is(MekanismAPITags.Chemicals.HIDDEN_FROM_RECIPE_VIEWERS) && 
                                              !holder.is(MekanismAPI.EMPTY_CHEMICAL_KEY);
                                   })
-                                  .forEach(holder -> output.accept(ChemicalUtil.getFilledVariant(MekanismBlocks.CREATIVE_CHEMICAL_TANK.getItemHolder(), holder)));
-                          output.accept(PatchouliAPI.get().getBookStack(ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "guide")));
+                                  .forEach(holder -> output.accept(ContainerType.CHEMICAL.getFilledVariant(MekanismBlocks.CREATIVE_CHEMICAL_TANK.getItemHolder(), holder, null)));
+                                  output.accept(PatchouliAPI.get().getBookStack(MekanismElements.rl("guide")));
                       })
     );
 }

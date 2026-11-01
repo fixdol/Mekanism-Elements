@@ -6,8 +6,6 @@ import fixdol.mekanismelements.common.registries.MSItems;
 import mekanism.api.datagen.recipe.builder.ChemicalCrystallizerRecipeBuilder;
 import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 
 public class CrystallizingRecipeProvider {
 
@@ -16,14 +14,14 @@ public class CrystallizingRecipeProvider {
 
         // Beryllium (gas, 1000 mB) -> Dust Beryllium (item)
         ChemicalCrystallizerRecipeBuilder.crystallizing(
-                IngredientCreatorAccess.chemicalStack().from(MSGases.BERYLLIUM.get(), 1000),
-                new ItemStack(MSItems.DUST_BERYLLIUM.get())
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "dust_beryllium"));
+                IngredientCreatorAccess.chemicalStack().fromHolder(MSGases.BERYLLIUM, 1000),
+                MSItems.DUST_BERYLLIUM.asTemplate()
+        ).save(recipeOutput, MekanismElements.rl(basePath + "dust_beryllium"));
 
         // Potassium Iodide (gas, 100 mB) -> Tablet Iodine (item)
         ChemicalCrystallizerRecipeBuilder.crystallizing(
-                IngredientCreatorAccess.chemicalStack().from(MSGases.POTASSIUM_IODIDE.get(), 100),
-                new ItemStack(MSItems.TABLET_IODINE.get())
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "tablet_iodine"));
+                IngredientCreatorAccess.chemicalStack().fromHolder(MSGases.POTASSIUM_IODIDE, 100),
+                MSItems.TABLET_IODINE.asTemplate()
+        ).save(recipeOutput, MekanismElements.rl(basePath + "tablet_iodine"));
     }
 }

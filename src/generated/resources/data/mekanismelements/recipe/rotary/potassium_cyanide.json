@@ -10,7 +10,7 @@
   },
   "fluid_input": {
     "amount": 1,
-    "fluid": "mekanismelements:potassium_cyanide"
+    "ingredient": "mekanismelements:potassium_cyanide"
   },
   "fluid_output": {
     "amount": 1,

@@ -7,7 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 
@@ -57,9 +57,9 @@ public class MSPatchouliProvider implements DataProvider {
     public CompletableFuture<?> run(CachedOutput cache) {
         List<CompletableFuture<?>> futures = new ArrayList<>();
         futures.add(DataProvider.saveStable(cache, book(),
-              bookDefinition.json(ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, BOOK + "/book"))));
+              bookDefinition.json(Identifier.fromNamespaceAndPath(MekanismElements.MODID, BOOK + "/book"))));
         futures.add(DataProvider.saveStable(cache, guideBookRecipe(),
-              recipes.json(ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "guide_book"))));
+              recipes.json(Identifier.fromNamespaceAndPath(MekanismElements.MODID, "guide_book"))));
 
         for (Category category : CATEGORIES) {
             futures.add(save(cache, category(category), LANG + "/categories/" + category.id()));
@@ -83,14 +83,14 @@ public class MSPatchouliProvider implements DataProvider {
 
     private CompletableFuture<?> save(CachedOutput cache, JsonObject json, String path) {
         return DataProvider.saveStable(cache, json,
-              books.json(ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, BOOK + "/" + path)));
+              books.json(Identifier.fromNamespaceAndPath(MekanismElements.MODID, BOOK + "/" + path)));
     }
 
     private static JsonObject guideBookRecipe() {
         JsonObject key = new JsonObject();
-        key.add("A", ingredient("minecraft:writable_book"));
-        key.add("B", ingredient("mekanism:gauge_dropper"));
-        key.add("C", ingredient(MekanismElements.MODID + ":syringe"));
+        key.addProperty("A", "minecraft:writable_book");
+        key.addProperty("B", "mekanism:gauge_dropper");
+        key.addProperty("C", MekanismElements.MODID + ":syringe");
 
         JsonArray pattern = new JsonArray();
         pattern.add("AB ");
@@ -112,12 +112,6 @@ public class MSPatchouliProvider implements DataProvider {
         recipe.add("pattern", pattern);
         recipe.add("result", result);
         return recipe;
-    }
-
-    private static JsonObject ingredient(String item) {
-        JsonObject json = new JsonObject();
-        json.addProperty("item", item);
-        return json;
     }
 
     private static JsonObject book() {
@@ -198,7 +192,7 @@ public class MSPatchouliProvider implements DataProvider {
     private static Map<String, List<String>> groupItems() {
         Map<String, List<String>> groups = new LinkedHashMap<>();
         for (Item item : BuiltInRegistries.ITEM) {
-            ResourceLocation id = BuiltInRegistries.ITEM.getKey(item);
+            Identifier id = BuiltInRegistries.ITEM.getKey(item);
             if (!MekanismElements.MODID.equals(id.getNamespace())) {
                 continue;
             }
@@ -256,7 +250,7 @@ public class MSPatchouliProvider implements DataProvider {
     }
 
     private static String nameKey(String path) {
-        return (BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, path)) instanceof BlockItem
+        return (BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(MekanismElements.MODID, path)) instanceof BlockItem
               ? "block." : "item.") + MekanismElements.MODID + "." + path;
     }
 

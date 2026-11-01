@@ -2,35 +2,39 @@ package fixdol.mekanismelements.datagen.machines;
 
 import fixdol.mekanismelements.common.MekanismElements;
 import fixdol.mekanismelements.common.registries.MSGases;
-import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.datagen.recipe.builder.ChemicalDissolutionRecipeBuilder;
 import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
 import mekanism.common.registries.MekanismChemicals;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
 
 public class DissolutionRecipeProvider {
 
-    public static void buildRecipes(RecipeOutput recipeOutput) {
+    public static void buildRecipes(RecipeOutput recipeOutput, HolderLookup.Provider registries) {
         String basePath = "dissolution/";
+        HolderGetter<Item> items = registries.lookupOrThrow(Registries.ITEM);
 
         // Netherite Dust (item) + Aqua Regia (gas, 1 mB) -> Netherite Acid (gas, 100 mB)
         ChemicalDissolutionRecipeBuilder.dissolution(
-                IngredientCreatorAccess.item().from(
-                        ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "dusts/netherite")), 1),
-                IngredientCreatorAccess.chemicalStack().from(MSGases.AQUA_REGIA.get(), 1),
-                new ChemicalStack(MSGases.NETHERITE_ACID.get().getAsHolder(), 100),
+                IngredientCreatorAccess.item().from(items,
+                        ItemTags.create(Identifier.fromNamespaceAndPath("c", "dusts/netherite")), 1),
+                IngredientCreatorAccess.chemicalStack().fromHolder(MSGases.AQUA_REGIA, 1),
+                MSGases.NETHERITE_ACID.asTemplate(100),
                 false
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "netherite_acid"));
+        ).save(recipeOutput, MekanismElements.rl(basePath + "netherite_acid"));
 
         // Emerald Ore (item, 1) + Sulfuric Acid (gas, 1 mB) -> Beryllium (gas, 1000 mB) [per_tick_usage = true]
         ChemicalDissolutionRecipeBuilder.dissolution(
-                IngredientCreatorAccess.item().from(
-                        ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ores/emerald")), 1),
-                IngredientCreatorAccess.chemicalStack().from(MekanismChemicals.SULFURIC_ACID.get(), 1),
-                new ChemicalStack(MSGases.BERYLLIUM.get().getAsHolder(), 1000),
+                IngredientCreatorAccess.item().from(items,
+                        ItemTags.create(Identifier.fromNamespaceAndPath("c", "ores/emerald")), 1),
+                IngredientCreatorAccess.chemicalStack().fromHolder(MekanismChemicals.SULFURIC_ACID, 1),
+                MSGases.BERYLLIUM.asTemplate(1000),
                 true
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "beryllium"));
+        ).save(recipeOutput, MekanismElements.rl(basePath + "beryllium"));
     }
 }

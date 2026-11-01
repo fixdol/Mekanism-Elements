@@ -1,19 +1,21 @@
 package fixdol.mekanismelements.common.recipe.lookup.monitor;
 
-import fixdol.mekanismelements.common.recipe.lookup.IMSRecipeLookupHandler;
+import com.google.common.primitives.Ints;
 import mekanism.api.IContentsListener;
 import mekanism.api.energy.IEnergyContainer;
 import mekanism.api.recipes.MekanismRecipe;
 import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.api.recipes.cache.ICachedRecipeHolder;
+import mekanism.api.recipes.cache.ItemStackConstantChemicalToObjectCachedRecipe;
 import mekanism.common.CommonWorldTickHandler;
-import mekanism.common.recipe.lookup.IRecipeLookupHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import fixdol.mekanismelements.common.recipe.lookup.IMSRecipeLookupHandler;
+import org.jspecify.annotations.Nullable;
 
 public class MSRecipeCacheLookupMonitor<RECIPE extends MekanismRecipe<?>> implements ICachedRecipeHolder<RECIPE>, IContentsListener {
+
     private final IMSRecipeLookupHandler<RECIPE> handler;
     protected final int cacheIndex;
+    @Nullable
     protected CachedRecipe<RECIPE> cachedRecipe;
     protected boolean hasNoRecipe;
     protected boolean shouldUnpause;
@@ -47,15 +49,14 @@ public class MSRecipeCacheLookupMonitor<RECIPE extends MekanismRecipe<?>> implem
         shouldUnpause = true;
     }
 
-    /**
-     * Helper that wraps {@link #updateAndProcess()} inside of a brief check to calculate how much energy actually got used.
-     */
-    public long updateAndProcess(IEnergyContainer energyContainer) {
-        //Copy this so that if it changes we still have the original amount
-        long prev = energyContainer.getEnergy();
+    /// Helper that wraps [#updateAndProcess()] inside of a brief check to calculate how much energy actually got used.
+    public int updateAndProcess(IEnergyContainer energyContainer) {
+        //Copy this so that if it changes we still have the original amount. Don't bother making it a constant though as this way
+        // we can then use minusEqual instead of subtract to remove an extra copy call
+        long prev = energyContainer.getAmountAsLong();
         if (updateAndProcess()) {
             //Update amount of energy that actually got used, as if we are "near" full we may not have performed our max number of operations
-            return prev - energyContainer.getEnergy();
+            return Math.max(0, Ints.saturatedCast(prev - energyContainer.getAmountAsLong()));
         }
         //If we don't have a cached recipe so didn't process anything at all just return zero
         return 0;
@@ -79,9 +80,13 @@ public class MSRecipeCacheLookupMonitor<RECIPE extends MekanismRecipe<?>> implem
     }
 
     @Override
-    public void loadSavedData(@NotNull CachedRecipe<RECIPE> cached, int cacheIndex) {
+    public void loadSavedData(CachedRecipe<RECIPE> cached, int cacheIndex) {
         if (cachedIndexMatches(cacheIndex)) {
             ICachedRecipeHolder.super.loadSavedData(cached, cacheIndex);
+            if (cached instanceof ItemStackConstantChemicalToObjectCachedRecipe<?, ?> c &&
+                handler instanceof IMSRecipeLookupHandler.ConstantUsageRecipeLookupHandler lookupHandler) {
+                c.loadSavedUsageSoFar(lookupHandler.getSavedUsedSoFar(cacheIndex));
+            }
         }
     }
 
@@ -104,7 +109,7 @@ public class MSRecipeCacheLookupMonitor<RECIPE extends MekanismRecipe<?>> implem
 
     @Nullable
     @Override
-    public CachedRecipe<RECIPE> createNewCachedRecipe(@NotNull RECIPE recipe, int cacheIndex) {
+    public CachedRecipe<RECIPE> createNewCachedRecipe(RECIPE recipe, int cacheIndex) {
         return cachedIndexMatches(cacheIndex) ? handler.createNewCachedRecipe(recipe, cacheIndex) : null;
     }
 

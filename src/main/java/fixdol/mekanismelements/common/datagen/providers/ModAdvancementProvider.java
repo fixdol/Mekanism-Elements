@@ -6,23 +6,22 @@ import fixdol.mekanismelements.common.registries.MSItems;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.common.data.AdvancementProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.data.advancements.AdvancementSubProvider;
+import net.minecraft.resources.Identifier;
 
 import java.util.function.Consumer;
 
-public class ModAdvancementProvider implements AdvancementProvider.AdvancementGenerator {
+public class ModAdvancementProvider implements AdvancementSubProvider {
 
     @Override
-    public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
+    public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver) {
 
         // neutron_source.json -> parent: mekanism:plutonium
         AdvancementHolder neutronSource = Advancement.Builder.advancement()
-                .parent(ResourceLocation.fromNamespaceAndPath("mekanism", "plutonium"))
+                .parent(Identifier.fromNamespaceAndPath("mekanism", "plutonium"))
                 .display(
                         MSItems.NEUTRON_SOURCE_PELLET.get(),
                         Component.translatable("advancements.mekanismelements.neutron_source.title"),
@@ -34,12 +33,12 @@ public class ModAdvancementProvider implements AdvancementProvider.AdvancementGe
                         false
                 )
                 .addCriterion("pellet_neutron_source", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.NEUTRON_SOURCE_PELLET.get()))
-                .save(saver, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "neutron_source").toString());
+                .save(saver, Identifier.fromNamespaceAndPath(MekanismElements.MODID, "neutron_source").toString());
 
         // californium.json -> parent: mekanism:plutonium
         /*
         AdvancementHolder californium = Advancement.Builder.advancement()
-                .parent(ResourceLocation.fromNamespaceAndPath("mekanism", "plutonium"))
+                .parent(Identifier.fromNamespaceAndPath("mekanism", "plutonium"))
                 .display(
                         MSItems.REFINED_CALIFORNIUM_INGOT.get(),
                         Component.translatable("advancements.mekanismelements.californium.title"),
@@ -51,7 +50,7 @@ public class ModAdvancementProvider implements AdvancementProvider.AdvancementGe
                         false
                 )
                 .addCriterion("pellet_neutron_source", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.REFINED_CALIFORNIUM_INGOT.get()))
-                .save(saver, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "californium").toString());
+                .save(saver, Identifier.fromNamespaceAndPath(MekanismElements.MODID, "californium").toString());
         */
 
         // radiation_irradiator.json -> parent: mekanismelements:neutron_source
@@ -68,11 +67,11 @@ public class ModAdvancementProvider implements AdvancementProvider.AdvancementGe
                         false
                 )
                 .addCriterion("pellet_neutron_source", InventoryChangeTrigger.TriggerInstance.hasItems(MSBlocks.RADIATION_IRRADIATOR.get()))
-                .save(saver, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "radiation_irradiator").toString());
+                .save(saver, Identifier.fromNamespaceAndPath(MekanismElements.MODID, "radiation_irradiator").toString());
 
         // seawater_pump.json -> parent: mekanism:pump
         Advancement.Builder.advancement()
-                .parent(ResourceLocation.fromNamespaceAndPath("mekanism", "pump"))
+                .parent(Identifier.fromNamespaceAndPath("mekanism", "pump"))
                 .display(
                         MSBlocks.SEAWATER_PUMP.get(),
                         Component.translatable("advancements.mekanismelements.seawater_pump.title"),
@@ -84,6 +83,6 @@ public class ModAdvancementProvider implements AdvancementProvider.AdvancementGe
                         false
                 )
                 .addCriterion("electric_pump", InventoryChangeTrigger.TriggerInstance.hasItems(MSBlocks.SEAWATER_PUMP.get()))
-                .save(saver, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "seawater_pump").toString());
+                .save(saver, Identifier.fromNamespaceAndPath(MekanismElements.MODID, "seawater_pump").toString());
     }
 }

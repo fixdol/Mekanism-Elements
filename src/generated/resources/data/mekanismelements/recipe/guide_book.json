@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "A": {
-      "item": "minecraft:writable_book"
-    },
-    "B": {
-      "item": "mekanism:gauge_dropper"
-    },
-    "C": {
-      "item": "mekanismelements:syringe"
-    }
+    "A": "minecraft:writable_book",
+    "B": "mekanism:gauge_dropper",
+    "C": "mekanismelements:syringe"
   },
   "pattern": [
     "AB ",

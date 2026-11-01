@@ -6,7 +6,7 @@ import fixdol.mekanismelements.common.MekanismElements;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 public class ChemLibRecipeProvider implements DataProvider {
 
     private static final String CHEMLIB = "chemlib";
-    private static final long AMOUNT = 1000;
+    private static final int AMOUNT = 1000;
 
     private static final Map<String, String> CRYSTALLIZING = new LinkedHashMap<>();
 
@@ -47,7 +47,7 @@ public class ChemLibRecipeProvider implements DataProvider {
         CompletableFuture<?>[] futures = new CompletableFuture<?>[CRYSTALLIZING.size()];
         int i = 0;
         for (Map.Entry<String, String> entry : CRYSTALLIZING.entrySet()) {
-            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(CHEMLIB, "crystallizing/" + entry.getValue());
+            Identifier id = Identifier.fromNamespaceAndPath(CHEMLIB, "crystallizing/" + entry.getValue());
             futures[i++] = DataProvider.saveStable(cache, crystallizing(entry.getKey(), entry.getValue()), recipePath.json(id));
         }
         return CompletableFuture.allOf(futures);
@@ -62,10 +62,10 @@ public class ChemLibRecipeProvider implements DataProvider {
 
         JsonObject input = new JsonObject();
         input.addProperty("amount", AMOUNT);
-        input.addProperty("chemical", ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, chemical).toString());
+        input.addProperty("chemical", Identifier.fromNamespaceAndPath(MekanismElements.MODID, chemical).toString());
 
         JsonObject output = new JsonObject();
-        output.addProperty("id", ResourceLocation.fromNamespaceAndPath(CHEMLIB, result).toString());
+        output.addProperty("id", Identifier.fromNamespaceAndPath(CHEMLIB, result).toString());
 
         JsonObject recipe = new JsonObject();
         recipe.add("neoforge:conditions", conditions);

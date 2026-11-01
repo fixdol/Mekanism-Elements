@@ -6,7 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 
 public class MuscleEnhancementTablet extends Item {
@@ -18,10 +18,10 @@ public class MuscleEnhancementTablet extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-        if (!level.isClientSide && entity instanceof Player player) {
+        if (!level.isClientSide() && entity instanceof Player player) {
 
-            MobEffectInstance currentEffect = player.getEffect(MobEffects.DAMAGE_BOOST);
-            player.getCooldowns().addCooldown(this, 6000);
+            MobEffectInstance currentEffect = player.getEffect(MobEffects.STRENGTH);
+            player.getCooldowns().addCooldown(stack, 6000);
 
             int newDuration;
             if (currentEffect != null) {
@@ -30,18 +30,18 @@ public class MuscleEnhancementTablet extends Item {
                 newDuration = BASE_DURATION;
             }
 
-            player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, newDuration, 1));
+            player.addEffect(new MobEffectInstance(MobEffects.STRENGTH, newDuration, 1));
         }
         return super.finishUsingItem(stack, level, entity);
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.EAT;
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return ItemUseAnimation.EAT;
     }
 
-    // getUseDuration signature changed in 1.21.1 - removed @Override if method doesn't exist
-    public int getUseDuration(ItemStack stack) {
+    @Override
+    public int getUseDuration(ItemStack stack, LivingEntity user) {
         return 20;
     }
 }

@@ -6,10 +6,9 @@
   },
   "item_input": {
     "count": 1,
-    "item": "mekanismelements:powder_high_quality_concrete_dark_red"
+    "ingredient": "mekanismelements:powder_high_quality_concrete_dark_red"
   },
   "output": {
-    "count": 1,
     "id": "mekanismelements:clump_high_quality_concrete_dark_red"
   },
   "per_tick_usage": false

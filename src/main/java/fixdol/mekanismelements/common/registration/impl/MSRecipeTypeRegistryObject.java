@@ -7,7 +7,7 @@ import mekanism.common.recipe.lookup.cache.IInputRecipeCache;
 import mekanism.common.registration.MekanismDeferredHolder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeType;
 
 public class MSRecipeTypeRegistryObject <RECIPE extends MekanismRecipe<?>, MS_INPUT_CACHE extends IInputRecipeCache> extends

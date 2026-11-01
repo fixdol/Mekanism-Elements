@@ -1,13 +1,13 @@
 package fixdol.mekanismelements.mixin;
 
-import mekanism.common.attachments.containers.chemical.ComponentBackedChemicalTank;
+import fixdol.mekanismelements.common.registries.MSGases;
+import mekanism.api.chemical.ChemicalResource;
+import mekanism.common.component.containers.chemical.ComponentBackedChemicalTank;
 import mekanism.common.item.gear.ItemJetpack;
-import mekanism.api.chemical.ChemicalStack;
-import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import fixdol.mekanismelements.common.registries.MSGases;
 
 import java.util.function.Predicate;
 
@@ -15,9 +15,9 @@ import java.util.function.Predicate;
 public abstract class MixinComponentBackedChemicalTank {
 
     @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true, ordinal = 0)
-    private static Predicate<ChemicalStack> modifyValidator(Predicate<ChemicalStack> originalValidator, ItemStack attachedTo) {
-        if (attachedTo.getItem() instanceof ItemJetpack) {
-            return stack -> originalValidator.test(stack) || stack.is(MSGases.AMMONIA);
+    private static Predicate<ChemicalResource> modifyValidator(Predicate<ChemicalResource> originalValidator, ItemAccess attachedAccess) {
+        if (attachedAccess.getResource().getItem() instanceof ItemJetpack) {
+            return resource -> originalValidator.test(resource) || resource.is(MSGases.AMMONIA);
         }
         return originalValidator;
     }

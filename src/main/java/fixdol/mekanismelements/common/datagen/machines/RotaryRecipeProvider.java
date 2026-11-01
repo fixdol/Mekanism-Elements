@@ -4,52 +4,52 @@ import fixdol.mekanismelements.common.MekanismElements;
 import fixdol.mekanismelements.common.registries.MSFluids;
 import fixdol.mekanismelements.common.registries.MSGases;
 import mekanism.api.chemical.Chemical;
-import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.datagen.recipe.builder.RotaryRecipeBuilder;
 import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
+import mekanism.common.registration.impl.DeferredChemical;
 import mekanism.common.registries.MekanismChemicals;
+import net.minecraft.core.Holder;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
 
 public class RotaryRecipeProvider {
 
     public static void buildRecipes(RecipeOutput recipeOutput) {
-        addRotary(recipeOutput, "ammonia",             MSFluids.AMMONIA.get(),             MSGases.AMMONIA.get());
-        addRotary(recipeOutput, "ammonium_nitrate",    MSFluids.AMMONIUM_NITRATE.get(),    MSGases.AMMONIUM_NITRATE.get());
+        addRotary(recipeOutput, "ammonia",             MSFluids.AMMONIA,             MSGases.AMMONIA);
+        addRotary(recipeOutput, "ammonium_nitrate",    MSFluids.AMMONIUM_NITRATE,    MSGases.AMMONIUM_NITRATE);
         // AQUA_REGIA: fluid comentado en MSFluids, descomentar cuando esté registrado
-        addRotary(recipeOutput, "antimatter_fluid",    MSFluids.ANTIMATTER_FLUID.get(),    MekanismChemicals.ANTIMATTER.get());
-        addRotary(recipeOutput, "beryllium",           MSFluids.BERYLLIUM.get(),           MSGases.BERYLLIUM.get());
-        addRotary(recipeOutput, "bromine",             MSFluids.BROMINE.get(),             MSGases.BROMINE.get());
-        addRotary(recipeOutput, "compressed_air",      MSFluids.COMPRESSED_AIR.get(),      MSGases.COMPRESSED_AIR.get());
-        addRotary(recipeOutput, "helium",              MSFluids.HELIUM.get(),              MSGases.HELIUM.get());
-        addRotary(recipeOutput, "hydrogen_cyanide",    MSFluids.HYDROGEN_CYANIDE.get(),    MSGases.HYDROGEN_CYANIDE.get());
-        addRotary(recipeOutput, "iodine",              MSFluids.IODINE.get(),              MSGases.IODINE.get());
-        addRotary(recipeOutput, "methane",             MSFluids.METHANE.get(),             MSGases.METHANE.get());
+        addRotary(recipeOutput, "antimatter_fluid",    MSFluids.ANTIMATTER_FLUID,    MekanismChemicals.ANTIMATTER);
+        addRotary(recipeOutput, "beryllium",           MSFluids.BERYLLIUM,           MSGases.BERYLLIUM);
+        addRotary(recipeOutput, "bromine",             MSFluids.BROMINE,             MSGases.BROMINE);
+        addRotary(recipeOutput, "compressed_air",      MSFluids.COMPRESSED_AIR,      MSGases.COMPRESSED_AIR);
+        addRotary(recipeOutput, "helium",              MSFluids.HELIUM,              MSGases.HELIUM);
+        addRotary(recipeOutput, "hydrogen_cyanide",    MSFluids.HYDROGEN_CYANIDE,    MSGases.HYDROGEN_CYANIDE);
+        addRotary(recipeOutput, "iodine",              MSFluids.IODINE,              MSGases.IODINE);
+        addRotary(recipeOutput, "methane",             MSFluids.METHANE,             MSGases.METHANE);
         // NETHERITE_ACID: fluid comentado en MSFluids, descomentar cuando esté registrado
-        addRotary(recipeOutput, "nitric_acid",         MSFluids.NITRIC_ACID.get(),         MSGases.NITRIC_ACID.get());
-        addRotary(recipeOutput, "nitric_oxide",        MSFluids.NITRIC_OXIDE.get(),        MSGases.NITRIC_OXIDE.get());
-        addRotary(recipeOutput, "nitrogen",            MSFluids.NITROGEN.get(),            MSGases.NITROGEN.get());
-        addRotary(recipeOutput, "nitrogen_dioxide",    MSFluids.NITROGEN_DIOXIDE.get(),    MSGases.NITROGEN_DIOXIDE.get());
+        addRotary(recipeOutput, "nitric_acid",         MSFluids.NITRIC_ACID,         MSGases.NITRIC_ACID);
+        addRotary(recipeOutput, "nitric_oxide",        MSFluids.NITRIC_OXIDE,        MSGases.NITRIC_OXIDE);
+        addRotary(recipeOutput, "nitrogen",            MSFluids.NITROGEN,            MSGases.NITROGEN);
+        addRotary(recipeOutput, "nitrogen_dioxide",    MSFluids.NITROGEN_DIOXIDE,    MSGases.NITROGEN_DIOXIDE);
         // POTASSIUM: no registrado en MSFluids, agregar cuando esté listo
-        addRotary(recipeOutput, "potassium_chloride",  MSFluids.POTASSIUM_CHLORIDE.get(),  MSGases.POTASSIUM_CHLORIDE.get());
-        addRotary(recipeOutput, "potassium_cyanide",   MSFluids.POTASSIUM_CYANIDE.get(),   MSGases.POTASSIUM_CYANIDE.get());
-        addRotary(recipeOutput, "potassium_hydroxide", MSFluids.POTASSIUM_HYDROXIDE.get(), MSGases.POTASSIUM_HYDROXIDE.get());
-        addRotary(recipeOutput, "potassium_iodide",    MSFluids.POTASSIUM_IODIDE.get(),    MSGases.POTASSIUM_IODIDE.get());
-        addRotary(recipeOutput, "seawater",            MSFluids.SEAWATER.get(),            MSGases.SEAWATER.get());
-        addRotary(recipeOutput, "strontium",           MSFluids.STRONTIUM.get(),           MSGases.STRONTIUM.get());
-        addRotary(recipeOutput, "superheated_helium",  MSFluids.SUPERHEATED_HELIUM.get(),  MSGases.SUPERHEATED_HELIUM.get());
-        addRotary(recipeOutput, "xenon",               MSFluids.XENON.get(),               MSGases.XENON.get());
-        addRotary(recipeOutput, "yttrium",             MSFluids.YTTRIUM.get(),             MSGases.YTTRIUM.get());
+        addRotary(recipeOutput, "potassium_chloride",  MSFluids.POTASSIUM_CHLORIDE,  MSGases.POTASSIUM_CHLORIDE);
+        addRotary(recipeOutput, "potassium_cyanide",   MSFluids.POTASSIUM_CYANIDE,   MSGases.POTASSIUM_CYANIDE);
+        addRotary(recipeOutput, "potassium_hydroxide", MSFluids.POTASSIUM_HYDROXIDE, MSGases.POTASSIUM_HYDROXIDE);
+        addRotary(recipeOutput, "potassium_iodide",    MSFluids.POTASSIUM_IODIDE,    MSGases.POTASSIUM_IODIDE);
+        addRotary(recipeOutput, "seawater",            MSFluids.SEAWATER,            MSGases.SEAWATER);
+        addRotary(recipeOutput, "strontium",           MSFluids.STRONTIUM,           MSGases.STRONTIUM);
+        addRotary(recipeOutput, "superheated_helium",  MSFluids.SUPERHEATED_HELIUM,  MSGases.SUPERHEATED_HELIUM);
+        addRotary(recipeOutput, "xenon",               MSFluids.XENON,               MSGases.XENON);
+        addRotary(recipeOutput, "yttrium",             MSFluids.YTTRIUM,             MSGases.YTTRIUM);
     }
 
-    private static void addRotary(RecipeOutput recipeOutput, String name, Fluid fluid, Chemical chemical) {
+    private static void addRotary(RecipeOutput recipeOutput, String name, Holder<Fluid> fluid, DeferredChemical<Chemical> chemical) {
         RotaryRecipeBuilder.rotary(
-                IngredientCreatorAccess.fluid().from(fluid, 1),
-                IngredientCreatorAccess.chemicalStack().from(chemical, 1),
-                new ChemicalStack(chemical, 1),
-                new FluidStack(fluid, 1)
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "rotary/" + name));
+                IngredientCreatorAccess.fluid().fromHolder(fluid, 1),
+                IngredientCreatorAccess.chemicalStack().fromHolder(chemical, 1),
+                chemical.asTemplate(1),
+                new FluidStackTemplate(fluid, 1)
+        ).save(recipeOutput, MekanismElements.rl("rotary/" + name));
     }
 }

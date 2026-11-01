@@ -26,7 +26,14 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.crafting.CookingBookCategory;
+import net.minecraft.world.item.crafting.Recipe;
+import org.jspecify.annotations.Nullable;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -40,32 +47,59 @@ import java.util.concurrent.CompletableFuture;
 
 public class ModRecipeProvider extends RecipeProvider {
 
-    public ModRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-        super(output, lookupProvider);
+    public ModRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
+        super(registries, new NoAdvancementOutput(output));
+    }
+
+    public static class ModRunner extends RecipeProvider.Runner {
+
+        public ModRunner(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> registries) {
+            super(packOutput, registries);
+        }
+
+        @Override
+        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
+            return new ModRecipeProvider(registries, output);
+        }
+
+        @Override
+        public String getName() {
+            return "Recipes: " + MekanismElements.MODID;
+        }
+    }
+
+    /** Las recetas se generan sin advancement asociada (igual que en 1.21.1). */
+    private record NoAdvancementOutput(RecipeOutput delegate) implements RecipeOutput {
+        @Override
+        public void accept(ResourceKey<Recipe<?>> id, Recipe<?> recipe, @Nullable AdvancementHolder advancement, ICondition... conditions) {
+            delegate.accept(id, recipe, null, conditions);
+        }
+
+        @Override
+        public Advancement.Builder advancement() {
+            return delegate.advancement();
+        }
+
+        @Override
+        public void includeRootAdvancement() {
+            delegate.includeRootAdvancement();
+        }
+    }
+
+    private static ResourceKey<Recipe<?>> key(String path) {
+        return ResourceKey.create(Registries.RECIPE, MekanismElements.rl(path));
+    }
+
+    private static TagKey<Item> cTag(String path) {
+        return ItemTags.create(Identifier.fromNamespaceAndPath("c", path));
     }
 
     @Override
-    protected void buildRecipes(RecipeOutput writer) {
-
-        RecipeOutput recipeOutput = new RecipeOutput() {
-            @Override
-            public void accept(ResourceLocation id, net.minecraft.world.item.crafting.Recipe<?> recipe,
-                               net.minecraft.advancements.AdvancementHolder advancement) {
-                writer.accept(id, recipe, null);
-            }
-            @Override
-            public net.minecraft.advancements.Advancement.Builder advancement() {
-                return writer.advancement();
-            }
-            @Override
-            public void accept(ResourceLocation id, net.minecraft.world.item.crafting.Recipe<?> recipe,
-                               net.minecraft.advancements.AdvancementHolder advancement, ICondition... conditions) {
-                writer.accept(id, recipe, null, conditions);
-            }
-        };
+    protected void buildRecipes() {
+        RecipeOutput recipeOutput = this.output;
 
         // Syringe
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MSItems.SYRINGE.get())
+        shaped(RecipeCategory.MISC, MSItems.SYRINGE.get())
                 .pattern(" I ")
                 .pattern(" G ")
                 .pattern(" G ")
@@ -75,20 +109,20 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(recipeOutput);
 
         // High Quality Concrete Clump
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, MSItems.HIGH_QUALITY_CONCRETE_POWDER.get(), 3)
-                .requires(net.minecraft.tags.ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "dusts/lead")))
+        shapeless(RecipeCategory.BUILDING_BLOCKS, MSItems.HIGH_QUALITY_CONCRETE_POWDER.get(), 3)
+                .requires(cTag("dusts/lead"))
                 .requires(Items.SAND)
-                .requires(net.minecraft.tags.ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "dusts/calcium_oxide")))
-                .unlockedBy("has_calcium_oxide", has(net.minecraft.tags.ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "dusts/calcium_oxide"))))
+                .requires(cTag("dusts/calcium_oxide"))
+                .unlockedBy("has_calcium_oxide", has(cTag("dusts/calcium_oxide")))
                 .save(recipeOutput);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MSItems.HIGH_PERFORMANCE_ADSORBENT.get().asItem())
+        shaped(RecipeCategory.MISC, MSItems.HIGH_PERFORMANCE_ADSORBENT.get().asItem())
                 .pattern("AAA")
                 .pattern("_X_")
                 .pattern("AAA")
                 .define('A', MekanismItems.HDPE_SHEET.get())
                 .define('X', MekanismItems.ANTIMATTER_PELLET.get())
-                .define('_', net.minecraft.tags.ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/lead")))
+                .define('_', cTag("ingots/lead"))
                 .unlockedBy("has_pellet_antimatter", has(MekanismItems.ANTIMATTER_PELLET.get()))
                 .save(recipeOutput);
 
@@ -113,17 +147,17 @@ public class ModRecipeProvider extends RecipeProvider {
         addColorRecipe(recipeOutput, MSItems.HIGH_QUALITY_CONCRETE_POWDER_YELLOW.get(), Items.YELLOW_DYE);
 
         // Structural Glass
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MekanismBlocks.STRUCTURAL_GLASS.asItem(), 8)
+        shaped(RecipeCategory.MISC, MekanismBlocks.STRUCTURAL_GLASS.asItem(), 8)
                 .pattern("SSS")
                 .pattern("SGS")
                 .pattern("SSS")
-                .define('S', net.minecraft.tags.ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "glass_blocks")))
-                .define('G', net.minecraft.tags.ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "glass_panes")))
+                .define('S', cTag("glass_blocks"))
+                .define('G', cTag("glass_panes"))
                 .unlockedBy("has_glass", has(Items.GLASS))
                 .save(recipeOutput);
 
         // Radiation Irradiator
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MSBlocks.RADIATION_IRRADIATOR.get().asItem())
+        shaped(RecipeCategory.MISC, MSBlocks.RADIATION_IRRADIATOR.get().asItem())
                 .pattern("CSC")
                 .pattern("_X_")
                 .pattern("CAC")
@@ -136,18 +170,18 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(recipeOutput);
 
         // Seawater Pump
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MSBlocks.SEAWATER_PUMP.get().asItem())
+        shaped(RecipeCategory.MISC, MSBlocks.SEAWATER_PUMP.get().asItem())
                 .pattern("AAA")
                 .pattern("_E_")
                 .pattern("AAA")
-                .define('A', net.minecraft.tags.ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "ingots/osmium")))
+                .define('A', cTag("ingots/osmium"))
                 .define('_', MekanismItems.ELITE_CONTROL_CIRCUIT.get())
                 .define('E', MekanismBlocks.ELECTRIC_PUMP.asItem())
                 .unlockedBy("has_electric_pump", has(MekanismBlocks.ELECTRIC_PUMP.asItem()))
                 .save(recipeOutput);
 
         // Adsorption Separator
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MSBlocks.ADSORPTION_SEPARATOR.get().asItem())
+        shaped(RecipeCategory.MISC, MSBlocks.ADSORPTION_SEPARATOR.get().asItem())
                 .pattern("ACA")
                 .pattern("SXS")
                 .pattern("ACA")
@@ -159,7 +193,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(recipeOutput);
 
         // Air Compressor
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MSBlocks.AIR_COMPRESSOR.get().asItem())
+        shaped(RecipeCategory.MISC, MSBlocks.AIR_COMPRESSOR.get().asItem())
                 .pattern("ACA")
                 .pattern("SXS")
                 .pattern("ATA")
@@ -172,7 +206,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(recipeOutput);
 
         // chemical demolition 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MSBlocks.CHEMICAL_DEMOLITION_MACHINE.get().asItem())
+        shaped(RecipeCategory.MISC, MSBlocks.CHEMICAL_DEMOLITION_MACHINE.get().asItem())
                 .pattern("ACA")
                 .pattern("SXS")
                 .pattern("ATA")
@@ -184,7 +218,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_steel_casing", has(MekanismBlocks.STEEL_CASING.asItem()))
                 .save(recipeOutput);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MSBlocks.INFINITY_ORE_REPROCESSING.get().asItem())
+        shaped(RecipeCategory.MISC, MSBlocks.INFINITY_ORE_REPROCESSING.get().asItem())
                 .pattern("ACA")
                 .pattern("PXP")
                 .pattern("ATA")
@@ -217,111 +251,120 @@ public class ModRecipeProvider extends RecipeProvider {
         addBlock(recipeOutput, MSItems.HIGH_QUALITY_CONCRETE_CLUMP_BROWN.get(), MSBlocks.BROWN_HIGH_QUALITY_CONCRETE.get(), MSBlocks.BROWN_HIGH_QUALITY_CONCRETE.get(), MSBlocks.BROWN_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.BROWN_HIGH_QUALITY_CONCRETE_STAIRS.get());
         addBlock(recipeOutput, MSItems.HIGH_QUALITY_CONCRETE_CLUMP_PINK.get(), MSBlocks.PINK_HIGH_QUALITY_CONCRETE.get(), MSBlocks.PINK_HIGH_QUALITY_CONCRETE.get(), MSBlocks.PINK_HIGH_QUALITY_CONCRETE_SLABS.get(), MSBlocks.PINK_HIGH_QUALITY_CONCRETE_STAIRS.get());
 
-        addOreRecipe(recipeOutput, MSItems.HIGH_PERFORMANCE_ADSORBENT_BERYLLIUM.get(), Ingredient.of(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "ingots/beryllium"))));
-        addOreRecipe(recipeOutput, MSItems.HIGH_PERFORMANCE_ADSORBENT_COPPER.get(), Ingredient.of(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "ingots/copper"))));
-        addOreRecipe(recipeOutput, MSItems.HIGH_PERFORMANCE_ADSORBENT_GOLD.get(), Ingredient.of(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "ingots/gold"))));
-        addOreRecipe(recipeOutput, MSItems.HIGH_PERFORMANCE_ADSORBENT_IRON.get(), Ingredient.of(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "ingots/iron"))));
-        addOreRecipe(recipeOutput, MSItems.HIGH_PERFORMANCE_ADSORBENT_LEAD.get(), Ingredient.of(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "ingots/lead"))));
-        addOreRecipe(recipeOutput, MSItems.HIGH_PERFORMANCE_ADSORBENT_OSMIUM.get(), Ingredient.of(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "ingots/osmium"))));
-        addOreRecipe(recipeOutput, MSItems.HIGH_PERFORMANCE_ADSORBENT_TIN.get(), Ingredient.of(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "ingots/tin"))));
-        addOreRecipe(recipeOutput, MSItems.HIGH_PERFORMANCE_ADSORBENT_URANIUM.get(), Ingredient.of(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "ingots/uranium"))));
+        addOreRecipe(recipeOutput, MSItems.HIGH_PERFORMANCE_ADSORBENT_BERYLLIUM.get(), tag(cTag("ingots/beryllium")));
+        addOreRecipe(recipeOutput, MSItems.HIGH_PERFORMANCE_ADSORBENT_COPPER.get(), tag(cTag("ingots/copper")));
+        addOreRecipe(recipeOutput, MSItems.HIGH_PERFORMANCE_ADSORBENT_GOLD.get(), tag(cTag("ingots/gold")));
+        addOreRecipe(recipeOutput, MSItems.HIGH_PERFORMANCE_ADSORBENT_IRON.get(), tag(cTag("ingots/iron")));
+        addOreRecipe(recipeOutput, MSItems.HIGH_PERFORMANCE_ADSORBENT_LEAD.get(), tag(cTag("ingots/lead")));
+        addOreRecipe(recipeOutput, MSItems.HIGH_PERFORMANCE_ADSORBENT_OSMIUM.get(), tag(cTag("ingots/osmium")));
+        addOreRecipe(recipeOutput, MSItems.HIGH_PERFORMANCE_ADSORBENT_TIN.get(), tag(cTag("ingots/tin")));
+        addOreRecipe(recipeOutput, MSItems.HIGH_PERFORMANCE_ADSORBENT_URANIUM.get(), tag(cTag("ingots/uranium")));
 
         // Smelting: Beryllium Dust -> Beryllium Ingot
         SimpleCookingRecipeBuilder.smelting(
                 Ingredient.of(MSItems.DUST_BERYLLIUM.get()),
                 RecipeCategory.MISC,
+                CookingBookCategory.MISC,
                 MSItems.INGOT_BERYLLIUM.get(),
                 0.7f, 200)
                 .group("beryllium_ingot")
                 .unlockedBy("has_dust_beryllium", has(MSItems.DUST_BERYLLIUM.get()))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "smelting/beryllium_ingot_from_dust"));
+                .save(recipeOutput, key("smelting/beryllium_ingot_from_dust"));
 
         // Blasting: Beryllium Dust -> Beryllium Ingot
         SimpleCookingRecipeBuilder.blasting(
                 Ingredient.of(MSItems.DUST_BERYLLIUM.get()),
                 RecipeCategory.MISC,
+                CookingBookCategory.MISC,
                 MSItems.INGOT_BERYLLIUM.get(),
                 0.7f, 100)
                 .group("beryllium_ingot")
                 .unlockedBy("has_dust_beryllium", has(MSItems.DUST_BERYLLIUM.get()))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "blasting/beryllium_ingot_from_dust"));
+                .save(recipeOutput, key("blasting/beryllium_ingot_from_dust"));
 
         // Smelting: Calcium Oxide Dust desde corales muertos y calcite
         SimpleCookingRecipeBuilder.smelting(
                 Ingredient.of(Items.CALCITE),
                 RecipeCategory.MISC,
+                CookingBookCategory.MISC,
                 MSItems.DUST_CALCIUM_OXIDE.get(),
                 0.6f, 200)
                 .unlockedBy("has_calcite", has(Items.CALCITE))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "smelting/dust_calcium_oxide_from_calcite"));
+                .save(recipeOutput, key("smelting/dust_calcium_oxide_from_calcite"));
 
         SimpleCookingRecipeBuilder.smelting(
                 Ingredient.of(Items.DRIPSTONE_BLOCK),
                 RecipeCategory.MISC,
+                CookingBookCategory.MISC,
                 MSItems.DUST_CALCIUM_OXIDE.get(),
                 0.6f, 200)
                 .unlockedBy("has_dripstone", has(Items.DRIPSTONE_BLOCK))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "smelting/dust_calcium_oxide_from_dripstone"));
+                .save(recipeOutput, key("smelting/dust_calcium_oxide_from_dripstone"));
 
         SimpleCookingRecipeBuilder.smelting(
                 Ingredient.of(Items.DEAD_TUBE_CORAL_BLOCK),
                 RecipeCategory.MISC,
+                CookingBookCategory.MISC,
                 MSItems.DUST_CALCIUM_OXIDE.get(),
                 0.6f, 200)
                 .unlockedBy("has_coral", has(Items.DEAD_TUBE_CORAL_BLOCK))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "smelting/dust_calcium_oxide_from_tube_coral"));
+                .save(recipeOutput, key("smelting/dust_calcium_oxide_from_tube_coral"));
 
         SimpleCookingRecipeBuilder.smelting(
                 Ingredient.of(Items.DEAD_BRAIN_CORAL_BLOCK),
                 RecipeCategory.MISC,
+                CookingBookCategory.MISC,
                 MSItems.DUST_CALCIUM_OXIDE.get(),
                 0.6f, 200)
                 .unlockedBy("has_coral", has(Items.DEAD_BRAIN_CORAL_BLOCK))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "smelting/dust_calcium_oxide_from_brain_coral"));
+                .save(recipeOutput, key("smelting/dust_calcium_oxide_from_brain_coral"));
 
         SimpleCookingRecipeBuilder.smelting(
                 Ingredient.of(Items.DEAD_BUBBLE_CORAL_BLOCK),
                 RecipeCategory.MISC,
+                CookingBookCategory.MISC,
                 MSItems.DUST_CALCIUM_OXIDE.get(),
                 0.6f, 200)
                 .unlockedBy("has_coral", has(Items.DEAD_BUBBLE_CORAL_BLOCK))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "smelting/dust_calcium_oxide_from_bubble_coral"));
+                .save(recipeOutput, key("smelting/dust_calcium_oxide_from_bubble_coral"));
 
         SimpleCookingRecipeBuilder.smelting(
                 Ingredient.of(Items.DEAD_FIRE_CORAL_BLOCK),
                 RecipeCategory.MISC,
+                CookingBookCategory.MISC,
                 MSItems.DUST_CALCIUM_OXIDE.get(),
                 0.6f, 200)
                 .unlockedBy("has_coral", has(Items.DEAD_FIRE_CORAL_BLOCK))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "smelting/dust_calcium_oxide_from_fire_coral"));
+                .save(recipeOutput, key("smelting/dust_calcium_oxide_from_fire_coral"));
 
         SimpleCookingRecipeBuilder.smelting(
                 Ingredient.of(Items.DEAD_HORN_CORAL_BLOCK),
                 RecipeCategory.MISC,
+                CookingBookCategory.MISC,
                 MSItems.DUST_CALCIUM_OXIDE.get(),
                 0.6f, 200)
                 .unlockedBy("has_coral", has(Items.DEAD_HORN_CORAL_BLOCK))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "smelting/dust_calcium_oxide_from_horn_coral"));
+                .save(recipeOutput, key("smelting/dust_calcium_oxide_from_horn_coral"));
 
         // Recetas de máquinas custom (delegadas)
         CrushingRecipeProvider.buildRecipes(recipeOutput);
         ChemicalDemolitionRecipeProvider.buildRecipes(recipeOutput);
-        AdsorptionRecipeProvider.buildRecipes(recipeOutput);
+        AdsorptionRecipeProvider.buildRecipes(recipeOutput, this.registries);
         RadiationIrradiatingRecipeProvider.buildRecipes(recipeOutput);
         ChemicalInfusingRecipeProvider.buildRecipes(recipeOutput);
-        ReactionRecipeProvider.buildRecipes(recipeOutput);
+        ReactionRecipeProvider.buildRecipes(recipeOutput, this.registries);
         NucleosynthesizingRecipeProvider.buildRecipes(recipeOutput);
         RotaryRecipeProvider.buildRecipes(recipeOutput);
         SeparatingRecipeProvider.buildRecipes(recipeOutput);
         CentrifugingRecipeProvider.buildRecipes(recipeOutput);
         OxidizingRecipeProvider.buildRecipes(recipeOutput);
         EvaporatingRecipeProvider.buildRecipes(recipeOutput);
-        DissolutionRecipeProvider.buildRecipes(recipeOutput);
+        DissolutionRecipeProvider.buildRecipes(recipeOutput, this.registries);
         PaintingRecipeProvider.buildRecipes(recipeOutput);
         CrystallizingRecipeProvider.buildRecipes(recipeOutput);
         ActivatingRecipeProvider.buildRecipes(recipeOutput);
-        InjectingRecipeProvider.buildRecipes(recipeOutput);
-        WashingRecipeProvider.buildRecipes(recipeOutput);
+        InjectingRecipeProvider.buildRecipes(recipeOutput, this.registries);
+        WashingRecipeProvider.buildRecipes(recipeOutput, this.registries);
         InfinityOreReprocessingRecipeProvider.buildRecipes(recipeOutput);
 
         // Stonecutting: High Quality Concrete -> Slab / Stairs (todos los colores)
@@ -357,15 +400,15 @@ public class ModRecipeProvider extends RecipeProvider {
     private void addHqcStonecutting(RecipeOutput output, String name, Block base, Block slab, Block stairs) {
         SingleItemRecipeBuilder.stonecutting(Ingredient.of(base), RecipeCategory.BUILDING_BLOCKS, slab, 2)
                 .unlockedBy("has_" + name, has(base))
-                .save(output, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "stonecutting/" + name + "_slab_alt"));
+                .save(output, key("stonecutting/" + name + "_slab_alt"));
 
         SingleItemRecipeBuilder.stonecutting(Ingredient.of(base), RecipeCategory.BUILDING_BLOCKS, stairs, 1)
                 .unlockedBy("has_" + name, has(base))
-                .save(output, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "stonecutting/" + name + "_stairs_alt"));
+                .save(output, key("stonecutting/" + name + "_stairs_alt"));
     }
 
     private void addColorRecipe(RecipeOutput output, Item item, Item dye) {
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, item, 8)
+        shapeless(RecipeCategory.BUILDING_BLOCKS, item, 8)
                 .requires(MSItems.HIGH_QUALITY_CONCRETE_POWDER.get(), 8)
                 .requires(dye)
                 .unlockedBy("has_clump", has(MSItems.HIGH_QUALITY_CONCRETE_POWDER.get()))
@@ -373,7 +416,7 @@ public class ModRecipeProvider extends RecipeProvider {
     }
 
     private void addOreRecipe(RecipeOutput output, Item item, Ingredient ore) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, item, 1)
+        shaped(RecipeCategory.MISC, item, 1)
                 .pattern("ACA")
                 .pattern("CXC")
                 .pattern("ACA")
@@ -385,20 +428,20 @@ public class ModRecipeProvider extends RecipeProvider {
     }
 
     private void addBlock(RecipeOutput output, Item input1, Block input2, Block block, Block slab, Block stairs) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, block, 4)
+        shaped(RecipeCategory.BUILDING_BLOCKS, block, 4)
                 .pattern("##")
                 .pattern("##")
                 .define('#', input1)
                 .unlockedBy("has_high_quality_concrete_clump", has(input1))
                 .save(output);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, slab, 6)
+        shaped(RecipeCategory.BUILDING_BLOCKS, slab, 6)
                 .pattern("###")
                 .define('#', input2)
                 .unlockedBy("has_block", has(input2))
                 .save(output);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, stairs, 4)
+        shaped(RecipeCategory.BUILDING_BLOCKS, stairs, 4)
                 .pattern("#  ")
                 .pattern("## ")
                 .pattern("###")

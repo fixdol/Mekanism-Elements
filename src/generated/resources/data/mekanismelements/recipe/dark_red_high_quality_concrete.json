@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "item": "mekanismelements:clump_high_quality_concrete_dark_red"
-    }
+    "#": "mekanismelements:clump_high_quality_concrete_dark_red"
   },
   "pattern": [
     "##",

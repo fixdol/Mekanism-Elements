@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/block",
   "elements": [
     {
       "faces": {
@@ -63,15 +63,6 @@
         12,
         0
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          4,
-          12,
-          0
-        ]
-      },
       "to": [
         12,
         15,
@@ -140,15 +131,6 @@
         0,
         0
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          4,
-          0,
-          0
-        ]
-      },
       "to": [
         12,
         4,
@@ -217,15 +199,6 @@
         0,
         0
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          12,
-          0,
-          0
-        ]
-      },
       "to": [
         16,
         16,
@@ -363,15 +336,6 @@
         4,
         0
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          4,
-          4,
-          0
-        ]
-      },
       "to": [
         12,
         12,
@@ -440,15 +404,6 @@
         15,
         12
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          4,
-          15,
-          12
-        ]
-      },
       "to": [
         12,
         16,
@@ -517,15 +472,6 @@
         15,
         0
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          4,
-          15,
-          0
-        ]
-      },
       "to": [
         12,
         16,
@@ -534,42 +480,6 @@
     },
     {
       "faces": {
-        "down": {
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            0.75,
-            0.75
-          ]
-        },
-        "east": {
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            0.75,
-            0.0
-          ]
-        },
-        "north": {
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            0.75,
-            0.0
-          ]
-        },
-        "south": {
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            0.75,
-            0.0
-          ]
-        },
         "up": {
           "texture": "#1",
           "uv": [
@@ -578,15 +488,6 @@
             16.0,
             8.0
           ]
-        },
-        "west": {
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            0.75,
-            0.0
-          ]
         }
       },
       "from": [
@@ -594,19 +495,7 @@
         16,
         4
       ],
-      "neoforge_data": {
-        "block_light": 15,
-        "sky_light": 15
-      },
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          4,
-          17,
-          4
-        ]
-      },
+      "light_emission": 15,
       "to": [
         12,
         16,
@@ -615,33 +504,6 @@
     },
     {
       "faces": {
-        "down": {
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            1.0,
-            0.0
-          ]
-        },
-        "east": {
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            0.0,
-            1.0
-          ]
-        },
-        "north": {
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            1.0,
-            1.0
-          ]
-        },
         "south": {
           "texture": "#1",
           "uv": [
@@ -650,24 +512,6 @@
             16.0,
             16.0
           ]
-        },
-        "up": {
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            1.0,
-            0.0
-          ]
-        },
-        "west": {
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            0.0,
-            1.0
-          ]
         }
       },
       "from": [
@@ -675,19 +519,7 @@
         4,
         16
       ],
-      "neoforge_data": {
-        "block_light": 15,
-        "sky_light": 15
-      },
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          4,
-          4,
-          16
-        ]
-      },
+      "light_emission": 15,
       "to": [
         12,
         12,
@@ -696,42 +528,6 @@
     },
     {
       "faces": {
-        "down": {
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            2.0,
-            2.0
-          ]
-        },
-        "east": {
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            2.0,
-            0.25
-          ]
-        },
-        "north": {
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            2.0,
-            0.25
-          ]
-        },
-        "south": {
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            2.0,
-            0.25
-          ]
-        },
         "up": {
           "texture": "#0",
           "uv": [
@@ -739,15 +535,6 @@
             0.0,
             8.0,
             8.0
-          ]
-        },
-        "west": {
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            2.0,
-            0.25
           ]
         }
       },
@@ -756,15 +543,6 @@
         15,
         4
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          4,
-          15,
-          4
-        ]
-      },
       "to": [
         12,
         16,
@@ -773,35 +551,6 @@
     },
     {
       "faces": {
-        "down": {
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            1.0,
-            0.125
-          ]
-        },
-        "east": {
-          "rotation": 270,
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            1.0,
-            0.125
-          ]
-        },
-        "north": {
-          "rotation": 180,
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            1.0,
-            1.0
-          ]
-        },
         "south": {
           "texture": "#0",
           "uv": [
@@ -810,26 +559,6 @@
             8.0,
             8.0
           ]
-        },
-        "up": {
-          "rotation": 180,
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            1.0,
-            0.125
-          ]
-        },
-        "west": {
-          "rotation": 90,
-          "texture": "#missing",
-          "uv": [
-            0.0,
-            0.0,
-            1.0,
-            0.125
-          ]
         }
       },
       "from": [
@@ -837,15 +566,6 @@
         4,
         15
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          4,
-          12,
-          15
-        ]
-      },
       "to": [
         12,
         12,
@@ -853,7 +573,6 @@
       ]
     }
   ],
-  "render_type": "minecraft:cutout",
   "textures": {
     "0": "mekanism:block/models/ports",
     "1": "mekanism:block/models/ports_led",

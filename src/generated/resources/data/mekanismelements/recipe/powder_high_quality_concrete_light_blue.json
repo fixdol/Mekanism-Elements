@@ -2,33 +2,15 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    {
-      "item": "mekanismelements:powder_high_quality_concrete"
-    },
-    {
-      "item": "mekanismelements:powder_high_quality_concrete"
-    },
-    {
-      "item": "mekanismelements:powder_high_quality_concrete"
-    },
-    {
-      "item": "mekanismelements:powder_high_quality_concrete"
-    },
-    {
-      "item": "mekanismelements:powder_high_quality_concrete"
-    },
-    {
-      "item": "mekanismelements:powder_high_quality_concrete"
-    },
-    {
-      "item": "mekanismelements:powder_high_quality_concrete"
-    },
-    {
-      "item": "mekanismelements:powder_high_quality_concrete"
-    },
-    {
-      "item": "minecraft:light_blue_dye"
-    }
+    "mekanismelements:powder_high_quality_concrete",
+    "mekanismelements:powder_high_quality_concrete",
+    "mekanismelements:powder_high_quality_concrete",
+    "mekanismelements:powder_high_quality_concrete",
+    "mekanismelements:powder_high_quality_concrete",
+    "mekanismelements:powder_high_quality_concrete",
+    "mekanismelements:powder_high_quality_concrete",
+    "mekanismelements:powder_high_quality_concrete",
+    "minecraft:light_blue_dye"
   ],
   "result": {
     "count": 8,

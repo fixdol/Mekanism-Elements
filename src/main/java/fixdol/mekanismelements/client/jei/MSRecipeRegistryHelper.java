@@ -2,7 +2,6 @@ package fixdol.mekanismelements.client.jei;
 
 import fixdol.mekanismelements.common.recipe.IMSRecipeTypeProvider;
 import mekanism.api.recipes.MekanismRecipe;
-import mekanism.client.MekanismClient;
 import mekanism.client.recipe_viewer.jei.MekanismJEI;
 import mekanism.client.recipe_viewer.type.IRecipeViewerRecipeType;
 import mezz.jei.api.registration.IRecipeRegistration;

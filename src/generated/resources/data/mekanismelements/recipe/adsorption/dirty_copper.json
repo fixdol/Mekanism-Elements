@@ -2,11 +2,11 @@
   "type": "mekanismelements:adsorption",
   "fluid_input": {
     "amount": 50,
-    "fluid": "mekanismelements:seawater"
+    "ingredient": "mekanismelements:seawater"
   },
   "item_input": {
     "count": 1,
-    "item": "mekanismelements:high_performance_adsorbent_copper"
+    "ingredient": "mekanismelements:high_performance_adsorbent_copper"
   },
   "output": {
     "amount": 400,

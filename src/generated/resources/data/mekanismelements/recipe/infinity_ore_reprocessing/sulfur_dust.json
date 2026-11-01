@@ -6,7 +6,7 @@
   },
   "item_input": {
     "count": 1,
-    "item": "mekanism:block_charcoal"
+    "ingredient": "mekanism:block_charcoal"
   },
   "output": {
     "count": 16,

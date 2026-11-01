@@ -1,28 +1,32 @@
 package fixdol.mekanismelements.api.recipes.cache;
 
 import fixdol.mekanismelements.api.recipes.RadiationIrradiatingRecipe;
+import mekanism.api.chemical.Chemical;
 import mekanism.api.chemical.ChemicalStack;
+import mekanism.api.chemical.ChemicalStackTemplate;
 import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.api.recipes.inputs.IInputHandler;
-import mekanism.api.recipes.inputs.ILongInputHandler;
 import mekanism.api.recipes.outputs.IOutputHandler;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
-import java.util.function.LongSupplier;
+import java.util.function.IntSupplier;
 
 public class RadiationIrradiatingCachedRecipe extends CachedRecipe<RadiationIrradiatingRecipe> {
-    private final IOutputHandler<ChemicalStack> outputHandler;
-    private final IInputHandler<@NotNull ItemStack> itemInputHandler;
-    private final ILongInputHandler<@NotNull ChemicalStack> gasInputHandler;
-    private final LongSupplier gasUsage;
-    private long gasUsageMultiplier;
+    private final IOutputHandler<ChemicalStackTemplate> outputHandler;
+    private final IInputHandler<Item, ItemStack> itemInputHandler;
+    private final IInputHandler<Chemical, ChemicalStack> gasInputHandler;
+    private final IntSupplier gasUsage;
+    private int gasUsageMultiplier;
 
     private ItemStack recipeItem = ItemStack.EMPTY;
     private ChemicalStack recipeGas = ChemicalStack.EMPTY;
-    private ChemicalStack output = ChemicalStack.EMPTY;
+    @Nullable
+    private ChemicalStackTemplate output;
 
     /**
      * @param recipe           Recipe.
@@ -33,18 +37,18 @@ public class RadiationIrradiatingCachedRecipe extends CachedRecipe<RadiationIrra
      * @param gasUsage         Chemical usage multiplier.
      * @param outputHandler    Output handler.
      */
-    public RadiationIrradiatingCachedRecipe(RadiationIrradiatingRecipe recipe, BooleanSupplier recheckAllErrors, IInputHandler<@NotNull ItemStack> itemInputHandler,
-                                            ILongInputHandler<@NotNull ChemicalStack> gasInputHandler, LongSupplier gasUsage, IOutputHandler<ChemicalStack> outputHandler) {
+    public RadiationIrradiatingCachedRecipe(RadiationIrradiatingRecipe recipe, BooleanSupplier recheckAllErrors, IInputHandler<Item, ItemStack> itemInputHandler,
+                                            IInputHandler<Chemical, ChemicalStack> gasInputHandler, IntSupplier gasUsage, IOutputHandler<ChemicalStackTemplate> outputHandler) {
         super(recipe, recheckAllErrors);
         this.itemInputHandler = Objects.requireNonNull(itemInputHandler, "Item input handler cannot be null.");
         this.gasInputHandler = Objects.requireNonNull(gasInputHandler, "Chemical input handler cannot be null.");
         this.gasUsage = Objects.requireNonNull(gasUsage, "Chemical usage cannot be null.");
-        this.outputHandler = Objects.requireNonNull(outputHandler, "Input handler cannot be null.");
+        this.outputHandler = Objects.requireNonNull(outputHandler, "Output handler cannot be null.");
     }
 
     @Override
     protected void setupVariableValues() {
-        gasUsageMultiplier = Math.max(gasUsage.getAsLong(), 0);
+        gasUsageMultiplier = Math.max(gasUsage.getAsInt(), 0);
     }
 
     @Override
@@ -82,29 +86,25 @@ public class RadiationIrradiatingCachedRecipe extends CachedRecipe<RadiationIrra
             //Ensure that we check that we have enough for that the recipe matches *and* also that we have enough for how much we need to use
             if (!gasStack.isEmpty() && recipe.test(itemInput, gasStack)) {
                 ChemicalStack recipeGas = gasInputHandler.getRecipeInput(recipe.getGasInput());
-                return !recipeGas.isEmpty() && gasStack.getAmount() >= recipeGas.getAmount();
+                return !recipeGas.isEmpty() && gasStack.amount() >= recipeGas.amount();
             }
         }
         return false;
     }
 
     @Override
-    protected void useResources(int operations) {
-        super.useResources(operations);
-        if (gasUsageMultiplier <= 0) {
-            return;
-        } else if (recipeGas.isEmpty()) {
-            return;
+    protected boolean useResources(int operations, TransactionContext transaction) {
+        if (!super.useResources(operations, transaction)) {
+            return false;
         }
-        gasInputHandler.use(recipeGas, operations * gasUsageMultiplier);
+        if (gasUsageMultiplier <= 0 || recipeGas.isEmpty()) {
+            return true;
+        }
+        return gasInputHandler.use(recipeGas, operations * gasUsageMultiplier, transaction);
     }
 
     @Override
-    protected void finishProcessing(int operations) {
-        //Validate something didn't go horribly wrong
-        if (!output.isEmpty()) {
-            itemInputHandler.use(recipeItem, operations);
-            outputHandler.handleOutput(output, operations);
-        }
+    protected boolean finishProcessing(int operations, TransactionContext transaction) {
+        return itemInputHandler.use(recipeItem, operations, transaction) && outputHandler.handleOutput(output, operations, transaction);
     }
 }

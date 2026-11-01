@@ -25,7 +25,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import mezz.jei.api.runtime.IIngredientManager;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.fml.ModList;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +40,7 @@ import static fixdol.mekanismelements.client.MSJEIRecipeType.*;
 public class MSJEI implements IModPlugin {
     @Nonnull
     @Override
-    public ResourceLocation getPluginUid() {
+    public Identifier getPluginUid() {
         return MekanismElements.rl("jei_plugin");
     }
 

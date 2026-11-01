@@ -6,14 +6,13 @@
   },
   "item_input": {
     "count": 1,
-    "item": "minecraft:clock"
+    "ingredient": "minecraft:clock"
   },
   "main_output": {
     "count": 4,
     "id": "minecraft:gold_ingot"
   },
   "secondary_output": {
-    "count": 1,
     "id": "minecraft:redstone"
   }
 }

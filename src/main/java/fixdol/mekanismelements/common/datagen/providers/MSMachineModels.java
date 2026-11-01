@@ -1,23 +1,201 @@
 package fixdol.mekanismelements.common.datagen.providers;
 
+import com.mojang.math.Quadrant;
+import net.minecraft.client.data.models.model.ModelInstance;
+import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
-import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
-import net.neoforged.neoforge.client.model.generators.ModelBuilder.FaceRotation;
+import net.minecraft.resources.Identifier;
+import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 public final class MSMachineModels {
 
     private MSMachineModels() {
     }
 
-    public static BlockModelBuilder adsorptionSeparator(BlockModelProvider models) {
-        BlockModelBuilder model = models.withExistingParent("adsorption_separator", "block/cube_all");
-        model.renderType("minecraft:cutout");
-        model.texture("0", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/adsorption_separator"));
-        model.texture("1", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports"));
-        model.texture("2", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports_led"));
-        model.texture("particle", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/adsorption_separator"));
+    /** Elements-based block model definition that keeps the Blockbench-style fluent API and emits through the 26.1 model templates. */
+    public static final class Model {
+        private final Identifier parent;
+        private final Map<String, Identifier> textures = new LinkedHashMap<>();
+        private final List<Element> elements = new ArrayList<>();
+
+        private Model(String parent) {
+            this.parent = Identifier.parse(parent);
+        }
+
+        public Model texture(String slot, Identifier texture) {
+            textures.put(slot, texture);
+            return this;
+        }
+
+        public Element element() {
+            Element element = new Element(this);
+            elements.add(element);
+            return element;
+        }
+
+        public Identifier create(Identifier target, BiConsumer<Identifier, ModelInstance> output) {
+            ExtendedModelTemplateBuilder template = ExtendedModelTemplateBuilder.builder().parent(parent);
+            TextureMapping mapping = new TextureMapping();
+            Map<String, TextureSlot> slots = new LinkedHashMap<>();
+            textures.forEach((name, texture) -> {
+                TextureSlot slot = TextureSlot.create(name);
+                slots.put(name, slot);
+                template.requiredTextureSlot(slot);
+                mapping.put(slot, new Material(texture));
+            });
+            for (Element element : elements) {
+                template.element(builder -> {
+                    builder.from(element.from[0], element.from[1], element.from[2]).to(element.to[0], element.to[1], element.to[2]);
+                    if (element.angle != 0F) {
+                        builder.rotation(rotation -> rotation.origin(element.origin[0], element.origin[1], element.origin[2]).singleAxis(element.axis, element.angle));
+                    }
+                    if (element.lightEmission > 0) {
+                        builder.lightEmission(element.lightEmission);
+                    }
+                    for (Face face : element.faces) {
+                        builder.face(face.direction, faceBuilder -> {
+                            faceBuilder.texture(slots.get(face.texture.substring(1)));
+                            if (face.uvs != null) {
+                                faceBuilder.uvs(face.uvs[0], face.uvs[1], face.uvs[2], face.uvs[3]);
+                            }
+                            if (face.cullface != null) {
+                                faceBuilder.cullface(face.cullface);
+                            }
+                            faceBuilder.rotation(face.rotation);
+                        });
+                    }
+                });
+            }
+            template.build().create(target, mapping, output);
+            return target;
+        }
+    }
+
+    public static final class Element {
+        private final Model model;
+        private final List<Face> faces = new ArrayList<>();
+        private float[] from = {0F, 0F, 0F};
+        private float[] to = {16F, 16F, 16F};
+        private float[] origin = {0F, 0F, 0F};
+        private Direction.Axis axis = Direction.Axis.Y;
+        private float angle;
+        private int lightEmission;
+
+        private Element(Model model) {
+            this.model = model;
+        }
+
+        public Element from(float x, float y, float z) {
+            from = new float[]{x, y, z};
+            return this;
+        }
+
+        public Element to(float x, float y, float z) {
+            to = new float[]{x, y, z};
+            return this;
+        }
+
+        public Rotation rotation() {
+            return new Rotation(this);
+        }
+
+        public Element emissivity(int blockLight, int skyLight) {
+            lightEmission = blockLight;
+            return this;
+        }
+
+        public Face face(Direction direction) {
+            return new Face(this, direction);
+        }
+
+        public Model end() {
+            return model;
+        }
+    }
+
+    public static final class Rotation {
+        private final Element element;
+
+        private Rotation(Element element) {
+            this.element = element;
+        }
+
+        public Rotation angle(float angle) {
+            element.angle = angle;
+            return this;
+        }
+
+        public Rotation axis(Direction.Axis axis) {
+            element.axis = axis;
+            return this;
+        }
+
+        public Rotation origin(float x, float y, float z) {
+            element.origin = new float[]{x, y, z};
+            return this;
+        }
+
+        public Element end() {
+            return element;
+        }
+    }
+
+    public static final class Face {
+        private final Element element;
+        private final Direction direction;
+        private float[] uvs;
+        private String texture;
+        private Direction cullface;
+        private Quadrant rotation = Quadrant.R0;
+
+        private Face(Element element, Direction direction) {
+            this.element = element;
+            this.direction = direction;
+        }
+
+        public Face uvs(float u1, float v1, float u2, float v2) {
+            uvs = new float[]{u1, v1, u2, v2};
+            return this;
+        }
+
+        public Face texture(String texture) {
+            this.texture = texture;
+            return this;
+        }
+
+        public Face cullface(Direction cullface) {
+            this.cullface = cullface;
+            return this;
+        }
+
+        public Face rotation(Quadrant rotation) {
+            this.rotation = rotation;
+            return this;
+        }
+
+        public Element end() {
+            // Faces pointing at the undefined "#missing" slot belong to zero-thickness elements and are never visible
+            if (!"#missing".equals(texture)) {
+                element.faces.add(this);
+            }
+            return element;
+        }
+    }
+
+    public static Model adsorptionSeparator() {
+        Model model = new Model("block/block");
+        model.texture("0", Identifier.fromNamespaceAndPath("mekanismelements", "block/adsorption_separator"));
+        model.texture("1", Identifier.fromNamespaceAndPath("mekanism", "block/models/ports"));
+        model.texture("2", Identifier.fromNamespaceAndPath("mekanism", "block/models/ports_led"));
+        model.texture("particle", Identifier.fromNamespaceAndPath("mekanismelements", "block/adsorption_separator"));
 
         //base
         model.element()
@@ -201,37 +379,36 @@ public final class MSMachineModels {
         return model;
     }
 
-    public static BlockModelBuilder airCompressor(BlockModelProvider models) {
-        BlockModelBuilder model = models.withExistingParent("air_compressor", "mekanism:block/machine");
-        model.texture("sides", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
-        model.texture("front", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/front"));
-        model.texture("west", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
-        model.texture("east", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
-        model.texture("south", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/back"));
-        model.texture("up", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/top"));
-        model.texture("down", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/bottom"));
+    public static Model airCompressor() {
+        Model model = new Model("mekanism:block/machine");
+        model.texture("sides", Identifier.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
+        model.texture("front", Identifier.fromNamespaceAndPath("mekanismelements", "block/air_compressor/front"));
+        model.texture("west", Identifier.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
+        model.texture("east", Identifier.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
+        model.texture("south", Identifier.fromNamespaceAndPath("mekanismelements", "block/air_compressor/back"));
+        model.texture("up", Identifier.fromNamespaceAndPath("mekanismelements", "block/air_compressor/top"));
+        model.texture("down", Identifier.fromNamespaceAndPath("mekanismelements", "block/air_compressor/bottom"));
         return model;
     }
 
-    public static BlockModelBuilder airCompressorActive(BlockModelProvider models) {
-        BlockModelBuilder model = models.withExistingParent("air_compressor_active", "mekanism:block/machine");
-        model.texture("sides", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
-        model.texture("front", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/front_active"));
-        model.texture("west", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
-        model.texture("east", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
-        model.texture("south", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/back"));
-        model.texture("up", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/top"));
-        model.texture("down", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/air_compressor/bottom"));
+    public static Model airCompressorActive() {
+        Model model = new Model("mekanism:block/machine");
+        model.texture("sides", Identifier.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
+        model.texture("front", Identifier.fromNamespaceAndPath("mekanismelements", "block/air_compressor/front_active"));
+        model.texture("west", Identifier.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
+        model.texture("east", Identifier.fromNamespaceAndPath("mekanismelements", "block/air_compressor/side"));
+        model.texture("south", Identifier.fromNamespaceAndPath("mekanismelements", "block/air_compressor/back"));
+        model.texture("up", Identifier.fromNamespaceAndPath("mekanismelements", "block/air_compressor/top"));
+        model.texture("down", Identifier.fromNamespaceAndPath("mekanismelements", "block/air_compressor/bottom"));
         return model;
     }
 
-    public static BlockModelBuilder chemicalDemolitionMachine(BlockModelProvider models) {
-        BlockModelBuilder model = models.withExistingParent("chemical_demolition_machine", "block/cube_all");
-        model.renderType("minecraft:cutout");
-        model.texture("0", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/chemical_demolition_machine"));
-        model.texture("1", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports"));
-        model.texture("2", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports_led"));
-        model.texture("particle", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/chemical_demolition_machine"));
+    public static Model chemicalDemolitionMachine() {
+        Model model = new Model("block/block");
+        model.texture("0", Identifier.fromNamespaceAndPath("mekanismelements", "block/chemical_demolition_machine"));
+        model.texture("1", Identifier.fromNamespaceAndPath("mekanism", "block/models/ports"));
+        model.texture("2", Identifier.fromNamespaceAndPath("mekanism", "block/models/ports_led"));
+        model.texture("particle", Identifier.fromNamespaceAndPath("mekanismelements", "block/chemical_demolition_machine"));
 
         //base
         model.element()
@@ -415,15 +592,14 @@ public final class MSMachineModels {
         return model;
     }
 
-    public static BlockModelBuilder radiationIrradiator(BlockModelProvider models) {
-        BlockModelBuilder model = models.withExistingParent("radiation_irradiator", "block/cube_all");
-        model.renderType("minecraft:cutout");
-        model.texture("0", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports"));
-        model.texture("1", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports_led"));
-        model.texture("2", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports_large_led"));
-        model.texture("3", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator"));
-        model.texture("4", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator_window"));
-        model.texture("particle", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator"));
+    public static Model radiationIrradiator() {
+        Model model = new Model("block/block");
+        model.texture("0", Identifier.fromNamespaceAndPath("mekanism", "block/models/ports"));
+        model.texture("1", Identifier.fromNamespaceAndPath("mekanism", "block/models/ports_led"));
+        model.texture("2", Identifier.fromNamespaceAndPath("mekanism", "block/models/ports_large_led"));
+        model.texture("3", Identifier.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator"));
+        model.texture("4", Identifier.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator_window"));
+        model.texture("particle", Identifier.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator"));
 
         model.element()
               .from(0F, 4F, 12F)
@@ -726,15 +902,14 @@ public final class MSMachineModels {
         return model;
     }
 
-    public static BlockModelBuilder radiationIrradiatorActive(BlockModelProvider models) {
-        BlockModelBuilder model = models.withExistingParent("radiation_irradiator_active", "block/cube_all");
-        model.renderType("minecraft:cutout");
-        model.texture("0", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports"));
-        model.texture("1", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports_led"));
-        model.texture("2", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports_large_led"));
-        model.texture("3", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator_active"));
-        model.texture("4", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator_window"));
-        model.texture("particle", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator"));
+    public static Model radiationIrradiatorActive() {
+        Model model = new Model("block/block");
+        model.texture("0", Identifier.fromNamespaceAndPath("mekanism", "block/models/ports"));
+        model.texture("1", Identifier.fromNamespaceAndPath("mekanism", "block/models/ports_led"));
+        model.texture("2", Identifier.fromNamespaceAndPath("mekanism", "block/models/ports_large_led"));
+        model.texture("3", Identifier.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator_active"));
+        model.texture("4", Identifier.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator_window"));
+        model.texture("particle", Identifier.fromNamespaceAndPath("mekanismelements", "block/radiation_irradiator"));
 
         model.element()
               .from(0F, 4F, 12F)
@@ -1037,13 +1212,12 @@ public final class MSMachineModels {
         return model;
     }
 
-    public static BlockModelBuilder seawaterPump(BlockModelProvider models) {
-        BlockModelBuilder model = models.withExistingParent("seawater_pump", "block/cube_all");
-        model.renderType("minecraft:cutout");
-        model.texture("0", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports"));
-        model.texture("1", ResourceLocation.fromNamespaceAndPath("mekanism", "block/models/ports_led"));
-        model.texture("2", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/seawater_pump"));
-        model.texture("particle", ResourceLocation.fromNamespaceAndPath("mekanismelements", "block/seawater_pump"));
+    public static Model seawaterPump() {
+        Model model = new Model("block/block");
+        model.texture("0", Identifier.fromNamespaceAndPath("mekanism", "block/models/ports"));
+        model.texture("1", Identifier.fromNamespaceAndPath("mekanism", "block/models/ports_led"));
+        model.texture("2", Identifier.fromNamespaceAndPath("mekanismelements", "block/seawater_pump"));
+        model.texture("particle", Identifier.fromNamespaceAndPath("mekanismelements", "block/seawater_pump"));
 
         model.element()
               .from(4F, 12F, 0F)
@@ -1089,7 +1263,7 @@ public final class MSMachineModels {
               .face(Direction.SOUTH).uvs(5.875F, 5F, 6.375F, 7F).texture("#2").end()
               .face(Direction.WEST).uvs(2F, 2F, 4F, 4F).texture("#2").end()
               .face(Direction.UP).uvs(0.5F, 8F, 0F, 6F).texture("#2").end()
-              .face(Direction.DOWN).uvs(1F, 6F, 0.5F, 8F).texture("#2").rotation(FaceRotation.UPSIDE_DOWN).end()
+              .face(Direction.DOWN).uvs(1F, 6F, 0.5F, 8F).texture("#2").rotation(Quadrant.R180).end()
               .end();
 
         model.element()
@@ -1174,11 +1348,11 @@ public final class MSMachineModels {
               .from(4F, 4F, 15F)
               .to(12F, 12F, 16F)
               .rotation().angle(0F).axis(Direction.Axis.Y).origin(4F, 12F, 15F).end()
-              .face(Direction.NORTH).uvs(0F, 0F, 1F, 1F).texture("#missing").rotation(FaceRotation.UPSIDE_DOWN).end()
-              .face(Direction.EAST).uvs(0F, 0F, 1F, 0.125F).texture("#missing").rotation(FaceRotation.COUNTERCLOCKWISE_90).end()
+              .face(Direction.NORTH).uvs(0F, 0F, 1F, 1F).texture("#missing").rotation(Quadrant.R180).end()
+              .face(Direction.EAST).uvs(0F, 0F, 1F, 0.125F).texture("#missing").rotation(Quadrant.R270).end()
               .face(Direction.SOUTH).uvs(0F, 0F, 8F, 8F).texture("#0").end()
-              .face(Direction.WEST).uvs(0F, 0F, 1F, 0.125F).texture("#missing").rotation(FaceRotation.CLOCKWISE_90).end()
-              .face(Direction.UP).uvs(0F, 0F, 1F, 0.125F).texture("#missing").rotation(FaceRotation.UPSIDE_DOWN).end()
+              .face(Direction.WEST).uvs(0F, 0F, 1F, 0.125F).texture("#missing").rotation(Quadrant.R90).end()
+              .face(Direction.UP).uvs(0F, 0F, 1F, 0.125F).texture("#missing").rotation(Quadrant.R180).end()
               .face(Direction.DOWN).uvs(0F, 0F, 1F, 0.125F).texture("#missing").end()
               .end();
         return model;

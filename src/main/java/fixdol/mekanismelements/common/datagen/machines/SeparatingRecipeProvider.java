@@ -3,12 +3,10 @@ package fixdol.mekanismelements.datagen.machines;
 import fixdol.mekanismelements.common.MekanismElements;
 import fixdol.mekanismelements.common.registries.MSFluids;
 import fixdol.mekanismelements.common.registries.MSGases;
-import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.datagen.recipe.builder.ElectrolysisRecipeBuilder;
 import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
 import mekanism.common.registries.MekanismChemicals;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
 
 public class SeparatingRecipeProvider {
 
@@ -17,9 +15,9 @@ public class SeparatingRecipeProvider {
 
         // Potassium Chloride (fluid, 2 mB) -> Potassium Hydroxide (left, 2 mB) + Chlorine (right, 1 mB)
         ElectrolysisRecipeBuilder.separating(
-                IngredientCreatorAccess.fluid().from(MSFluids.POTASSIUM_CHLORIDE.get(), 2),
-                new ChemicalStack(MSGases.POTASSIUM_HYDROXIDE.get().getAsHolder(), 2),
-                new ChemicalStack(MekanismChemicals.CHLORINE.get().getAsHolder(), 1)
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "potassium_chloride"));
+                IngredientCreatorAccess.fluid().fromHolder(MSFluids.POTASSIUM_CHLORIDE, 2),
+                MSGases.POTASSIUM_HYDROXIDE.asTemplate(2),
+                MekanismChemicals.CHLORINE.asTemplate(1)
+        ).save(recipeOutput, MekanismElements.rl(basePath + "potassium_chloride"));
     }
 }

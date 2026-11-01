@@ -1,7 +1,7 @@
 package fixdol.mekanismelements.common;
 
 import mekanism.api.text.ILangEntry;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 
 public enum MSLang implements ILangEntry {
     DESCRIPTION_ADSORPTION_SEPARATOR("description", "adsorption_separator"),

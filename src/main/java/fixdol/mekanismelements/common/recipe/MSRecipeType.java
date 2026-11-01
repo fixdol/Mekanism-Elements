@@ -12,15 +12,22 @@ import mekanism.api.recipes.FluidToFluidRecipe;
 import mekanism.api.recipes.MekanismRecipe;
 import mekanism.client.MekanismClient;
 import mekanism.common.recipe.lookup.cache.IInputRecipeCache;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeMap;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +60,7 @@ public class MSRecipeType<RECIPE extends MekanismRecipe<?>, INPUT_CACHE extends 
     }
 
     private List<RECIPE> cachedRecipes = Collections.emptyList();
-    private final ResourceLocation registryName;
+    private final Identifier registryName;
     private final INPUT_CACHE inputCache;
 
     private MSRecipeType(String name, Function<MSRecipeType<RECIPE, INPUT_CACHE>, INPUT_CACHE> inputCacheCreator) {
@@ -67,7 +74,7 @@ public class MSRecipeType<RECIPE extends MekanismRecipe<?>, INPUT_CACHE extends 
     }
 
     @Override
-    public ResourceLocation getRegistryName() {
+    public Identifier getRegistryName() {
         return registryName;
     }
 
@@ -89,40 +96,32 @@ public class MSRecipeType<RECIPE extends MekanismRecipe<?>, INPUT_CACHE extends 
     @NotNull
     @Override
     public List<RECIPE> getRecipes(@Nullable Level world) {
-        if (world == null) {
-            if (FMLEnvironment.dist.isClient()) {
-                world = MekanismClient.tryGetClientWorld();
-            } else {
-                try {
-                    world = ServerLifecycleHooks.getCurrentServer().overworld();
-                } catch (Exception e) {
-                    return Collections.emptyList();
-                }
-            }
-            if (world == null) {
-                return Collections.emptyList();
-            }
+        RecipeMap recipeMap = getRecipeMap(world);
+        if (recipeMap == RecipeMap.EMPTY) {
+            return Collections.emptyList();
         }
-        return getRecipes(world.getRecipeManager());
+        return getRecipes(recipeMap);
     }
 
     @NotNull
-    public List<RECIPE> getRecipes(RecipeManager recipeManager) {
+    public List<RECIPE> getRecipes(RecipeMap recipeMap) {
         if (cachedRecipes.isEmpty()) {
             @SuppressWarnings({"unchecked", "rawtypes"})
-            List<RecipeHolder<RECIPE>> recipeHolders = (List) recipeManager.getAllRecipesFor((RecipeType) this);
+            Collection<RecipeHolder<RECIPE>> recipeHolders = (Collection) recipeMap.byType((RecipeType) this);
 
             cachedRecipes = recipeHolders.stream()
+                    .filter(holder -> !holder.value().isIncomplete())
                     .map(holder -> {
                         RECIPE recipe = holder.value();
+                        Identifier id = holder.id().identifier();
                         if (recipe instanceof AdsorptionRecipe r) {
-                            r.setId(holder.id());
+                            r.setId(id);
                         } else if (recipe instanceof RadiationIrradiatingRecipe r) {
-                            r.setId(holder.id());
+                            r.setId(id);
                         } else if (recipe instanceof ChemicalDemolitionRecipe r) {
-                            r.setId(holder.id());
+                            r.setId(id);
                         } else if (recipe instanceof InfinityOreReprocessingRecipe r) {
-                            r.setId(holder.id());
+                            r.setId(id);
                         }
                         return recipe;
                     })
@@ -131,22 +130,34 @@ public class MSRecipeType<RECIPE extends MekanismRecipe<?>, INPUT_CACHE extends 
         return cachedRecipes;
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public static <RECIPE_TYPE extends Recipe<?>> Optional<RECIPE_TYPE> getRecipeFor(RecipeType<RECIPE_TYPE> recipeType, Container inventory, Level level) {
-        RecipeManager recipeManager = level.getRecipeManager();
-        List<RecipeHolder<RECIPE_TYPE>> recipes = (List) recipeManager.getAllRecipesFor((RecipeType) recipeType);
-        return recipes.stream()
-                .map(RecipeHolder::value)
-                .filter(recipe -> !recipe.isIncomplete())
-                .findFirst();
+    private static RecipeMap getRecipeMap(@Nullable Level level) {
+        if (level instanceof ServerLevel serverLevel) {
+            return serverLevel.recipeAccess().recipeMap();
+        } else if (level != null) {
+            if (level.isClientSide()) {
+                return MekanismClient.clientRecipes();
+            }
+        } else if (FMLEnvironment.getDist().isClient()) {
+            return MekanismClient.clientRecipes();
+        } else {
+            MinecraftServer currentServer = ServerLifecycleHooks.getCurrentServer();
+            if (currentServer != null) {
+                return currentServer.getRecipeManager().recipeMap();
+            }
+        }
+        return RecipeMap.EMPTY;
+    }
+
+    public static <I extends RecipeInput, RECIPE_TYPE extends Recipe<I>> Optional<RecipeHolder<RECIPE_TYPE>> getRecipeFor(RecipeType<RECIPE_TYPE> recipeType, I input,
+                                                                                                                         Level level) {
+        return getRecipeMap(level).getRecipesFor(recipeType, input, level).findFirst();
     }
 
     /**
-     * Helper for getting a recipe from a world's recipe manager.
+     * Helper for getting a recipe from a level's recipe manager.
      */
-    public static Optional<? extends Recipe<?>> byKey(Level level, ResourceLocation id) {
-        return level.getRecipeManager().byKey(id)
-                .map(RecipeHolder::value)
-                .filter(recipe -> recipe.isSpecial() || !recipe.isIncomplete());
+    @Nullable
+    public static RecipeHolder<?> byKey(Level level, ResourceKey<Recipe<?>> id) {
+        return getRecipeMap(level).byKey(id);
     }
 }

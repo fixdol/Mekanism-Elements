@@ -1,53 +1,60 @@
 package fixdol.mekanismelements.api.recipes.cache;
 
 import fixdol.mekanismelements.api.recipes.ChemicalDemolitionRecipe;
+import mekanism.api.chemical.Chemical;
 import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.api.recipes.inputs.IInputHandler;
-import mekanism.api.recipes.inputs.ILongInputHandler;
 import mekanism.api.recipes.outputs.IOutputHandler;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
-import java.util.function.LongSupplier;
+import java.util.function.IntSupplier;
 
 public class ChemicalDemolitionCachedRecipe extends CachedRecipe<ChemicalDemolitionRecipe> {
-    private final IOutputHandler firstOutputHandler;
-    private final IOutputHandler secondOutputHandler;
-    private final IInputHandler<@NotNull ItemStack> itemInputHandler;
-    private final ILongInputHandler<@NotNull ChemicalStack> gasInputHandler;
-    private final LongSupplier gasUsage;
-    private long gasUsageMultiplier;
+    private final IOutputHandler<ItemStackTemplate> firstOutputHandler;
+    private final IOutputHandler<ItemStackTemplate> secondOutputHandler;
+    private final IInputHandler<Item, ItemStack> itemInputHandler;
+    private final IInputHandler<Chemical, ChemicalStack> gasInputHandler;
+    private final IntSupplier gasUsage;
+    private int gasUsageMultiplier;
 
     private ItemStack recipeItem = ItemStack.EMPTY;
     private ChemicalStack recipeGas = ChemicalStack.EMPTY;
-    private ItemStack firstOutput = ItemStack.EMPTY;
-    private ItemStack secondOutput = ItemStack.EMPTY;
+    @Nullable
+    private ItemStackTemplate firstOutput;
+    @Nullable
+    private ItemStackTemplate secondOutput;
 
     /**
-     * @param recipe           Recipe.
-     * @param recheckAllErrors Returns {@code true} if processing should be continued even if an error is hit in order to gather all the errors. It is recommended to not
-     *                         do this every tick or if there is no one viewing recipes.
-     * @param itemInputHandler Item input handler.
-     * @param gasInputHandler  Chemical input handler.
-     * @param gasUsage         Chemical usage multiplier.
-     * @param firstOutputHandler    Output handler.
+     * @param recipe              Recipe.
+     * @param recheckAllErrors    Returns {@code true} if processing should be continued even if an error is hit in order to gather all the errors. It is recommended to not
+     *                            do this every tick or if there is no one viewing recipes.
+     * @param itemInputHandler    Item input handler.
+     * @param gasInputHandler     Chemical input handler.
+     * @param gasUsage            Chemical usage multiplier.
+     * @param firstOutputHandler  First output handler.
+     * @param secondOutputHandler Second output handler.
      */
-    public ChemicalDemolitionCachedRecipe(ChemicalDemolitionRecipe recipe, BooleanSupplier recheckAllErrors, IInputHandler<@NotNull ItemStack> itemInputHandler,
-                                            ILongInputHandler<@NotNull ChemicalStack> gasInputHandler, LongSupplier gasUsage, IOutputHandler firstOutputHandler, IOutputHandler secondOutputHandler) {
+    public ChemicalDemolitionCachedRecipe(ChemicalDemolitionRecipe recipe, BooleanSupplier recheckAllErrors, IInputHandler<Item, ItemStack> itemInputHandler,
+                                          IInputHandler<Chemical, ChemicalStack> gasInputHandler, IntSupplier gasUsage, IOutputHandler<ItemStackTemplate> firstOutputHandler,
+                                          IOutputHandler<ItemStackTemplate> secondOutputHandler) {
         super(recipe, recheckAllErrors);
         this.itemInputHandler = Objects.requireNonNull(itemInputHandler, "Item input handler cannot be null.");
         this.gasInputHandler = Objects.requireNonNull(gasInputHandler, "Chemical input handler cannot be null.");
         this.gasUsage = Objects.requireNonNull(gasUsage, "Chemical usage cannot be null.");
-        this.firstOutputHandler = Objects.requireNonNull(firstOutputHandler, "First Input handler cannot be null.");
-        this.secondOutputHandler = Objects.requireNonNull(secondOutputHandler, "Second Input handler cannot be null.");
+        this.firstOutputHandler = Objects.requireNonNull(firstOutputHandler, "First output handler cannot be null.");
+        this.secondOutputHandler = Objects.requireNonNull(secondOutputHandler, "Second output handler cannot be null.");
     }
 
     @Override
     protected void setupVariableValues() {
-        gasUsageMultiplier = Math.max(gasUsage.getAsLong(), 0);
+        gasUsageMultiplier = Math.max(gasUsage.getAsInt(), 0);
     }
 
     @Override
@@ -86,27 +93,21 @@ public class ChemicalDemolitionCachedRecipe extends CachedRecipe<ChemicalDemolit
             ChemicalStack gasStack = gasInputHandler.getInput();
             if (!gasStack.isEmpty() && recipe.test(itemInput, gasStack)) {
                 ChemicalStack recipeGas = gasInputHandler.getRecipeInput(recipe.getGasInput());
-                return !recipeGas.isEmpty() && gasStack.getAmount() >= recipeGas.getAmount();
+                return !recipeGas.isEmpty() && gasStack.amount() >= recipeGas.amount();
             }
         }
         return false;
     }
 
     @Override
-    protected void useResources(int operations) {
-        super.useResources(operations);
-    }
-
-    @Override
-    protected void finishProcessing(int operations) {
-        if (!firstOutput.isEmpty() && !secondOutput.isEmpty()) {
-            itemInputHandler.use(recipeItem, operations);
-            if (gasUsageMultiplier > 0) {
-                gasInputHandler.use(recipeGas, operations * gasUsageMultiplier);
-            }
-            firstOutputHandler.handleOutput(firstOutput, operations);
-            secondOutputHandler.handleOutput(secondOutput, operations);
+    protected boolean finishProcessing(int operations, TransactionContext transaction) {
+        if (firstOutput == null || secondOutput == null) {
+            return false;
         }
+        //Note: The chemical is only consumed once the recipe finishes
+        return itemInputHandler.use(recipeItem, operations, transaction) &&
+               gasInputHandler.use(recipeGas, operations * gasUsageMultiplier, transaction) &&
+               firstOutputHandler.handleOutput(firstOutput, operations, transaction) &&
+               secondOutputHandler.handleOutput(secondOutput, operations, transaction);
     }
 }
-

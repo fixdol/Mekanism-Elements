@@ -5,7 +5,7 @@ import mekanism.api.recipes.MekanismRecipe;
 import mekanism.api.text.IHasTranslationKey;
 import mekanism.client.recipe_viewer.type.IRecipeViewerRecipeType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ public class MSJEIRecipeViewerRecipeType<RECIPE extends MekanismRecipe<?>> imple
     private final MSRecipeTypeRegistryObject<RECIPE, ?> registryObject;
     private final Class<? extends RECIPE> recipeClass;
     private final IHasTranslationKey description;
-    private final ResourceLocation icon;
+    private final Identifier icon;
     private final int xOffset;
     private final int yOffset;
     private final int width;
@@ -28,7 +28,7 @@ public class MSJEIRecipeViewerRecipeType<RECIPE extends MekanismRecipe<?>> imple
             MSRecipeTypeRegistryObject<RECIPE, ?> registryObject,
             Class<? extends RECIPE> recipeClass,
             IHasTranslationKey description,
-            ResourceLocation icon,
+            Identifier icon,
             int xOffset, int yOffset, int width, int height,
             ItemLike... workstations) {
         this.registryObject = registryObject;
@@ -43,7 +43,7 @@ public class MSJEIRecipeViewerRecipeType<RECIPE extends MekanismRecipe<?>> imple
     }
 
     @Override
-    public ResourceLocation id() {
+    public Identifier id() {
         return registryObject.getId();
     }
 
@@ -66,7 +66,7 @@ public class MSJEIRecipeViewerRecipeType<RECIPE extends MekanismRecipe<?>> imple
     }
 
     @Override
-    public ResourceLocation icon() {
+    public @org.jspecify.annotations.Nullable Identifier icon() {
         return icon;
     }
 

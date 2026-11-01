@@ -1,9 +1,5 @@
 package fixdol.mekanismelements.datagen.machines;
 
-import fixdol.mekanismelements.common.MekanismElements;
-import mekanism.api.datagen.recipe.builder.ItemStackChemicalToItemStackRecipeBuilder;
-import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
-import mekanism.common.registries.MekanismChemicals;
 import net.minecraft.data.recipes.RecipeOutput;
 
 public class NucleosynthesizingRecipeProvider {
@@ -13,12 +9,12 @@ public class NucleosynthesizingRecipeProvider {
         // Descomentar cuando estén registrados en MSItems
 
         /*
-        ItemStackChemicalToItemStackRecipeBuilder.nucleosynthesizing(
-                IngredientCreatorAccess.item().from(MSItems.UNSTABLE_CALIFORNIUM_MIXTURE.get(), 8),
-                IngredientCreatorAccess.chemicalStack().from(MekanismChemicals.ANTIMATTER.get(), 1000),
-                new ItemStack(MSItems.INGOT_REFINED_CALIFORNIUM.get(), 1),
-                1000
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, "nucleosynthesizing/ingot_refined_californium"));
+        NucleosynthesizingRecipeBuilder.nucleosynthesizing(
+                IngredientCreatorAccess.item().from(MSItems.UNSTABLE_CALIFORNIUM_MIXTURE, 8),
+                IngredientCreatorAccess.chemicalStack().fromHolder(MekanismChemicals.ANTIMATTER, 1000),
+                MSItems.INGOT_REFINED_CALIFORNIUM.asTemplate(),
+                1000, false
+        ).save(recipeOutput, MekanismElements.rl("nucleosynthesizing/ingot_refined_californium"));
         */
     }
 }

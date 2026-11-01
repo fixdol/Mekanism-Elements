@@ -19,37 +19,37 @@ public class ModDataMapProvider extends DataMapProvider {
     }
 
     @Override
-    protected void gather() {
+    protected void gather(HolderLookup.Provider provider) {
         // chemical_attribute_heated_coolant.json
         builder(IMekanismDataMapTypes.INSTANCE.heatedChemicalCoolant())
                 .add(
-                        MSGases.SUPERHEATED_HELIUM.get().getAsHolder(),
-                        new HeatedCoolant(MSGases.HELIUM.get().getAsHolder(), 100.0),
+                        MSGases.SUPERHEATED_HELIUM,
+                        new HeatedCoolant(MSGases.HELIUM, 100.0),
                         false
                 );
 
         // chemical_attribute_cooled_coolant.json
         builder(IMekanismDataMapTypes.INSTANCE.cooledChemicalCoolant())
                 .add(
-                        MSGases.HELIUM.get().getAsHolder(),
-                        new CooledCoolant(MSGases.SUPERHEATED_HELIUM.get().getAsHolder(), 100.0, 1.0),
+                        MSGases.HELIUM,
+                        new CooledCoolant(MSGases.SUPERHEATED_HELIUM, 100.0, 1.0),
                         false
                 )
                 .add(
-                        MSGases.AMMONIUM_NITRATE_SOLUTION.get().getAsHolder(),
-                        new CooledCoolant(MSGases.AMMONIUM_NITRATE_SOLUTION.get().getAsHolder(), 120.0, 0.7),
+                        MSGases.AMMONIUM_NITRATE_SOLUTION,
+                        new CooledCoolant(MSGases.AMMONIUM_NITRATE_SOLUTION, 120.0, 0.7),
                         false
                 );
 
         // chemical_attribute_fuel.json
         builder(IMekanismDataMapTypes.INSTANCE.chemicalFuel())
                 .add(
-                        MSGases.AMMONIA.get().getAsHolder(),
+                        MSGases.AMMONIA,
                         new ChemicalFuel(10, 99999),
                         false
                 )
                 .add(
-                        MSGases.AMERICIUM.get().getAsHolder(),
+                        MSGases.AMERICIUM,
                         new ChemicalFuel(500, 60000),
                         false
                 );
@@ -57,12 +57,12 @@ public class ModDataMapProvider extends DataMapProvider {
         // chemical_attribute_radioactivity.json
         builder(IMekanismDataMapTypes.INSTANCE.chemicalRadioactivity())
                 .add(
-                        MSGases.CALIFORNIUM.get().getAsHolder(),
+                        MSGases.CALIFORNIUM,
                         new ChemicalRadioactivity(0.1),
                         false
                 )
                 .add(
-                        MSGases.CURIUM.get().getAsHolder(),
+                        MSGases.CURIUM,
                         new ChemicalRadioactivity(0.07),
                         false
                 );

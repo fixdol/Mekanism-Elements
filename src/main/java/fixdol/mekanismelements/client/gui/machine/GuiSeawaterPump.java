@@ -13,12 +13,11 @@ import mekanism.common.inventory.container.tile.MekanismTileContainer;
 import mekanism.common.inventory.warning.WarningTracker;
 import mekanism.common.util.text.EnergyDisplay;
 import mekanism.common.util.text.TextUtils;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,33 +33,32 @@ public class GuiSeawaterPump extends GuiConfigurableTile<TileEntitySeawaterPump,
         super.addGuiElements();
         addRenderableWidget(new GuiInnerScreen(this, 54, 23, 80, 41, () -> {
             List<Component> list = new ArrayList<>();
-            list.add(EnergyDisplay.of(tile.getEnergyContainer()).getTextComponent());
-            FluidStack fluidStack = tile.fluidTank.getFluid();
-            if (fluidStack.isEmpty()) {
+            list.add(EnergyDisplay.of(tile.energyContainer()).getTextComponent());
+            if (tile.fluidTank.isEmpty()) {
                 list.add(MekanismLang.NO_FLUID.translate());
             } else {
-                list.add(MekanismLang.GENERIC_STORED_MB.translate(fluidStack, TextUtils.format(fluidStack.getAmount())));
+                list.add(MekanismLang.GENERIC_STORED_MB.translate(tile.fluidTank.resource(), TextUtils.format(tile.fluidTank.amountAsLong())));
             }
             return list;
         }));
-        addRenderableWidget(new GuiVerticalPowerBar(this, tile.getEnergyContainer(), 164, 15))
+        addRenderableWidget(new GuiVerticalPowerBar(this, tile.energyContainer(), 164, 15))
                 .warning(WarningTracker.WarningType.NOT_ENOUGH_ENERGY, () -> {
-                    MachineEnergyContainer<TileEntitySeawaterPump> energyContainer = tile.getEnergyContainer();
-                    return energyContainer.getEnergyPerTick() > energyContainer.getEnergy();
+                    MachineEnergyContainer<TileEntitySeawaterPump> energyContainer = tile.energyContainer();
+                    return energyContainer.getEnergyPerTick() > energyContainer.getAmountAsLong();
                 });
-        addRenderableWidget(new GuiFluidGauge(() -> tile.fluidTank, () -> tile.getFluidTanks(null), GaugeType.STANDARD, this, 6, 13))
-                .warning(WarningTracker.WarningType.NO_SPACE_IN_OUTPUT, () -> tile.fluidTank.getNeeded() < TileEntitySeawaterPump.SEAWATER_STACK.getAmount());
+        addRenderableWidget(new GuiFluidGauge(() -> tile.fluidTank, tile::getFluidTanks, GaugeType.STANDARD, this, 6, 13))
+                .warning(WarningTracker.WarningType.NO_SPACE_IN_OUTPUT, () -> tile.fluidTank.getNeededAsInt(FluidResource.of(TileEntitySeawaterPump.SEAWATER_STACK)) < TileEntitySeawaterPump.SEAWATER_STACK.amount());
 
         addRenderableWidget(new GuiEnergyTab(this, () -> {
-            return List.of(EnergyDisplay.of(tile.getEnergyContainer()).getTextComponent());
+            return List.of(EnergyDisplay.of(tile.energyContainer()).getTextComponent());
         }));
     }
 
 
     @Override
-    protected void drawForegroundText(@Nonnull GuiGraphics matrix, int mouseX, int mouseY) {
+    protected void drawForegroundText(GuiGraphicsExtractor matrix, int mouseX, int mouseY) {
         renderTitleText(matrix);
-        matrix.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, titleTextColor());
+        renderInventoryText(matrix);
         super.drawForegroundText(matrix, mouseX, mouseY);
     }
 }

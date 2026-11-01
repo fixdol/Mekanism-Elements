@@ -1,6 +1,5 @@
 package fixdol.mekanismelements.client.rei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
@@ -25,16 +24,18 @@ import mekanism.client.gui.element.slot.SlotType;
 import mekanism.client.recipe_viewer.RecipeViewerUtils;
 import mekanism.client.recipe_viewer.type.IRecipeViewerRecipeType;
 import mekanism.client.render.MekanismRenderer;
+import mekanism.common.MekanismLang;
 import mekanism.common.tile.component.config.DataType;
-import net.minecraft.client.gui.GuiGraphics;
+import mekanism.common.util.text.TextUtils;
 import net.minecraft.client.gui.components.events.AbstractContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.fluids.FluidStack;
+import org.joml.Matrix3x2fStack;
 
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
 /**
@@ -62,20 +63,14 @@ public class MSReiBuilder extends AbstractContainerEventHandler implements IGuiW
     public <ELEMENT extends GuiElement> ELEMENT addElement(ELEMENT element) {
         widgets.add(Widgets.createDrawableWidget((graphics, mouseX, mouseY, delta) -> {
             // Same sequence Mekanism's own EMI widget uses to draw a GUI element
-            PoseStack pose = graphics.pose();
-            pose.pushPose();
-            pose.translate((float) element.getGuiLeft(), (float) element.getGuiTop(), 0);
+            Matrix3x2fStack pose = graphics.pose();
+            pose.pushMatrix();
+            pose.translate((float) element.getGuiLeft(), (float) element.getGuiTop());
             element.renderShifted(graphics, mouseX, mouseY, 0);
             element.onDrawBackground(graphics, mouseX, mouseY, 0);
-            pose.pushPose();
-            element.onRenderForeground(graphics, mouseX, mouseY, 200, 200);
-            pose.popPose();
-            pose.popPose();
+            element.onRenderForeground(graphics, mouseX, mouseY);
+            pose.popMatrix();
         }));
-        if (element instanceof GuiGauge<?> gauge) {
-            Rectangle area = new Rectangle(element.getX(), element.getY(), element.getWidth(), element.getHeight());
-            widgets.add(Widgets.createTooltip(point -> area.contains(point) ? Tooltip.create(point, gauge.getTooltipText()) : null));
-        }
         return element;
     }
 
@@ -105,41 +100,47 @@ public class MSReiBuilder extends AbstractContainerEventHandler implements IGuiW
 
     public void chemicalGauge(GaugeType type, DataType data, int x, int y, ChemicalStack stack) {
         GuiChemicalGauge gauge = GuiChemicalGauge.getDummy(type.with(data), this, x, y);
-        gauge.setDummyType(stack);
         addElement(gauge);
         if (!stack.isEmpty()) {
-            fill(gauge, graphics -> MekanismRenderer.color(graphics, stack), () -> MekanismRenderer.getChemicalTexture(stack));
+            fill(gauge, () -> MekanismRenderer.color(stack), () -> MekanismRenderer.getChemicalTexture(stack));
         }
+        tooltip(gauge, stack, stack.isEmpty() ? 0 : stack.amount());
     }
 
     public void fluidGauge(GaugeType type, DataType data, int x, int y, FluidStack stack) {
         GuiFluidGauge gauge = GuiFluidGauge.getDummy(type.with(data), this, x, y);
-        gauge.setDummyType(stack);
         addElement(gauge);
         if (!stack.isEmpty()) {
-            fill(gauge, graphics -> MekanismRenderer.color(graphics, stack),
+            fill(gauge, () -> MekanismRenderer.color(stack),
                     () -> MekanismRenderer.getFluidTexture(stack, MekanismRenderer.FluidTextureType.STILL));
         }
+        tooltip(gauge, stack, stack.isEmpty() ? 0 : stack.amount());
     }
 
     /**
-     * A dummy gauge only draws its frame. JEI and EMI fill it with the ingredient, so do the same here: the sprite of
-     * the chemical or fluid at full level, then the scale marks on top (what Mekanism's EMI tank widget does).
+     * A dummy gauge has no way to hold a chemical or fluid, so it only draws its frame. JEI and EMI fill it with the
+     * ingredient, so do the same here: the sprite of the chemical or fluid at full level, then the scale marks on top
+     * (what Mekanism's EMI tank widget does).
      */
-    private void fill(GuiGauge<?> gauge, Consumer<GuiGraphics> color, Supplier<TextureAtlasSprite> sprite) {
+    private void fill(GuiGauge<?> gauge, IntSupplier color, Supplier<TextureAtlasSprite> sprite) {
         widgets.add(Widgets.createDrawableWidget((graphics, mouseX, mouseY, delta) -> {
             int width = gauge.getWidth() - 2;
             int height = gauge.getHeight() - 2;
-            color.accept(graphics);
             GuiUtils.drawTiledSprite(graphics, gauge.getX() + 1, gauge.getY() + 1, height, width, height, sprite.get(), 16, 16, 0,
-                    GuiUtils.TilingDirection.UP_RIGHT);
-            MekanismRenderer.resetColor(graphics);
-            PoseStack pose = graphics.pose();
-            pose.pushPose();
-            pose.translate((float) gauge.getGuiLeft(), (float) gauge.getGuiTop(), 0);
+                    GuiUtils.TilingDirection.UP_RIGHT, color.getAsInt());
+            Matrix3x2fStack pose = graphics.pose();
+            pose.pushMatrix();
+            pose.translate((float) gauge.getGuiLeft(), (float) gauge.getGuiTop());
             gauge.drawBarOverlay(graphics);
-            pose.popPose();
+            pose.popMatrix();
         }));
+    }
+
+    /** What the gauge would show if it held the stack: a dummy gauge always reports itself as empty. */
+    private void tooltip(GuiGauge<?> gauge, Object stack, long amount) {
+        Rectangle area = new Rectangle(gauge.getX(), gauge.getY(), gauge.getWidth(), gauge.getHeight());
+        List<Component> text = amount > 0 ? List.of(MekanismLang.GENERIC_STORED_MB.translate(stack, TextUtils.format(amount))) : gauge.getTooltipText();
+        widgets.add(Widgets.createTooltip(point -> area.contains(point) ? Tooltip.create(point, text) : null));
     }
 
     /** An REI slot over the frame of a Mekanism slot, so its item or fluid can be looked up from REI. */

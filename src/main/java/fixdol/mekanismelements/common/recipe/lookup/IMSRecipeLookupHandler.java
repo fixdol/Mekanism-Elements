@@ -52,7 +52,7 @@ public interface IMSRecipeLookupHandler<RECIPE extends MekanismRecipe<?>> extend
     }
 
     interface ConstantUsageRecipeLookupHandler {
-        default long getSavedUsedSoFar(int cacheIndex) {
+        default int getSavedUsedSoFar(int cacheIndex) {
             return 0;
         }
     }

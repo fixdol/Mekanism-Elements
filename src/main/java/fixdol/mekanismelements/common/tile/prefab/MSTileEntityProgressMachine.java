@@ -1,5 +1,6 @@
 package fixdol.mekanismelements.common.tile.prefab;
 
+import mekanism.api.SerializationConstants;
 import mekanism.api.Upgrade;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
@@ -11,11 +12,10 @@ import mekanism.common.inventory.container.sync.SyncableInt;
 import mekanism.common.util.MekanismUtils;
 import mekanism.common.util.UpgradeUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import java.util.List;
 
@@ -54,15 +54,15 @@ public abstract class MSTileEntityProgressMachine<RECIPE extends MekanismRecipe<
     }
 
     @Override
-    public void loadAdditional(@NotNull CompoundTag nbt, @NotNull HolderLookup.Provider provider) {
-        super.loadAdditional(nbt, provider);
-        operatingTicks = nbt.getInt("progress");
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        operatingTicks = input.getIntOr(SerializationConstants.PROGRESS, operatingTicks);
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag nbtTags, @NotNull HolderLookup.Provider provider) {
-        super.saveAdditional(nbtTags, provider);
-        nbtTags.putInt("progress", getOperatingTicks());
+    public void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        output.putInt(SerializationConstants.PROGRESS, getOperatingTicks());
     }
 
     @Override
@@ -73,9 +73,8 @@ public abstract class MSTileEntityProgressMachine<RECIPE extends MekanismRecipe<
         }
     }
 
-    @NotNull
     @Override
-    public List<Component> getInfo(@NotNull Upgrade upgrade) {
+    public List<Component> getInfo(Upgrade upgrade) {
         return UpgradeUtils.getMultScaledInfo(this, upgrade);
     }
 
@@ -86,4 +85,3 @@ public abstract class MSTileEntityProgressMachine<RECIPE extends MekanismRecipe<
         container.track(SyncableInt.create(this::getTicksRequired, value -> ticksRequired = value));
     }
 }
-

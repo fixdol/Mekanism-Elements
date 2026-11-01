@@ -1,10 +1,13 @@
 package fixdol.mekanismelements.client.rei;
 
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
+import me.shedaniel.rei.api.common.display.Display;
+import me.shedaniel.rei.api.common.display.DisplaySerializer;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import mekanism.client.recipe_viewer.type.IRecipeViewerRecipeType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +22,7 @@ public class MSReiDisplay extends BasicDisplay {
     private final Consumer<MSReiBuilder> layout;
 
     public MSReiDisplay(IRecipeViewerRecipeType<?> type, List<EntryIngredient> inputs, List<EntryIngredient> outputs,
-                        Optional<ResourceLocation> id, Consumer<MSReiBuilder> layout) {
+                        Optional<Identifier> id, Consumer<MSReiBuilder> layout) {
         super(inputs, outputs, id);
         this.category = CategoryIdentifier.of(type.id());
         this.layout = layout;
@@ -28,6 +31,13 @@ public class MSReiDisplay extends BasicDisplay {
     @Override
     public CategoryIdentifier<MSReiDisplay> getCategoryIdentifier() {
         return category;
+    }
+
+    /** These displays are built on the client from the synced recipes, so they never travel from the server. */
+    @Override
+    @Nullable
+    public DisplaySerializer<? extends Display> getSerializer() {
+        return null;
     }
 
     public Consumer<MSReiBuilder> layout() {

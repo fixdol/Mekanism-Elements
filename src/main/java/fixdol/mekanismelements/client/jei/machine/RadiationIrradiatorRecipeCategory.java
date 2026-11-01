@@ -1,7 +1,8 @@
 package fixdol.mekanismelements.client.jei.machine;
 
+import com.mojang.serialization.Codec;
 import fixdol.mekanismelements.api.recipes.RadiationIrradiatingRecipe;
-import fixdol.mekanismelements.common.registries.MSBlocks;
+import fixdol.mekanismelements.common.registries.MSRecipeSerializers;
 import fixdol.mekanismelements.common.tile.machine.TileEntityRadiationIrradiator;
 import mekanism.api.chemical.ChemicalStack;
 import mekanism.client.gui.element.bar.GuiHorizontalPowerBar;
@@ -11,21 +12,23 @@ import mekanism.client.gui.element.gauge.GuiGauge;
 import mekanism.client.gui.element.progress.ProgressType;
 import mekanism.client.gui.element.slot.GuiSlot;
 import mekanism.client.gui.element.slot.SlotType;
+import mekanism.client.recipe_viewer.RecipeViewerUtils;
 import mekanism.client.recipe_viewer.jei.BaseRecipeCategory;
-import mekanism.client.recipe_viewer.jei.MekanismJEI;
 import mekanism.client.recipe_viewer.type.IRecipeViewerRecipeType;
 import mekanism.common.inventory.container.slot.SlotOverlay;
 import mekanism.common.tile.component.config.DataType;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.ICodecHelper;
-import mezz.jei.api.ingredients.IIngredientType;
+import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.IRecipeManager;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.context.ContextMap;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
-import java.util.*;
+import java.util.List;
 
 public class RadiationIrradiatorRecipeCategory extends BaseRecipeCategory<RadiationIrradiatingRecipe> {
     private final GuiGauge<?> inputGauge;
@@ -41,44 +44,27 @@ public class RadiationIrradiatorRecipeCategory extends BaseRecipeCategory<Radiat
         addSlot(SlotType.OUTPUT, 152, 55).with(SlotOverlay.PLUS);
         addSlot(SlotType.POWER, 152, 14).with(SlotOverlay.POWER);
         addSimpleProgress(ProgressType.LARGE_RIGHT, 64, 40);
-        addElement(new GuiHorizontalPowerBar(this, () -> 1.0, 115, 75));
+        addElement(new GuiHorizontalPowerBar(this, RecipeViewerUtils.FULL_BAR, 115, 75));
     }
 
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, RadiationIrradiatingRecipe recipe, @NotNull IFocusGroup focusGroup) {
-        initItem(builder, RecipeIngredientRole.INPUT, inputSlot, recipe.getItemInput().getRepresentations());
-        List<@NotNull ChemicalStack> chemicalInputs = recipe.getGasInput().getRepresentations();
-        List<ChemicalStack> scaledChemicals = chemicalInputs.stream().map(chemical -> chemical.copyWithAmount(chemical.getAmount() * TileEntityRadiationIrradiator.BASE_TICKS_REQUIRED))
+        ContextMap slotDisplayContext = getSlotDisplayContext();
+        initItem(builder, RecipeIngredientRole.INPUT, inputSlot, recipe.getItemInput().getRepresentations(slotDisplayContext));
+        List<ChemicalStack> scaledChemicals = recipe.getGasInput().getRepresentations(slotDisplayContext).stream()
+                .map(chemical -> chemical.copyWithAmount(chemical.amount() * TileEntityRadiationIrradiator.BASE_TICKS_REQUIRED))
                 .toList();
         initChemical(builder, RecipeIngredientRole.INPUT, inputGauge, scaledChemicals);
-        List<ChemicalStack> outputDefinition = recipe.getOutputDefinition();
-        if (outputDefinition.size() == 1) {
-            ChemicalStack output = outputDefinition.get(0);
-            initChemicalOutput(builder, getIngredientType(output), Collections.singletonList(output));
-        } else {
-            // In unified system, all outputs use TYPE_CHEMICAL
-            initChemicalOutput(builder, MekanismJEI.TYPE_CHEMICAL, outputDefinition);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private <STACK extends ChemicalStack> void initChemicalOutput(IRecipeLayoutBuilder builder, IIngredientType<STACK> type, List<ChemicalStack> stacks) {
-        initChemical(builder, RecipeIngredientRole.OUTPUT, outputGauge, stacks);
-    }
-
-    @SuppressWarnings("unchecked")
-    private <STACK extends ChemicalStack> IIngredientType<STACK> getIngredientType(ChemicalStack stack) {
-        // Use the unified TYPE_CHEMICAL for all chemical stacks in Mekanism 10.7
-        return (IIngredientType<STACK>) MekanismJEI.TYPE_CHEMICAL;
+        initChemical(builder, outputGauge, recipe.getOutputDefinition());
     }
 
     @Override
-    public com.mojang.serialization.Codec<RadiationIrradiatingRecipe> getCodec(ICodecHelper codecHelper, IRecipeManager recipeManager) {
-        return fixdol.mekanismelements.common.registries.MSRecipeSerializers.RADIATION_IRRADIATOR.get().codec().codec();
+    public Codec<RadiationIrradiatingRecipe> getCodec(ICodecHelper codecHelper, IRecipeManager recipeManager) {
+        return MSRecipeSerializers.RADIATION_IRRADIATOR.get().codec().codec();
     }
 
     @Override
-    public net.minecraft.resources.ResourceLocation getRegistryName(RadiationIrradiatingRecipe recipe) {
+    public @Nullable Identifier getIdentifier(RadiationIrradiatingRecipe recipe) {
         return recipe.getId();
     }
 }

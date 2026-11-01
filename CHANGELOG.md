@@ -3,6 +3,21 @@
 🚀 [3.0.19]
 
 Additions & Changes
+1) Minecraft 26.1.2 port
+
+Mekanism: Elements now runs on Minecraft 26.1.2 with NeoForge 26.1.2.99 or newer and Java 25.
+It requires Mekanism: Version Locked and Mekanism: Generators Version Locked (Mekanism 10.8.0).
+JEI shows all six machines. The REI integration is ported too, but it has not been tested in game. EMI is not supported because it has no 26.1.2 build.
+The Patchouli guide works with the Patchouli 26.1 beta. It is optional.
+2) Internal
+
+The recipes, mixins and data generators were rewritten for the Mekanism 10.8.0 API. The recipes, loot tables, tags, data maps, item models and block states were regenerated for 26.1.2.
+The Chemical Infuser tank mixin and the player tick mixin were removed: the first one is now done by Mekanism itself and the second one did nothing.
+The Infinity Ore Reprocessor now drops itself when broken.
+
+🚀 [3.0.19 · 1.21.1]
+
+Additions & Changes
 1) EMI and REI support
 
 All six machines (Adsorption Separator, Chemical Demolition Machine, Radiation Irradiator, Infinity Ore Reprocessor, Air Compressor and Seawater Pump) now have their own recipe categories in EMI and in REI, drawn with the same layout as in JEI.

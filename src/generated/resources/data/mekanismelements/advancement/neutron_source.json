@@ -17,7 +17,6 @@
       "translate": "advancements.mekanismelements.neutron_source.description"
     },
     "icon": {
-      "count": 1,
       "id": "mekanismelements:pellet_neutron_source"
     },
     "title": {

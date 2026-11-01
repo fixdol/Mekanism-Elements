@@ -5,8 +5,6 @@ import fixdol.mekanismelements.common.registries.MSItems;
 import mekanism.api.datagen.recipe.builder.ItemStackToItemStackRecipeBuilder;
 import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 
 public class CrushingRecipeProvider {
 
@@ -15,8 +13,8 @@ public class CrushingRecipeProvider {
 
         // Beryllium Ingot -> Beryllium Dust
         ItemStackToItemStackRecipeBuilder.crushing(
-                IngredientCreatorAccess.item().from(MSItems.INGOT_BERYLLIUM.get()),
-                new ItemStack(MSItems.DUST_BERYLLIUM.get(), 1)
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "beryllium_dust"));
+                IngredientCreatorAccess.item().from(MSItems.INGOT_BERYLLIUM),
+                MSItems.DUST_BERYLLIUM.asTemplate()
+        ).save(recipeOutput, MekanismElements.rl(basePath + "beryllium_dust"));
     }
 }

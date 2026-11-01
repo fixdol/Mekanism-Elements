@@ -6,7 +6,7 @@
   },
   "item_input": {
     "count": 1,
-    "item": "minecraft:totem_of_undying"
+    "ingredient": "minecraft:totem_of_undying"
   },
   "main_output": {
     "count": 20,

@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "A": {
-      "item": "mekanism:hdpe_sheet"
-    },
-    "X": {
-      "item": "mekanism:pellet_antimatter"
-    },
-    "_": {
-      "tag": "c:ingots/lead"
-    }
+    "A": "mekanism:hdpe_sheet",
+    "X": "mekanism:pellet_antimatter",
+    "_": "#c:ingots/lead"
   },
   "pattern": [
     "AAA",
@@ -18,7 +12,6 @@
     "AAA"
   ],
   "result": {
-    "count": 1,
     "id": "mekanismelements:high_performance_adsorbent"
   }
 }

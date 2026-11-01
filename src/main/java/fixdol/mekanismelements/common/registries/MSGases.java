@@ -4,7 +4,8 @@ import fixdol.mekanismelements.common.MekanismElements;
 import fixdol.mekanismelements.common.gas.MSChemicalConstants;
 import mekanism.api.chemical.Chemical;
 import mekanism.api.chemical.ChemicalBuilder;
-import mekanism.api.chemical.attribute.ChemicalAttributes;
+import mekanism.api.datamaps.chemical.attribute.CooledCoolant;
+import mekanism.api.datamaps.chemical.attribute.HeatedCoolant;
 import mekanism.common.registration.impl.ChemicalDeferredRegister;
 import mekanism.common.registration.impl.DeferredChemical;
 
@@ -80,26 +81,26 @@ public class MSGases {
     public static class Coolants {
 
 
-        public static ChemicalAttributes.CooledCoolant getHeliumCoolant() {
-            return new ChemicalAttributes.CooledCoolant(
-                    SUPERHEATED_HELIUM.get().getAsHolder(), 100, 1.5);
+        public static CooledCoolant getHeliumCoolant() {
+            return new CooledCoolant(
+                    SUPERHEATED_HELIUM, 100, 1.5);
         }
 
-        public static ChemicalAttributes.HeatedCoolant getHeatedHeliumCoolant() {
-            return new ChemicalAttributes.HeatedCoolant(
-                    HELIUM.get().getAsHolder(), 100);
+        public static HeatedCoolant getHeatedHeliumCoolant() {
+            return new HeatedCoolant(
+                    HELIUM, 100);
         }
 
         // Ammonium Nitrate Solution coolant
         // thermalEnthalpy=120, conductivity=0.7 -> enfria mas rapido que Helium pero menos que Sodium
-        public static ChemicalAttributes.CooledCoolant getAmmoniumNitrateSolutionCoolant() {
-            return new ChemicalAttributes.CooledCoolant(
-                    AMMONIUM_NITRATE_SOLUTION.get().getAsHolder(), 120, 0.7);
+        public static CooledCoolant getAmmoniumNitrateSolutionCoolant() {
+            return new CooledCoolant(
+                    AMMONIUM_NITRATE_SOLUTION, 120, 0.7);
         }
 
-        public static ChemicalAttributes.HeatedCoolant getHeatedAmmoniumNitrateSolutionCoolant() {
-            return new ChemicalAttributes.HeatedCoolant(
-                    AMMONIUM_NITRATE_SOLUTION.get().getAsHolder(), 120);
+        public static HeatedCoolant getHeatedAmmoniumNitrateSolutionCoolant() {
+            return new HeatedCoolant(
+                    AMMONIUM_NITRATE_SOLUTION, 120);
         }
     }
 }

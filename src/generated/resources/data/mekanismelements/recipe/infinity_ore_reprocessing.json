@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "A": {
-      "item": "mekanism:alloy_atomic"
-    },
-    "C": {
-      "item": "mekanism:ultimate_control_circuit"
-    },
-    "P": {
-      "item": "mekanismelements:seawater_pump"
-    },
-    "T": {
-      "item": "mekanism:ultimate_chemical_tank"
-    },
-    "X": {
-      "item": "mekanismelements:adsorption_separator"
-    }
+    "A": "mekanism:alloy_atomic",
+    "C": "mekanism:ultimate_control_circuit",
+    "P": "mekanismelements:seawater_pump",
+    "T": "mekanism:ultimate_chemical_tank",
+    "X": "mekanismelements:adsorption_separator"
   },
   "pattern": [
     "ACA",
@@ -24,7 +14,6 @@
     "ATA"
   ],
   "result": {
-    "count": 1,
     "id": "mekanismelements:infinity_ore_reprocessing"
   }
 }

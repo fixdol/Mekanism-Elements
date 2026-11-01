@@ -1,7 +1,7 @@
 package fixdol.mekanismelements.client.gui.machine;
 
 import fixdol.mekanismelements.common.tile.machine.TileEntityAirCompressor;
-import mekanism.api.chemical.ChemicalStack;
+import mekanism.api.chemical.ChemicalResource;
 import mekanism.client.gui.GuiConfigurableTile;
 import mekanism.client.gui.element.GuiInnerScreen;
 import mekanism.client.gui.element.bar.GuiVerticalPowerBar;
@@ -14,11 +14,10 @@ import mekanism.common.inventory.container.tile.MekanismTileContainer;
 import mekanism.common.inventory.warning.WarningTracker;
 import mekanism.common.util.text.EnergyDisplay;
 import mekanism.common.util.text.TextUtils;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,33 +33,32 @@ public class GuiAirCompressor extends GuiConfigurableTile<TileEntityAirCompresso
         super.addGuiElements();
         addRenderableWidget(new GuiInnerScreen(this, 54, 23, 80, 41, () -> {
             List<Component> list = new ArrayList<>();
-            list.add(EnergyDisplay.of(tile.getEnergyContainer()).getTextComponent());
-            ChemicalStack chemicalStack = tile.chemicalTank.getStack();
-            if (chemicalStack.isEmpty()) {
+            list.add(EnergyDisplay.of(tile.energyContainer()).getTextComponent());
+            if (tile.chemicalTank.isEmpty()) {
                 list.add(MekanismLang.NO_CHEMICAL.translate());
             } else {
-                list.add(MekanismLang.GENERIC_STORED_MB.translate(chemicalStack, TextUtils.format(chemicalStack.getAmount())));
+                list.add(MekanismLang.GENERIC_STORED_MB.translate(tile.chemicalTank.resource(), TextUtils.format(tile.chemicalTank.amountAsLong())));
             }
             return list;
         }));
-        addRenderableWidget(new GuiVerticalPowerBar(this, tile.getEnergyContainer(), 164, 15))
+        addRenderableWidget(new GuiVerticalPowerBar(this, tile.energyContainer(), 164, 15))
                 .warning(WarningTracker.WarningType.NOT_ENOUGH_ENERGY, () -> {
-                    MachineEnergyContainer<TileEntityAirCompressor> energyContainer = tile.getEnergyContainer();
-                    return energyContainer.getEnergyPerTick() > energyContainer.getEnergy();
+                    MachineEnergyContainer<TileEntityAirCompressor> energyContainer = tile.energyContainer();
+                    return energyContainer.getEnergyPerTick() > energyContainer.getAmountAsLong();
                 });
-        addRenderableWidget(new GuiChemicalGauge(() -> tile.chemicalTank, () -> tile.getChemicalTanks(null), GaugeType.STANDARD, this, 6, 13))
-                .warning(WarningTracker.WarningType.NO_SPACE_IN_OUTPUT, () -> tile.chemicalTank.getNeeded() < TileEntityAirCompressor.COMPRESSED_AIR_STACK.getAmount());
+        addRenderableWidget(new GuiChemicalGauge(() -> tile.chemicalTank, tile::getChemicalTanks, GaugeType.STANDARD, this, 6, 13))
+                .warning(WarningTracker.WarningType.NO_SPACE_IN_OUTPUT, () -> tile.chemicalTank.getNeededAsLong(ChemicalResource.of(TileEntityAirCompressor.COMPRESSED_AIR_STACK)) < TileEntityAirCompressor.COMPRESSED_AIR_STACK.amount());
 
         addRenderableWidget(new GuiEnergyTab(this, () -> {
-            return List.of(EnergyDisplay.of(tile.getEnergyContainer()).getTextComponent());
+            return List.of(EnergyDisplay.of(tile.energyContainer()).getTextComponent());
         }));
     }
 
 
     @Override
-    protected void drawForegroundText(@Nonnull GuiGraphics matrix, int mouseX, int mouseY) {
+    protected void drawForegroundText(GuiGraphicsExtractor matrix, int mouseX, int mouseY) {
         renderTitleText(matrix);
-        matrix.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, titleTextColor());
+        renderInventoryText(matrix);
         super.drawForegroundText(matrix, mouseX, mouseY);
     }
 }

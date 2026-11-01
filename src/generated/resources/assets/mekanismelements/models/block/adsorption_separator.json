@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/block",
   "elements": [
     {
       "faces": {
@@ -131,15 +131,6 @@
         4,
         4
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          10,
-          4,
-          4
-        ]
-      },
       "to": [
         14,
         16,
@@ -208,15 +199,6 @@
         4,
         4
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          2,
-          4,
-          4
-        ]
-      },
       "to": [
         6,
         16,
@@ -285,15 +267,6 @@
         4,
         2
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          7,
-          4,
-          2
-        ]
-      },
       "to": [
         9,
         12,
@@ -362,15 +335,6 @@
         7,
         7
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          9,
-          7,
-          7
-        ]
-      },
       "to": [
         10,
         9,
@@ -439,15 +403,6 @@
         7,
         7
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          6,
-          7,
-          7
-        ]
-      },
       "to": [
         7,
         9,
@@ -516,15 +471,6 @@
         4,
         12
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          0,
-          4,
-          12
-        ]
-      },
       "to": [
         16,
         16,
@@ -593,15 +539,6 @@
         4,
         2
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          14,
-          4,
-          2
-        ]
-      },
       "to": [
         15,
         14,
@@ -670,15 +607,6 @@
         4,
         2
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          10,
-          4,
-          2
-        ]
-      },
       "to": [
         14,
         14,
@@ -747,15 +675,6 @@
         4,
         2
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          1,
-          4,
-          2
-        ]
-      },
       "to": [
         2,
         14,
@@ -824,15 +743,6 @@
         4,
         2
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          2,
-          4,
-          2
-        ]
-      },
       "to": [
         6,
         14,
@@ -875,15 +785,6 @@
         4,
         4
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          15,
-          4,
-          4
-        ]
-      },
       "to": [
         16,
         12,
@@ -925,15 +826,6 @@
         4,
         4
       ],
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          -1,
-          4,
-          4
-        ]
-      },
       "to": [
         1,
         12,
@@ -958,19 +850,7 @@
         5,
         5
       ],
-      "neoforge_data": {
-        "block_light": 15,
-        "sky_light": 15
-      },
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          18,
-          5,
-          5
-        ]
-      },
+      "light_emission": 15,
       "to": [
         16,
         11,
@@ -995,19 +875,7 @@
         5,
         5
       ],
-      "neoforge_data": {
-        "block_light": 15,
-        "sky_light": 15
-      },
-      "rotation": {
-        "angle": 0.0,
-        "axis": "y",
-        "origin": [
-          0,
-          8,
-          8
-        ]
-      },
+      "light_emission": 15,
       "to": [
         0,
         11,
@@ -1015,7 +883,6 @@
       ]
     }
   ],
-  "render_type": "minecraft:cutout",
   "textures": {
     "0": "mekanismelements:block/adsorption_separator",
     "1": "mekanism:block/models/ports",

@@ -1,12 +1,12 @@
 {
   "values": {
     "mekanismelements:americium": {
-      "burn_time": 500,
-      "energy": 60000
+      "energy": 60000,
+      "maxBurnPerTick": 500
     },
     "mekanismelements:ammonia": {
-      "burn_time": 10,
-      "energy": 99999
+      "energy": 99999,
+      "maxBurnPerTick": 10
     }
   }
 }

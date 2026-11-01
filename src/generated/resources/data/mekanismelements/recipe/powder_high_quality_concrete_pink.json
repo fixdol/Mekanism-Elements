@@ -2,33 +2,15 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    {
-      "item": "mekanismelements:powder_high_quality_concrete"
-    },
-    {
-      "item": "mekanismelements:powder_high_quality_concrete"
-    },
-    {
-      "item": "mekanismelements:powder_high_quality_concrete"
-    },
-    {
-      "item": "mekanismelements:powder_high_quality_concrete"
-    },
-    {
-      "item": "mekanismelements:powder_high_quality_concrete"
-    },
-    {
-      "item": "mekanismelements:powder_high_quality_concrete"
-    },
-    {
-      "item": "mekanismelements:powder_high_quality_concrete"
-    },
-    {
-      "item": "mekanismelements:powder_high_quality_concrete"
-    },
-    {
-      "item": "minecraft:pink_dye"
-    }
+    "mekanismelements:powder_high_quality_concrete",
+    "mekanismelements:powder_high_quality_concrete",
+    "mekanismelements:powder_high_quality_concrete",
+    "mekanismelements:powder_high_quality_concrete",
+    "mekanismelements:powder_high_quality_concrete",
+    "mekanismelements:powder_high_quality_concrete",
+    "mekanismelements:powder_high_quality_concrete",
+    "mekanismelements:powder_high_quality_concrete",
+    "minecraft:pink_dye"
   ],
   "result": {
     "count": 8,

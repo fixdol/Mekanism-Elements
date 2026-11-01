@@ -1,194 +1,197 @@
 package fixdol.mekanismelements.common.tile.machine;
 
-import mekanism.common.tile.component.config.ConfigInfo;
 import fixdol.mekanismelements.common.registries.MSBlocks;
 import fixdol.mekanismelements.common.registries.MSFluids;
-import mekanism.api.*;
+import mekanism.api.AutomationType;
+import mekanism.api.IConfigurable;
+import mekanism.api.IContentsListener;
+import mekanism.api.RelativeSide;
+import mekanism.api.SerializationConstants;
+import mekanism.api.Upgrade;
+import mekanism.api.energy.IEnergyContainer;
+import mekanism.api.fluid.IFluidTank;
+import mekanism.api.inventory.IInventorySlot;
 import mekanism.common.capabilities.Capabilities;
 import mekanism.common.capabilities.energy.MachineEnergyContainer;
 import mekanism.common.capabilities.fluid.BasicFluidTank;
-import mekanism.common.capabilities.holder.energy.EnergyContainerHelper;
-import mekanism.common.capabilities.holder.energy.IEnergyContainerHolder;
-import mekanism.common.capabilities.holder.fluid.FluidTankHelper;
-import mekanism.common.capabilities.holder.fluid.IFluidTankHolder;
-import mekanism.common.capabilities.holder.slot.IInventorySlotHolder;
-import mekanism.common.capabilities.holder.slot.InventorySlotHelper;
-import mekanism.common.capabilities.resolver.BasicCapabilityResolver;
+import mekanism.common.capabilities.holder.container.IContainerHolder;
+import mekanism.common.capabilities.holder.container.MekContainerHelper;
+import mekanism.common.capabilities.holder.single.BasicSingleHolder;
+import mekanism.common.capabilities.holder.single.ISingleContainerHolder;
+import mekanism.common.component.containers.type.ContainerType;
+import mekanism.common.component.containers.type.IContainerType;
 import mekanism.common.integration.computer.SpecialComputerMethodWrapper;
 import mekanism.common.integration.computer.annotation.WrappingComputerMethod;
 import mekanism.common.inventory.slot.EnergyInventorySlot;
 import mekanism.common.inventory.slot.FluidInventorySlot;
 import mekanism.common.inventory.slot.OutputInventorySlot;
 import mekanism.common.lib.transmitter.TransmissionType;
-import mekanism.common.tile.component.TileComponentConfig;
-import mekanism.common.tile.component.TileComponentEjector;
+import mekanism.common.tile.component.config.ConfigInfo;
+import mekanism.common.tile.component.config.DataType;
 import mekanism.common.tile.prefab.TileEntityConfigurableMachine;
-import mekanism.common.util.FluidUtils;
+import mekanism.common.util.EnumUtils;
 import mekanism.common.util.MekanismUtils;
+import mekanism.common.util.ResourceUtils;
 import mekanism.common.util.UpgradeUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.fluids.FluidStack;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
-import org.jetbrains.annotations.Nullable;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
+import org.jetbrains.annotations.UnknownNullability;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 public class TileEntitySeawaterPump extends TileEntityConfigurableMachine implements IConfigurable {
     private static final int BASE_TICKS_REQUIRED = 19;
-    public static final FluidStack SEAWATER_STACK = new FluidStack(MSFluids.SEAWATER.get(), 200);
+    private static final int BASE_OUTPUT_RATE = 256;
+    private static final long MAX_FLUID = 10_000;
+    public static final FluidStack SEAWATER_STACK = MSFluids.SEAWATER.asStack(200);
 
+    @UnknownNullability//Initialized via getInitialFluidTanks
     @WrappingComputerMethod(wrapper = SpecialComputerMethodWrapper.ComputerFluidTankWrapper.class, methodNames = {"getFluid", "getFluidCapacity", "getFluidNeeded", "getFluidFilledPercentage"}, docPlaceholder = "buffer tank")
     public BasicFluidTank fluidTank;
     public int ticksRequired = BASE_TICKS_REQUIRED;
 
     public int operatingTicks;
+    private int outputRate = BASE_OUTPUT_RATE;
+    @Nullable
+    private BlockCapabilityCache<ResourceHandler<FluidResource>, @Nullable Direction> fluidHandlerAbove;
 
+    @UnknownNullability//Initialized via getInitialEnergyContainer
     private MachineEnergyContainer<TileEntitySeawaterPump> energyContainer;
 
+    @UnknownNullability//Initialized via getInitialInventory
     @WrappingComputerMethod(wrapper = SpecialComputerMethodWrapper.ComputerIInventorySlotWrapper.class, methodNames = "getInputItem", docPlaceholder = "")
     FluidInventorySlot inputSlot;
 
+    @UnknownNullability//Initialized via getInitialInventory
     @WrappingComputerMethod(wrapper = SpecialComputerMethodWrapper.ComputerIInventorySlotWrapper.class, methodNames = "getOutputItem", docPlaceholder = "")
     OutputInventorySlot outputSlot;
 
+    @UnknownNullability//Initialized via getInitialInventory
     @WrappingComputerMethod(wrapper = SpecialComputerMethodWrapper.ComputerIInventorySlotWrapper.class, methodNames = "getEnergyItem", docPlaceholder = "")
     private EnergyInventorySlot energySlot;
 
     public TileEntitySeawaterPump(BlockPos pos, BlockState state) {
         super(MSBlocks.SEAWATER_PUMP, pos, state);
-        // Config is created from block attributes in parent constructor
-        getConfig().setupItemIOConfig(List.of(inputSlot),List.of(outputSlot),energySlot,true);
-        
-        // Fluid Output Config - TOP and RIGHT sides
-        ConfigInfo fluidConfig = getConfig().setupOutputConfig(TransmissionType.FLUID , fluidTank , RelativeSide.TOP);
-        if (fluidConfig != null) {
-            fluidConfig.setDataType(mekanism.common.tile.component.config.DataType.OUTPUT, RelativeSide.TOP);
-            fluidConfig.setDataType(mekanism.common.tile.component.config.DataType.OUTPUT, RelativeSide.RIGHT);
-            fluidConfig.setDataType(mekanism.common.tile.component.config.DataType.OUTPUT, RelativeSide.FRONT);
-        }
-        
+        configComponent.setupItemIOConfig(List.of(inputSlot), List.of(outputSlot), energySlot, true);
+
+        // Fluid Output Config - TOP, RIGHT and FRONT sides
+        ConfigInfo fluidConfig = configComponent.setupOutputConfig(TransmissionType.FLUID, fluidTank);
+        fluidConfig.setDataType(DataType.OUTPUT, RelativeSide.TOP);
+        fluidConfig.setDataType(DataType.OUTPUT, RelativeSide.RIGHT);
+        fluidConfig.setDataType(DataType.OUTPUT, RelativeSide.FRONT);
+
         // Energy Config - all sides accept
-        ConfigInfo energyConfig = getConfig().setupInputConfig(TransmissionType.ENERGY , energyContainer);
-        if (energyConfig != null) {
-            for (RelativeSide side : RelativeSide.values()) {
-                energyConfig.setDataType(mekanism.common.tile.component.config.DataType.INPUT, side);
-            }
+        ConfigInfo energyConfig = configComponent.setupInputConfig(TransmissionType.ENERGY, energyContainer);
+        for (RelativeSide side : EnumUtils.SIDES) {
+            energyConfig.setDataType(DataType.INPUT, side);
         }
 
-        ejectorComponent = new TileComponentEjector(this);
-        ejectorComponent.setOutputData(getConfig(),TransmissionType.ITEM)
+        ejectorComponent.setOutputData(configComponent, TransmissionType.ITEM)
                 .setCanEject(type -> canFunction());
-        ejectorComponent.setOutputData(getConfig(),TransmissionType.FLUID)
+        ejectorComponent.setOutputData(configComponent, TransmissionType.FLUID)
                 .setCanEject(type -> canFunction());
     }
 
     @Override
-    protected void presetVariables() {
-        super.presetVariables();
-        fluidTank = BasicFluidTank.output(10_000, this::markForSave);
-        energyContainer = MachineEnergyContainer.input(this, this::markForSave);
-    }
-
-    @Nonnull
-    @Override
-    public IFluidTankHolder getInitialFluidTanks(IContentsListener listener) {
-        FluidTankHelper builder = FluidTankHelper.forSide(this::getDirection);
-        builder.addTank(fluidTank, RelativeSide.TOP);
-        return builder.build();
-    }
-
-    @Nonnull
-    @Override
-    protected IEnergyContainerHolder getInitialEnergyContainers(IContentsListener listener) {
-        EnergyContainerHelper builder = EnergyContainerHelper.forSide(this::getDirection);
-        builder.addContainer(energyContainer, RelativeSide.BACK);
-        return builder.build();
-    }
-
-    @Nonnull
-    @Override
-    protected IInventorySlotHolder getInitialInventory(IContentsListener listener) {
-        InventorySlotHelper builder = InventorySlotHelper.forSide(this::getDirection);
-        builder.addSlot(inputSlot = FluidInventorySlot.drain(fluidTank, listener, 28, 20), RelativeSide.TOP);
-        builder.addSlot(outputSlot = OutputInventorySlot.at(listener, 28, 51), RelativeSide.BOTTOM);
-        builder.addSlot(energySlot = EnergyInventorySlot.fillOrConvert(energyContainer, this::getLevel, listener, 143, 35), RelativeSide.BACK);
+    protected IContainerHolder<IFluidTank> getInitialFluidTanks(IContentsListener listener) {
+        MekContainerHelper<IFluidTank> builder = MekContainerHelper.forSide(facingSupplier);
+        builder.addContainer(fluidTank = BasicFluidTank.output(MAX_FLUID, listener), RelativeSide.TOP);
         return builder.build();
     }
 
     @Override
-    protected boolean onUpdateServer() {
-        boolean needsUpdate = super.onUpdateServer();
-        if (this.getLevel().getBiome(this.getBlockPos()).is(BiomeTags.IS_OCEAN)) {
-            BlockPos belowPos = this.getBlockPos().below();
-            BlockState belowState = this.getLevel().getBlockState(belowPos);
+    protected ISingleContainerHolder<IEnergyContainer> getInitialEnergyContainer(IContentsListener listener) {
+        energyContainer = MachineEnergyContainer.input(this, listener);
+        return new BasicSingleHolder<>(energyContainer, facingSupplier, BACK_ONLY);
+    }
+
+    @Override
+    protected IContainerHolder<IInventorySlot> getInitialInventory(IContentsListener listener) {
+        MekContainerHelper<IInventorySlot> builder = MekContainerHelper.forSide(facingSupplier);
+        builder.addContainer(inputSlot = FluidInventorySlot.drain(fluidTank, listener, 28, 20), RelativeSide.TOP);
+        builder.addContainer(outputSlot = OutputInventorySlot.at(listener, 28, 51), RelativeSide.BOTTOM);
+        builder.addContainer(energySlot = EnergyInventorySlot.fillOrConvert(energyContainer, this::getLevel, listener, 143, 35), RelativeSide.BACK);
+        return builder.build();
+    }
+
+    @Override
+    protected boolean onUpdateServer(ServerLevel level) {
+        boolean sendUpdatePacket = super.onUpdateServer(level);
+        if (level.getBiome(getBlockPos()).is(BiomeTags.IS_OCEAN)) {
+            BlockState belowState = level.getBlockState(getBlockPos().below());
             if (belowState.getFluidState().isSource() && belowState.getFluidState().getType() == Fluids.WATER) {
 
-                energySlot.fillContainerOrConvert();
-                inputSlot.drainTank(outputSlot);
+                energySlot.fillContainerOrConvert(null);
+                inputSlot.drainTankIntoSlot(outputSlot, null);
 
-                if (canFunction() && SEAWATER_STACK.getAmount() <= fluidTank.getNeeded()) {
-                    long energyPerTick = energyContainer.getEnergyPerTick();
-
-                    if (energyContainer.extract(energyPerTick, Action.SIMULATE, AutomationType.INTERNAL) == energyPerTick) {
-                        operatingTicks++;
-
-                        if (operatingTicks >= ticksRequired) {
-                            operatingTicks = 0;
-                            energyContainer.extract(energyPerTick, Action.EXECUTE, AutomationType.INTERNAL);
-                            fluidTank.insert(SEAWATER_STACK, Action.EXECUTE, AutomationType.INTERNAL);
+                FluidResource seawater = FluidResource.of(SEAWATER_STACK);
+                if (canFunction() && SEAWATER_STACK.amount() <= fluidTank.getNeededAsInt(seawater)) {
+                    int energyPerTick = energyContainer.getEnergyPerTick();
+                    try (Transaction transaction = Transaction.openRoot()) {
+                        if (energyContainer.extract(energyPerTick, transaction, AutomationType.INTERNAL) == energyPerTick) {
+                            operatingTicks++;
+                            if (operatingTicks >= ticksRequired) {
+                                operatingTicks = 0;
+                                fluidTank.insert(seawater, SEAWATER_STACK.amount(), transaction, AutomationType.INTERNAL);
+                                transaction.commit();
+                            }
                         }
                     }
                 }
                 if (!fluidTank.isEmpty()) {
-                    int emitRate = (int)(256L * (1 + upgradeComponent.getUpgrades(Upgrade.SPEED)));
-                    if (level instanceof net.minecraft.server.level.ServerLevel serverLevel) {
-                        BlockCapabilityCache<net.neoforged.neoforge.fluids.capability.IFluidHandler, net.minecraft.core.Direction> cache = 
-                            mekanism.common.capabilities.Capabilities.FLUID.createCache(serverLevel, getBlockPos().relative(Direction.UP), Direction.DOWN);
-                        FluidUtils.emit(Collections.singletonList(cache), fluidTank, emitRate);
+                    if (fluidHandlerAbove == null) {
+                        fluidHandlerAbove = Capabilities.FLUID.createCache(level, worldPosition.above(), Direction.DOWN);
                     }
+                    ResourceUtils.emit(fluidHandlerAbove.getCapability(), fluidTank, outputRate, null);
                 }
             }
         }
-        return needsUpdate;
+        return sendUpdatePacket;
     }
 
     @Override
-    public void saveAdditional(@Nonnull CompoundTag nbtTags, @Nonnull HolderLookup.Provider provider) {
-        super.saveAdditional(nbtTags, provider);
-        nbtTags.putInt("progress", operatingTicks);
+    public void setLevel(Level level) {
+        super.setLevel(level);
+        //Invalidate the cache as if the level changed then it might no longer be valid
+        fluidHandlerAbove = null;
     }
 
     @Override
-    public void loadAdditional(@Nonnull CompoundTag nbt, @Nonnull HolderLookup.Provider provider) {
-        super.loadAdditional(nbt, provider);
-
-        operatingTicks = nbt.getInt("progress");
+    public void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        output.putInt(SerializationConstants.PROGRESS, operatingTicks);
     }
 
     @Override
-    public InteractionResult onSneakRightClick(Player player) {
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        operatingTicks = input.getIntOr(SerializationConstants.PROGRESS, operatingTicks);
+    }
+
+    @Override
+    public InteractionResult onSneakRightClick(Level level, Player player) {
         return InteractionResult.PASS;
     }
 
     @Override
-    public InteractionResult onRightClick(Player player) {
+    public InteractionResult onRightClick(Level level, Player player) {
         return InteractionResult.PASS;
-    }
-
-    public boolean canPulse() {
-        return true;
     }
 
     @Override
@@ -196,16 +199,18 @@ public class TileEntitySeawaterPump extends TileEntityConfigurableMachine implem
         super.recalculateUpgrades(upgrade);
         if (upgrade == Upgrade.SPEED) {
             ticksRequired = MekanismUtils.getTicks(this, BASE_TICKS_REQUIRED);
+            outputRate = BASE_OUTPUT_RATE * (1 + getUpgrades(Upgrade.SPEED));
         }
     }
 
     @Override
     public int getRedstoneLevel() {
-        return MekanismUtils.redstoneLevelFromContents(fluidTank.getFluidAmount(), fluidTank.getCapacity());
+        return ContainerType.FLUID.getRedstoneSignalFromContainer(fluidTank);
     }
 
-    protected boolean makesComparatorDirty(@Nullable TransmissionType type) {
-        return type == TransmissionType.FLUID;
+    @Override
+    protected boolean makesComparatorDirty(IContainerType<?, ?> type) {
+        return type == ContainerType.FLUID;
     }
 
     @Override
@@ -213,8 +218,7 @@ public class TileEntitySeawaterPump extends TileEntityConfigurableMachine implem
         return UpgradeUtils.getMultScaledInfo(this, upgrade);
     }
 
-    public MachineEnergyContainer<TileEntitySeawaterPump> getEnergyContainer() {
+    public MachineEnergyContainer<TileEntitySeawaterPump> energyContainer() {
         return energyContainer;
     }
 }
-

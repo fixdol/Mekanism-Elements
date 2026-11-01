@@ -6,7 +6,7 @@
   },
   "item_input": {
     "count": 1,
-    "item": "mekanismelements:pellet_neutron_source"
+    "ingredient": "mekanismelements:pellet_neutron_source"
   },
   "output": {
     "amount": 500,

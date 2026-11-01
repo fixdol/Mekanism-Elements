@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    {
-      "tag": "c:dusts/lead"
-    },
-    {
-      "item": "minecraft:sand"
-    },
-    {
-      "tag": "c:dusts/calcium_oxide"
-    }
+    "#c:dusts/lead",
+    "minecraft:sand",
+    "#c:dusts/calcium_oxide"
   ],
   "result": {
     "count": 3,

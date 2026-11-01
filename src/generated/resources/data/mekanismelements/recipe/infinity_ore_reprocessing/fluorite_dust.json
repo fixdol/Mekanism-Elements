@@ -6,7 +6,7 @@
   },
   "item_input": {
     "count": 1,
-    "item": "mekanism:fluorite_gem"
+    "ingredient": "mekanism:fluorite_gem"
   },
   "output": {
     "count": 16,

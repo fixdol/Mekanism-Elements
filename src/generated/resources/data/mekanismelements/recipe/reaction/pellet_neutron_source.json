@@ -7,14 +7,13 @@
   "duration": 25,
   "fluid_input": {
     "amount": 1000,
-    "fluid": "mekanismelements:beryllium"
+    "ingredient": "mekanismelements:beryllium"
   },
   "item_input": {
     "count": 1,
-    "tag": "c:dusts/steel"
+    "ingredient": "#c:dusts/steel"
   },
   "item_output": {
-    "count": 1,
     "id": "mekanismelements:pellet_neutron_source"
   }
 }

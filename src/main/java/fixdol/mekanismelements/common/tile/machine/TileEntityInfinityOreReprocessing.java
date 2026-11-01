@@ -3,6 +3,7 @@ package fixdol.mekanismelements.common.tile.machine;
 import fixdol.mekanismelements.api.recipes.InfinityOreReprocessingRecipe;
 import fixdol.mekanismelements.common.recipe.IMSRecipeTypeProvider;
 import fixdol.mekanismelements.common.recipe.MSRecipeType;
+import fixdol.mekanismelements.common.recipe.lookup.IMSDoubleRecipeLookupHandler;
 import fixdol.mekanismelements.common.recipe.lookup.cache.MSInputRecipeCache;
 import fixdol.mekanismelements.common.registries.MSBlocks;
 import fixdol.mekanismelements.common.tile.prefab.MSTileEntityProgressMachine;
@@ -12,6 +13,8 @@ import mekanism.api.chemical.BasicChemicalTank;
 import mekanism.api.chemical.Chemical;
 import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.chemical.IChemicalTank;
+import mekanism.api.energy.IEnergyContainer;
+import mekanism.api.inventory.IInventorySlot;
 import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.api.recipes.cache.TwoInputCachedRecipe;
 import mekanism.api.recipes.inputs.IInputHandler;
@@ -19,35 +22,36 @@ import mekanism.api.recipes.inputs.InputHelper;
 import mekanism.api.recipes.outputs.IOutputHandler;
 import mekanism.api.recipes.outputs.OutputHelper;
 import mekanism.common.capabilities.energy.MachineEnergyContainer;
-import mekanism.common.capabilities.holder.chemical.ChemicalTankHelper;
-import mekanism.common.capabilities.holder.chemical.IChemicalTankHolder;
-import mekanism.common.capabilities.holder.energy.EnergyContainerHelper;
-import mekanism.common.capabilities.holder.energy.IEnergyContainerHolder;
-import mekanism.common.capabilities.holder.slot.IInventorySlotHolder;
-import mekanism.common.capabilities.holder.slot.InventorySlotHelper;
+import mekanism.common.capabilities.holder.container.IContainerHolder;
+import mekanism.common.capabilities.holder.container.MekContainerHelper;
+import mekanism.common.capabilities.holder.single.ISingleContainerHolder;
+import mekanism.common.capabilities.holder.single.SingleConfigHolder;
+import mekanism.common.inventory.container.slot.SlotOverlay;
 import mekanism.common.inventory.slot.BasicInventorySlot;
+import mekanism.common.inventory.slot.ChemicalInventorySlot;
+import mekanism.common.inventory.slot.EnergyInventorySlot;
 import mekanism.common.inventory.slot.InputInventorySlot;
 import mekanism.common.inventory.slot.OutputInventorySlot;
-import mekanism.common.inventory.slot.EnergyInventorySlot;
-import mekanism.common.inventory.slot.chemical.ChemicalInventorySlot;
-import mekanism.common.inventory.container.slot.SlotOverlay;
 import mekanism.common.inventory.warning.WarningTracker.WarningType;
+import mekanism.common.lib.transmitter.TransmissionType;
 import mekanism.common.recipe.IMekanismRecipeTypeProvider;
 import mekanism.common.recipe.lookup.IRecipeLookupHandler;
-import mekanism.common.tile.component.TileComponentEjector;
-import mekanism.common.tile.component.config.DataType;
 import mekanism.common.tile.component.config.ConfigInfo;
-import mekanism.common.lib.transmitter.TransmissionType;
+import mekanism.common.tile.component.config.DataType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
 
 public class TileEntityInfinityOreReprocessing extends MSTileEntityProgressMachine<InfinityOreReprocessingRecipe> implements
+        IMSDoubleRecipeLookupHandler.ItemChemicalRecipeLookupHandler<InfinityOreReprocessingRecipe>,
         IRecipeLookupHandler<InfinityOreReprocessingRecipe> {
     private static final List<CachedRecipe.OperationTracker.RecipeError> TRACKED_ERROR_TYPES = List.of(
             CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_ENERGY,
@@ -59,38 +63,39 @@ public class TileEntityInfinityOreReprocessing extends MSTileEntityProgressMachi
     private static final long MAX_CHEMICAL = 10_000;
     public static final int BASE_TICKS_REQUIRED = 100;
 
+    @UnknownNullability//Initialized via getInitialChemicalTanks
     public IChemicalTank chemicalInputTank;
+    @UnknownNullability//Initialized via getInitialInventory
     public BasicInventorySlot outputSlot;
+    @UnknownNullability//Initialized via getInitialInventory
     public BasicInventorySlot itemInputSlot;
 
-    private final IInputHandler<@NotNull ItemStack> itemInputHandler;
-    private final IInputHandler<@NotNull ChemicalStack> chemicalInputHandler;
-    private final IOutputHandler<@NotNull ItemStack> outputHandler;
+    private final IInputHandler<Item, ItemStack> itemInputHandler;
+    private final IInputHandler<Chemical, ChemicalStack> chemicalInputHandler;
+    private final IOutputHandler<ItemStackTemplate> outputHandler;
 
+    @UnknownNullability//Initialized via getInitialEnergyContainer
     private MachineEnergyContainer<TileEntityInfinityOreReprocessing> energyContainer;
+    @UnknownNullability//Initialized via getInitialInventory
     private ChemicalInventorySlot chemicalInputSlot;
+    @UnknownNullability//Initialized via getInitialInventory
     private EnergyInventorySlot energySlot;
 
     public TileEntityInfinityOreReprocessing(BlockPos pos, BlockState state) {
         super(MSBlocks.INFINITY_ORE_REPROCESSING, pos, state, TRACKED_ERROR_TYPES, BASE_TICKS_REQUIRED);
 
-        getConfig().setupItemIOConfig(Collections.singletonList(itemInputSlot), Collections.singletonList(outputSlot), energySlot, false);
+        configComponent.setupItemIOConfig(Collections.singletonList(itemInputSlot), Collections.singletonList(outputSlot), energySlot, false);
 
-        ConfigInfo chemicalConfig = getConfig().setupInputConfig(TransmissionType.CHEMICAL, chemicalInputTank);
-        if (chemicalConfig != null) {
-            chemicalConfig.setDataType(DataType.INPUT, RelativeSide.LEFT);
-            chemicalConfig.setDataType(DataType.INPUT, RelativeSide.BACK);
+        ConfigInfo chemicalConfig = configComponent.setupInputConfig(TransmissionType.CHEMICAL, chemicalInputTank);
+        chemicalConfig.setDataType(DataType.INPUT, RelativeSide.LEFT);
+        chemicalConfig.setDataType(DataType.INPUT, RelativeSide.BACK);
+
+        ConfigInfo energyConfig = configComponent.setupInputConfig(TransmissionType.ENERGY, energyContainer);
+        for (RelativeSide side : RelativeSide.values()) {
+            energyConfig.setDataType(DataType.INPUT, side);
         }
 
-        ConfigInfo energyConfig = getConfig().setupInputConfig(TransmissionType.ENERGY, energyContainer);
-        if (energyConfig != null) {
-            for (RelativeSide side : RelativeSide.values()) {
-                energyConfig.setDataType(DataType.INPUT, side);
-            }
-        }
-
-        ejectorComponent = new TileComponentEjector(this);
-        ejectorComponent.setOutputData(getConfig(), TransmissionType.ITEM);
+        ejectorComponent.setOutputData(configComponent, TransmissionType.ITEM);
 
         itemInputHandler = InputHelper.getInputHandler(itemInputSlot, CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_INPUT);
         chemicalInputHandler = InputHelper.getInputHandler(chemicalInputTank, CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_INPUT);
@@ -98,93 +103,43 @@ public class TileEntityInfinityOreReprocessing extends MSTileEntityProgressMachi
     }
 
     @Override
-    protected void presetVariables() {
-        super.presetVariables();
-        chemicalInputTank = BasicChemicalTank.input(MAX_CHEMICAL,
-                this::containsRecipe,
-                recipeCacheLookupMonitor);
-    }
-
-    @NotNull
-    @Override
-    public IChemicalTankHolder getInitialChemicalTanks(IContentsListener listener) {
-        ChemicalTankHelper builder = ChemicalTankHelper.forSideWithConfig(this);
-        builder.addTank(chemicalInputTank);
+    public IContainerHolder<IChemicalTank> getInitialChemicalTanks(IContentsListener listener, IContentsListener recipeCacheListener, IContentsListener recipeCacheUnpauseListener) {
+        MekContainerHelper<IChemicalTank> builder = MekContainerHelper.forSideWithChemicalConfig(this);
+        builder.addContainer(chemicalInputTank = BasicChemicalTank.input(MAX_CHEMICAL, this::containsRecipeB, recipeCacheListener));
         return builder.build();
     }
 
-    @NotNull
     @Override
-    protected IEnergyContainerHolder getInitialEnergyContainers(IContentsListener listener, IContentsListener recipeCacheListener) {
-        EnergyContainerHelper builder = EnergyContainerHelper.forSideWithConfig(this);
-        builder.addContainer(energyContainer = MachineEnergyContainer.input(this, () -> {
-            listener.onContentsChanged();
-            recipeCacheListener.onContentsChanged();
-        }));
-        return builder.build();
+    protected ISingleContainerHolder<IEnergyContainer> getInitialEnergyContainer(IContentsListener listener, IContentsListener recipeCacheListener, IContentsListener recipeCacheUnpauseListener) {
+        energyContainer = MachineEnergyContainer.input(this, recipeCacheUnpauseListener);
+        return SingleConfigHolder.energy(energyContainer, this);
     }
 
-    @NotNull
     @Override
-    protected IInventorySlotHolder getInitialInventory(IContentsListener listener, IContentsListener recipeCacheListener) {
-        InventorySlotHelper builder = InventorySlotHelper.forSideWithConfig(this);
+    protected IContainerHolder<IInventorySlot> getInitialInventory(IContentsListener listener, IContentsListener recipeCacheListener, IContentsListener recipeCacheUnpauseListener) {
+        MekContainerHelper<IInventorySlot> builder = MekContainerHelper.forSideWithItemConfig(this);
         // Slot de item de entrada (la mena "sucia"). Posición GUI a tu gusto; 21,17 es un ejemplo (arriba del slot quimico).
-        builder.addSlot(itemInputSlot = InputInventorySlot.at(item -> containsRecipe(item), recipeCacheListener, 21, 17));
-        builder.addSlot(outputSlot = OutputInventorySlot.at(recipeCacheListener, 116, 36));
+        builder.addContainer(itemInputSlot = InputInventorySlot.at(this::containsRecipeA, recipeCacheListener, 21, 17));
+        builder.addContainer(outputSlot = OutputInventorySlot.at(recipeCacheUnpauseListener, 116, 36));
         outputSlot.setSlotOverlay(SlotOverlay.PLUS);
         outputSlot.tracksWarnings(slot -> slot.warning(WarningType.NO_SPACE_IN_OUTPUT, getWarningCheck(CachedRecipe.OperationTracker.RecipeError.NOT_ENOUGH_OUTPUT_SPACE)));
-        builder.addSlot(chemicalInputSlot = ChemicalInventorySlot.fill(chemicalInputTank, recipeCacheListener, 21, 56));
-        builder.addSlot(energySlot = EnergyInventorySlot.fillOrConvert(energyContainer, this::getLevel, recipeCacheListener, 144, 35));
+        builder.addContainer(chemicalInputSlot = ChemicalInventorySlot.fill(chemicalInputTank, listener, 21, 56));
+        builder.addContainer(energySlot = EnergyInventorySlot.fillOrConvert(energyContainer, this::getLevel, listener, 144, 35));
         return builder.build();
     }
 
     @Override
-    protected boolean onUpdateServer() {
-        boolean needsUpdate = super.onUpdateServer();
-        chemicalInputSlot.fillTank();
-        energySlot.fillContainerOrConvert();
-        if (recipeCacheLookupMonitor.updateAndProcess()) {
-            needsUpdate = true;
-        }
-        return needsUpdate;
+    protected boolean onUpdateServer(ServerLevel level) {
+        boolean sendUpdatePacket = super.onUpdateServer(level);
+        chemicalInputSlot.fillTankFromSlot(null);
+        energySlot.fillContainerOrConvert(null);
+        recipeCacheLookupMonitor.updateAndProcess();
+        return sendUpdatePacket;
     }
 
     @Override
     public IMSRecipeTypeProvider<InfinityOreReprocessingRecipe, MSInputRecipeCache.ItemChemical<InfinityOreReprocessingRecipe>> getMSRecipeType() {
         return MSRecipeType.INFINITY_ORE_REPROCESSING;
-    }
-
-    private boolean containsRecipe(ItemStack item) {
-        for (InfinityOreReprocessingRecipe recipe : MSRecipeType.INFINITY_ORE_REPROCESSING.get().getRecipes(getLevel())) {
-            if (recipe.getItemInput().test(item)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean containsRecipe(Chemical chemical) {
-        for (InfinityOreReprocessingRecipe recipe : MSRecipeType.INFINITY_ORE_REPROCESSING.get().getRecipes(getLevel())) {
-            if (recipe.getChemicalInput().testType(chemical)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Nullable
-    private InfinityOreReprocessingRecipe findFirstRecipe(ItemStack item, ChemicalStack chemical) {
-        for (InfinityOreReprocessingRecipe recipe : MSRecipeType.INFINITY_ORE_REPROCESSING.get().getRecipes(getLevel())) {
-            if (recipe.test(item, chemical)) {
-                return recipe;
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    private InfinityOreReprocessingRecipe findFirstRecipe(IInputHandler<ItemStack> itemInputHandler, IInputHandler<ChemicalStack> chemicalInputHandler) {
-        return findFirstRecipe(itemInputHandler.getInput(), chemicalInputHandler.getInput());
     }
 
     @Nullable
@@ -193,12 +148,9 @@ public class TileEntityInfinityOreReprocessing extends MSTileEntityProgressMachi
         return findFirstRecipe(itemInputHandler, chemicalInputHandler);
     }
 
-    @NotNull
     @Override
-    public CachedRecipe<InfinityOreReprocessingRecipe> createNewCachedRecipe(@NotNull InfinityOreReprocessingRecipe recipe, int cacheIndex) {
-        return new TwoInputCachedRecipe<>(recipe, recheckAllRecipeErrors, itemInputHandler, chemicalInputHandler, outputHandler,
-                recipe::getItemInput, recipe::getChemicalInput, recipe::getOutput,
-                ItemStack::isEmpty, ChemicalStack::isEmpty, ItemStack::isEmpty) {}
+    public CachedRecipe<InfinityOreReprocessingRecipe> createNewCachedRecipe(InfinityOreReprocessingRecipe recipe, int cacheIndex) {
+        return new TwoInputCachedRecipe<>(recipe, recheckAllRecipeErrors, itemInputHandler, chemicalInputHandler, outputHandler)
                 .setErrorsChanged(this::onErrorsChanged)
                 .setCanHolderFunction(this::canFunction)
                 .setActive(this::setActive)
@@ -219,7 +171,7 @@ public class TileEntityInfinityOreReprocessing extends MSTileEntityProgressMachi
         clearRecipeErrors(cacheIndex);
     }
 
-    public MachineEnergyContainer<TileEntityInfinityOreReprocessing> getEnergyContainer() {
+    public MachineEnergyContainer<TileEntityInfinityOreReprocessing> energyContainer() {
         return energyContainer;
     }
 }

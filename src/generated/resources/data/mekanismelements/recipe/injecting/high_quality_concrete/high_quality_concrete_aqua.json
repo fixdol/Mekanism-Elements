@@ -6,10 +6,9 @@
   },
   "item_input": {
     "count": 1,
-    "item": "mekanismelements:powder_high_quality_concrete_aqua"
+    "ingredient": "mekanismelements:powder_high_quality_concrete_aqua"
   },
   "output": {
-    "count": 1,
     "id": "mekanismelements:clump_high_quality_concrete_aqua"
   },
   "per_tick_usage": false

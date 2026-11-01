@@ -7,17 +7,17 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.FluidTagsProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+
 
 import java.util.concurrent.CompletableFuture;
 
 public class MSFluidTagsProvider extends FluidTagsProvider {
 
-    public MSFluidTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper existingFileHelper) {
-        super(output, lookupProvider, MekanismElements.MODID, existingFileHelper);
+    public MSFluidTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+        super(output, lookupProvider, MekanismElements.MODID);
     }
 
     @Override
@@ -68,6 +68,6 @@ public class MSFluidTagsProvider extends FluidTagsProvider {
     }
 
     private static TagKey<Fluid> fluidTag(String namespace, String path) {
-        return TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath(namespace, path));
+        return TagKey.create(Registries.FLUID, Identifier.fromNamespaceAndPath(namespace, path));
     }
 }

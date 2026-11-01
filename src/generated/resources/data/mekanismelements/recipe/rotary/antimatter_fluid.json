@@ -10,7 +10,7 @@
   },
   "fluid_input": {
     "amount": 1,
-    "fluid": "mekanismelements:antimatter_fluid"
+    "ingredient": "mekanismelements:antimatter_fluid"
   },
   "fluid_output": {
     "amount": 1,

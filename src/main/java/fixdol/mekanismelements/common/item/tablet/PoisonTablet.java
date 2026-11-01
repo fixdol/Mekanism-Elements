@@ -6,7 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 
 public class PoisonTablet extends Item {
@@ -18,10 +18,10 @@ public class PoisonTablet extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-        if (!level.isClientSide && entity instanceof Player player) {
+        if (!level.isClientSide() && entity instanceof Player player) {
 
             MobEffectInstance currentEffect = player.getEffect(MobEffects.POISON);
-            player.getCooldowns().addCooldown(this, 4800);
+            player.getCooldowns().addCooldown(stack, 4800);
 
             int newDuration;
             if (currentEffect != null) {
@@ -36,12 +36,12 @@ public class PoisonTablet extends Item {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.EAT;
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return ItemUseAnimation.EAT;
     }
 
-    // getUseDuration signature changed in 1.21.1 - removed @Override if method doesn't exist
-    public int getUseDuration(ItemStack stack) {
+    @Override
+    public int getUseDuration(ItemStack stack, LivingEntity user) {
         return 20;
     }
 }

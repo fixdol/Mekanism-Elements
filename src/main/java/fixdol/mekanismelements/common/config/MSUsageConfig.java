@@ -3,19 +3,19 @@ package fixdol.mekanismelements.common.config;
 import mekanism.common.config.BaseMekanismConfig;
 import mekanism.common.config.IConfigTranslation;
 import mekanism.common.config.value.CachedBooleanValue;
-import mekanism.common.config.value.CachedLongValue;
+import mekanism.common.config.value.CachedIntValue;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.fml.config.ModConfig;
 
 public class MSUsageConfig extends BaseMekanismConfig {
 
     public final CachedBooleanValue gasGeneratorDebug;
-    public final CachedLongValue airCompressor;
-    public final CachedLongValue radiationIrradiator;
-    public final CachedLongValue adsorptionSeparator;
-    public final CachedLongValue seawaterPump;
-    public final CachedLongValue organicLiquidExtractor;
-    public final CachedLongValue infinityOreReprocessing;
+    public final CachedIntValue airCompressor;
+    public final CachedIntValue radiationIrradiator;
+    public final CachedIntValue adsorptionSeparator;
+    public final CachedIntValue seawaterPump;
+    public final CachedIntValue organicLiquidExtractor;
+    public final CachedIntValue infinityOreReprocessing;
 
     private final ModConfigSpec configSpec;
 
@@ -28,12 +28,12 @@ public class MSUsageConfig extends BaseMekanismConfig {
                 "Logs fuel/burn/energy info every server tick. Disable in production.")
                 .define("gasGeneratorDebug", false));
 
-        airCompressor = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.airCompressor", "Air Compressor", "Energy usage per tick (Joules)."), "airCompressor", 100L, 0L, Long.MAX_VALUE);
-        radiationIrradiator = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.radiationIrradiator", "Radiation Irradiator", "Energy usage per tick (Joules)."), "radiationIrradiator", 1_000L, 0L, Long.MAX_VALUE);
-        adsorptionSeparator = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.adsorptionSeparator", "Adsorption Separator", "Energy usage per tick (Joules)."), "adsorptionSeparator", 500L, 0L, Long.MAX_VALUE);
-        organicLiquidExtractor = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.organicLiquidExtractor", "Organic Liquid Extractor", "Energy usage per tick (Joules)."), "organicLiquidExtractor", 100L, 0L, Long.MAX_VALUE);
-        seawaterPump = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.seawaterPump", "Seawater Pump", "Energy usage per tick (Joules)."), "seawaterPump", 100L, 0L, Long.MAX_VALUE);
-        infinityOreReprocessing = CachedLongValue.define(this, builder, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.infinityOreReprocessing", "Infinity Ore Reprocessing", "Energy usage per tick (Joules)."), "infinityOreReprocessing", 500L, 0L, Long.MAX_VALUE);
+        airCompressor = CachedIntValue.wrap(this, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.airCompressor", "Air Compressor", "Energy usage per tick (Joules).").applyToBuilder(builder).defineInRange("airCompressor", 100, 0, Integer.MAX_VALUE));
+        radiationIrradiator = CachedIntValue.wrap(this, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.radiationIrradiator", "Radiation Irradiator", "Energy usage per tick (Joules).").applyToBuilder(builder).defineInRange("radiationIrradiator", 1_000, 0, Integer.MAX_VALUE));
+        adsorptionSeparator = CachedIntValue.wrap(this, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.adsorptionSeparator", "Adsorption Separator", "Energy usage per tick (Joules).").applyToBuilder(builder).defineInRange("adsorptionSeparator", 500, 0, Integer.MAX_VALUE));
+        organicLiquidExtractor = CachedIntValue.wrap(this, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.organicLiquidExtractor", "Organic Liquid Extractor", "Energy usage per tick (Joules).").applyToBuilder(builder).defineInRange("organicLiquidExtractor", 100, 0, Integer.MAX_VALUE));
+        seawaterPump = CachedIntValue.wrap(this, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.seawaterPump", "Seawater Pump", "Energy usage per tick (Joules).").applyToBuilder(builder).defineInRange("seawaterPump", 100, 0, Integer.MAX_VALUE));
+        infinityOreReprocessing = CachedIntValue.wrap(this, new IConfigTranslation.ConfigTranslation("config.mekanismelements.usage.infinityOreReprocessing", "Infinity Ore Reprocessing", "Energy usage per tick (Joules).").applyToBuilder(builder).defineInRange("infinityOreReprocessing", 500, 0, Integer.MAX_VALUE));
 
         builder.pop();
         configSpec = builder.build();

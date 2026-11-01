@@ -4,21 +4,20 @@ import fixdol.mekanismelements.common.MekanismElements;
 import fixdol.mekanismelements.common.registries.MSGases;
 import mekanism.api.datagen.recipe.builder.FluidChemicalToChemicalRecipeBuilder;
 import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 
 public class WashingRecipeProvider {
 
-    public static void buildRecipes(RecipeOutput recipeOutput) {
+    public static void buildRecipes(RecipeOutput recipeOutput, HolderLookup.Provider registries) {
         String basePath = "washing/";
 
-       
         FluidChemicalToChemicalRecipeBuilder.washing(
-                IngredientCreatorAccess.fluid().from(FluidTags.WATER, 100),
-                IngredientCreatorAccess.chemicalStack().from(MSGases.AMMONIUM_NITRATE.get(), 1000),
-                MSGases.AMMONIUM_NITRATE_SOLUTION.get().getStack(1000)
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(
-                MekanismElements.MODID, basePath + "ammonium_nitrate_solution"));
+                IngredientCreatorAccess.fluid().from(registries.lookupOrThrow(Registries.FLUID), FluidTags.WATER, 100),
+                IngredientCreatorAccess.chemicalStack().fromHolder(MSGases.AMMONIUM_NITRATE, 1000),
+                MSGases.AMMONIUM_NITRATE_SOLUTION.asTemplate(1000)
+        ).save(recipeOutput, MekanismElements.rl(basePath + "ammonium_nitrate_solution"));
     }
 }

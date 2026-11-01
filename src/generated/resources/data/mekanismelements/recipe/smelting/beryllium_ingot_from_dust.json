@@ -4,11 +4,8 @@
   "cookingtime": 200,
   "experience": 0.7,
   "group": "beryllium_ingot",
-  "ingredient": {
-    "item": "mekanismelements:dust_beryllium"
-  },
+  "ingredient": "mekanismelements:dust_beryllium",
   "result": {
-    "count": 1,
     "id": "mekanismelements:ingot_beryllium"
   }
 }

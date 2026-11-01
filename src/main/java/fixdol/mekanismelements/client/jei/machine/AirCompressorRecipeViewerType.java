@@ -4,7 +4,7 @@ import fixdol.mekanismelements.common.MekanismElements;
 import fixdol.mekanismelements.common.registries.MSBlocks;
 import mekanism.client.recipe_viewer.type.IRecipeViewerRecipeType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,7 @@ public class AirCompressorRecipeViewerType implements IRecipeViewerRecipeType<Ai
     }
 
     @Override
-    public ResourceLocation id() {
+    public Identifier id() {
         return MekanismElements.rl("air_compressor");
     }
 
@@ -42,7 +42,7 @@ public class AirCompressorRecipeViewerType implements IRecipeViewerRecipeType<Ai
     }
 
     @Override
-    public ResourceLocation icon() {
+    public @org.jspecify.annotations.Nullable Identifier icon() {
         return null;
     }
 

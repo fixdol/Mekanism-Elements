@@ -10,7 +10,7 @@
   },
   "fluid_input": {
     "amount": 1,
-    "fluid": "mekanismelements:iodine"
+    "ingredient": "mekanismelements:iodine"
   },
   "fluid_output": {
     "amount": 1,

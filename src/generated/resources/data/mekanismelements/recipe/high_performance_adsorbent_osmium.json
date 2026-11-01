@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "A": {
-      "item": "mekanism:pellet_antimatter"
-    },
-    "C": {
-      "tag": "c:ingots/osmium"
-    },
-    "X": {
-      "item": "mekanismelements:high_performance_adsorbent"
-    }
+    "A": "mekanism:pellet_antimatter",
+    "C": "#c:ingots/osmium",
+    "X": "mekanismelements:high_performance_adsorbent"
   },
   "pattern": [
     "ACA",
@@ -18,7 +12,6 @@
     "ACA"
   ],
   "result": {
-    "count": 1,
     "id": "mekanismelements:high_performance_adsorbent_osmium"
   }
 }

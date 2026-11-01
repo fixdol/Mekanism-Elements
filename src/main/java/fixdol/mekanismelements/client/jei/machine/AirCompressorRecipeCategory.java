@@ -1,9 +1,8 @@
 package fixdol.mekanismelements.client.jei.machine;
 
+import com.mojang.serialization.Codec;
 import fixdol.mekanismelements.client.MSRecipeViewerText;
-import fixdol.mekanismelements.common.registries.MSGases;
-import mekanism.api.chemical.Chemical;
-import mekanism.api.chemical.ChemicalStack;
+import fixdol.mekanismelements.common.tile.machine.TileEntityAirCompressor;
 import mekanism.client.gui.element.GuiInnerScreen;
 import mekanism.client.gui.element.gauge.GaugeType;
 import mekanism.client.gui.element.gauge.GuiChemicalGauge;
@@ -18,42 +17,36 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.IRecipeManager;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
-import java.util.Collections;
 import java.util.List;
-
 
 public class AirCompressorRecipeCategory extends BaseRecipeCategory<AirCompressorInfoRecipe> {
 
-    private static final ChemicalStack OUTPUT_STACK =
-            new ChemicalStack((Chemical) MSGases.COMPRESSED_AIR.get(), 200);
-
-    private static final List<Component> DESCRIPTION = List.of(
-            Component.translatable("description.mekanismelements.air_compressor")
-    );
+    private static final Component DESCRIPTION = Component.translatable("description.mekanismelements.air_compressor");
 
     private final GuiGauge<?> outputGauge;
 
     public AirCompressorRecipeCategory(IGuiHelper helper, IRecipeViewerRecipeType<AirCompressorInfoRecipe> recipeType) {
         super(helper, recipeType);
-        addElement(new GuiInnerScreen(this, 5, 5, 122, 70, () -> MSRecipeViewerText.wrapForInnerScreen(DESCRIPTION.get(0))).clearFormat());
+        addElement(new GuiInnerScreen(this, 5, 5, 122, 70, () -> MSRecipeViewerText.wrapForInnerScreen(DESCRIPTION)).clearFormat());
         outputGauge = addElement(GuiChemicalGauge.getDummy(GaugeType.STANDARD.with(DataType.OUTPUT), this, 131, 5));
     }
 
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, AirCompressorInfoRecipe recipe, @NotNull IFocusGroup focusGroup) {
-        initChemical(builder, RecipeIngredientRole.OUTPUT, outputGauge, Collections.singletonList(OUTPUT_STACK));
+        initChemical(builder, RecipeIngredientRole.OUTPUT, outputGauge, List.of(TileEntityAirCompressor.COMPRESSED_AIR_STACK));
     }
 
     @Override
-    public com.mojang.serialization.Codec<AirCompressorInfoRecipe> getCodec(ICodecHelper codecHelper, IRecipeManager recipeManager) {
+    public @Nullable Codec<AirCompressorInfoRecipe> getCodec(ICodecHelper codecHelper, IRecipeManager recipeManager) {
         return null;
     }
 
     @Override
-    public ResourceLocation getRegistryName(AirCompressorInfoRecipe recipe) {
+    public @Nullable Identifier getIdentifier(AirCompressorInfoRecipe recipe) {
         return null;
     }
 }

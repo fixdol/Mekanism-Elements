@@ -10,7 +10,7 @@
   },
   "fluid_input": {
     "amount": 1,
-    "fluid": "mekanismelements:helium"
+    "ingredient": "mekanismelements:helium"
   },
   "fluid_output": {
     "amount": 1,

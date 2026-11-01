@@ -2,14 +2,10 @@ package fixdol.mekanismelements.datagen.machines;
 
 import fixdol.mekanismelements.common.MekanismElements;
 import fixdol.mekanismelements.common.registries.MSGases;
-import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.datagen.recipe.builder.ItemStackToChemicalRecipeBuilder;
 import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
 import mekanism.common.registries.MekanismItems;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 
 public class OxidizingRecipeProvider {
 
@@ -18,8 +14,8 @@ public class OxidizingRecipeProvider {
 
         // Substrate -> Methane (100 mB)
         ItemStackToChemicalRecipeBuilder.oxidizing(
-                IngredientCreatorAccess.item().from(Ingredient.of(MekanismItems.SUBSTRATE.get())),
-                new ChemicalStack(MSGases.METHANE.get().getAsHolder(), 100)
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "methane"));
+                IngredientCreatorAccess.item().from(MekanismItems.SUBSTRATE),
+                MSGases.METHANE.asTemplate(100)
+        ).save(recipeOutput, MekanismElements.rl(basePath + "methane"));
     }
 }

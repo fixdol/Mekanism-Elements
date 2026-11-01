@@ -1,9 +1,14 @@
 package fixdol.mekanismelements.mixin;
 
 import fixdol.mekanismelements.common.config.MSConfig;
+import mekanism.api.chemical.ChemicalResource;
+import mekanism.api.chemical.IChemicalTank;
+import mekanism.api.datamaps.IMekanismDataMapTypes;
 import mekanism.api.datamaps.chemical.attribute.ChemicalFuel;
-import mekanism.api.chemical.ChemicalStack;
+import mekanism.api.energy.IEnergyContainer;
 import mekanism.generators.common.tile.TileEntityGasGenerator;
+import net.minecraft.server.level.ServerLevel;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,53 +21,39 @@ import static mekanism.api.MekanismAPI.logger;
 public class MixinTileEntityGasGenerator {
 
     @Shadow
-    public TileEntityGasGenerator.FuelTank fuelTank;
+    @Nullable
+    private ChemicalFuel cachedFuel;
 
-    @Shadow(remap = false)
-    private long burnTicks;
-
-    @Shadow(remap = false)
-    private int maxBurnTicks;
-
-    @Shadow(remap = false)
-    private long generationRate;
-
-    @Inject(method = "onUpdateServer()Z", at = @At("HEAD"))
-    private void onUpdateServerHead(CallbackInfoReturnable<Boolean> cir) {
-        if (!fuelTank.isEmpty() && generationRate == 0) {
-            ChemicalFuel fuel = fuelTank.getFuel();
-            if (fuel != null) {
-                maxBurnTicks = Math.max(1, fuel.burnTicks());
-                generationRate = fuel.energyPerTick();
-            }
+    @Inject(method = "onUpdateServer(Lnet/minecraft/server/level/ServerLevel;)Z", at = @At("HEAD"))
+    private void onUpdateServerHead(ServerLevel level, CallbackInfoReturnable<Boolean> cir) {
+        TileEntityGasGenerator self = (TileEntityGasGenerator) (Object) this;
+        IChemicalTank fuelTank = self.getFuelTank();
+        if (!fuelTank.isEmpty() && cachedFuel == null) {
+            cachedFuel = fuelTank.resource().getData(IMekanismDataMapTypes.INSTANCE.chemicalFuel());
         }
 
         if (!MSConfig.usageConfig.gasGeneratorDebug.get()) {
             return;
         }
 
-        TileEntityGasGenerator self = (TileEntityGasGenerator) (Object) this;
         boolean tankEmpty = fuelTank.isEmpty();
-        long energyStored = self.getEnergyContainer().getEnergy();
-        long energyCapacity = self.getEnergyContainer().getMaxEnergy();
+        IEnergyContainer energyContainer = self.getEnergyContainer();
+        long energyStored = energyContainer == null ? 0 : energyContainer.getAmountAsLong();
+        long energyCapacity = energyContainer == null ? 0 : energyContainer.getCapacityAsLong();
         boolean canFunction = self.canFunction();
-        long insertResult = self.getEnergyContainer().insert(generationRate, mekanism.api.Action.SIMULATE, mekanism.api.AutomationType.INTERNAL);
-        boolean conditionResult = !tankEmpty && canFunction && insertResult == 0L;
 
-        logger.info("[GasGenerator Debug] Tick: tankEmpty={}, canFunction={}, generationRate={}, insertResult={}, conditionResult={}, energyStored={}/{}, fuelTankStored={}",
-                tankEmpty, canFunction, generationRate, insertResult, conditionResult, energyStored, energyCapacity, tankEmpty ? 0 : fuelTank.getStored());
+        logger.info("[GasGenerator Debug] Tick: tankEmpty={}, canFunction={}, cachedFuel={}, energyStored={}/{}, fuelTankStored={}",
+                tankEmpty, canFunction, cachedFuel, energyStored, energyCapacity, tankEmpty ? 0 : fuelTank.amountAsLong());
 
         if (!tankEmpty) {
-            ChemicalFuel fuel = fuelTank.getFuel();
-            ChemicalStack stack = fuelTank.getStack();
-            mekanism.api.datamaps.chemical.attribute.ChemicalFuel directFuel = stack.getData(mekanism.api.datamaps.IMekanismDataMapTypes.INSTANCE.chemicalFuel());
-
-            if (fuel != null) {
-                logger.info("[GasGenerator Debug] Fuel details: fuel_burnTicks={}, fuel_energyPerTick={}, burnTicks={}, maxBurnTicks={}, stack={}, directFuel={}",
-                        fuel.burnTicks(), fuel.energyPerTick(), burnTicks, maxBurnTicks, stack, directFuel != null);
+            ChemicalResource resource = fuelTank.resource();
+            ChemicalFuel directFuel = resource.getData(IMekanismDataMapTypes.INSTANCE.chemicalFuel());
+            if (cachedFuel != null) {
+                logger.info("[GasGenerator Debug] Fuel details: fuel_maxBurnPerTick={}, fuel_energyPerTick={}, resource={}, directFuel={}",
+                        cachedFuel.maxBurnPerTick(), cachedFuel.energyPerTick(), resource, directFuel != null);
             } else {
-                logger.warn("[GasGenerator Debug] Fuel tank not empty but getFuel() returned null! Stack: {}, directFuel: {}, hasData: {}",
-                        stack, directFuel, directFuel != null);
+                logger.warn("[GasGenerator Debug] Fuel tank not empty but cachedFuel is null! Resource: {}, directFuel: {}, hasData: {}",
+                        resource, directFuel, directFuel != null);
             }
         }
     }

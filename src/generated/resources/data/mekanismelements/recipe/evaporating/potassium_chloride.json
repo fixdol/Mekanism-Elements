@@ -2,7 +2,7 @@
   "type": "mekanism:evaporating",
   "input": {
     "amount": 1,
-    "fluid": "mekanismelements:seawater"
+    "ingredient": "mekanismelements:seawater"
   },
   "output": {
     "amount": 1,

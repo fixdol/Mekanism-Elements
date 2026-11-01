@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="${neo_version}"
+loaderVersion="${loader_version_range}"
 license="${mod_license}"
 issueTrackerURL="${issue_tracker}"
 
@@ -46,14 +46,14 @@ config="mekanismelements.mixins.json"
 
 [[dependencies.${mod_id}]]
     modId="patchouli"
-    type="required"
-    versionRange="[${patchouli_version},)"
+    type="optional"
+    versionRange="[0,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.${mod_id}]]
     modId="jei"
     type="optional"
-    versionRange="${jei_version}"
+    versionRange="[${jei_version},)"
     ordering="NONE"
     side="BOTH"

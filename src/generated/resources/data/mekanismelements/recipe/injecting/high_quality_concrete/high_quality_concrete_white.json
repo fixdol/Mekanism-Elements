@@ -6,10 +6,9 @@
   },
   "item_input": {
     "count": 1,
-    "item": "mekanismelements:powder_high_quality_concrete_white"
+    "ingredient": "mekanismelements:powder_high_quality_concrete_white"
   },
   "output": {
-    "count": 1,
     "id": "mekanismelements:clump_high_quality_concrete_white"
   },
   "per_tick_usage": false

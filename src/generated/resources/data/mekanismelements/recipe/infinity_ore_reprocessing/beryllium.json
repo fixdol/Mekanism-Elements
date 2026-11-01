@@ -6,7 +6,7 @@
   },
   "item_input": {
     "count": 1,
-    "item": "mekanismelements:ingot_beryllium"
+    "ingredient": "mekanismelements:ingot_beryllium"
   },
   "output": {
     "count": 16,

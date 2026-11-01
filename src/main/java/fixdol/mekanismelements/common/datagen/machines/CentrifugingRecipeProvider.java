@@ -2,11 +2,9 @@ package fixdol.mekanismelements.datagen.machines;
 
 import fixdol.mekanismelements.common.MekanismElements;
 import fixdol.mekanismelements.common.registries.MSGases;
-import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.datagen.recipe.builder.ChemicalToChemicalRecipeBuilder;
 import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
 
 public class CentrifugingRecipeProvider {
 
@@ -15,20 +13,20 @@ public class CentrifugingRecipeProvider {
 
         // Dissolved Spent Nuclear Waste (100 mB) -> Curium (1 mB)
         ChemicalToChemicalRecipeBuilder.centrifuging(
-                IngredientCreatorAccess.chemicalStack().from(MSGases.DISSOLVED_SPENT_NUCLEAR_WASTE.get(), 100),
-                new ChemicalStack(MSGases.CURIUM.get().getAsHolder(), 1)
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "curium"));
+                IngredientCreatorAccess.chemicalStack().fromHolder(MSGases.DISSOLVED_SPENT_NUCLEAR_WASTE, 100),
+                MSGases.CURIUM.asTemplate(1)
+        ).save(recipeOutput, MekanismElements.rl(basePath + "curium"));
 
         // Yttrium (10 mB) -> Helium (1 mB)
         ChemicalToChemicalRecipeBuilder.centrifuging(
-                IngredientCreatorAccess.chemicalStack().from(MSGases.YTTRIUM.get(), 10),
-                new ChemicalStack(MSGases.HELIUM.get().getAsHolder(), 1)
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "helium"));
+                IngredientCreatorAccess.chemicalStack().fromHolder(MSGases.YTTRIUM, 10),
+                MSGases.HELIUM.asTemplate(1)
+        ).save(recipeOutput, MekanismElements.rl(basePath + "helium"));
 
         // Iodine (1 mB) -> Xenon (1 mB)
         ChemicalToChemicalRecipeBuilder.centrifuging(
-                IngredientCreatorAccess.chemicalStack().from(MSGases.IODINE.get(), 1),
-                new ChemicalStack(MSGases.XENON.get().getAsHolder(), 1)
-        ).build(recipeOutput, ResourceLocation.fromNamespaceAndPath(MekanismElements.MODID, basePath + "xenon"));
+                IngredientCreatorAccess.chemicalStack().fromHolder(MSGases.IODINE, 1),
+                MSGases.XENON.asTemplate(1)
+        ).save(recipeOutput, MekanismElements.rl(basePath + "xenon"));
     }
 }

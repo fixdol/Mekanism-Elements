@@ -10,7 +10,7 @@
   },
   "fluid_input": {
     "amount": 1,
-    "fluid": "mekanismelements:hydrogen_cyanide"
+    "ingredient": "mekanismelements:hydrogen_cyanide"
   },
   "fluid_output": {
     "amount": 1,

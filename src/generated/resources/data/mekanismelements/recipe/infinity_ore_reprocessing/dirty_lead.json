@@ -6,7 +6,7 @@
   },
   "item_input": {
     "count": 1,
-    "item": "mekanism:dirty_dust_lead"
+    "ingredient": "mekanism:dirty_dust_lead"
   },
   "output": {
     "count": 16,
