@@ -1,5 +1,12 @@
 ⚡ Mekanism: Elements — Changelog
 
+🚀 [3.0.20]
+
+Additions & Changes
+1) Dependencies
+
+The minimum JEI version is now 29.47.0.111.
+
 🚀 [3.0.19]
 
 Additions & Changes
